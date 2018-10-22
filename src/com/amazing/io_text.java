@@ -9,12 +9,9 @@ public class io_text {
 	private static final String data_path = "src/Data/"; //Path to the Data Folder
 	protected static String data[] = null;
 	
-	protected static String[] read_every (String file_type, String input) {	//Reads all the filtered data from file
+	protected static void read_every (String file_type, String input) {	//Reads all the filtered data from file
 		String file_path = data_path + file_type;	//Path to the file
 		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
-			//Property create
-			Properties prop = new Properties();
-			prop.load(reader);
 			String line = ""; //Line data
 			int c = 0; //Counter
 			switch (file_type) {
@@ -26,7 +23,8 @@ public class io_text {
 								break;
 							}
 							else {
-								data[c] = prop.getProperty("pu_p_id=");
+								data[c] = line;
+								data[c] = data[c].replaceAll(".+=", "");
 								c++;
 							}
 						}
@@ -40,7 +38,8 @@ public class io_text {
 								break;
 							}
 							else {
-								data[c] = prop.getProperty("p_name=");
+								data[c] = line;
+								data[c] = data[c].replaceAll(".+=", "");
 								c++;
 							}
 						}
@@ -48,8 +47,8 @@ public class io_text {
 				case "d_category": //Category
 					data = new String[5];
 					while((line = reader.readLine()) != null){ //Buffered Reader searches for the input
-						data[c] = prop.getProperty("category=");
-						System.out.println(prop.getProperty("category="));
+						data[c] = line;
+						data[c] = data[c].replaceAll(".+=", "");
 						c++;
 					}
 					break;
@@ -59,28 +58,25 @@ public class io_text {
 		catch (Exception FileNotFoundException) { //Exception Catch
 			System.out.println("ERROR - File not found.");
 		}
-		return data;
 	}
 	
-	protected static String[] read_d (String file_type, String input) {	//Reads one data from the file
+	protected static void read_d (String file_type, String input) {	//Reads one data from the file
 		String file_path = data_path + file_type;	//Path to the file
 		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
-			//Property create
-			Properties prop = new Properties();
-			prop.load(reader);
 			String line = ""; //Line data
+			
 			switch (file_type) {
 				case "d_user": //User
 					data = new String[4];
 					while((line = reader.readLine()) != null){ //Buffered Reader searches for the user
 						if (line.equals("u_email=" + input)) { //Check if this is the user line
-							data[0] = prop.getProperty("u_email=");
-							reader.readLine();
-							data[1] = prop.getProperty("u_password=");
-							reader.readLine();
-							data[2] = prop.getProperty("u_login=");
-							reader.readLine();
-							data[3] = prop.getProperty("u_last_login=");
+							for (int i = 0; i < 4; i++) {
+								data[i] = line;
+								data[i] = data[i].replaceAll(".+=", "");
+								if (i < 3) {
+									reader.readLine();
+								}
+							}
 							break;
 						}
 					}
@@ -89,9 +85,13 @@ public class io_text {
 					data = new String[2];
 					while((line = reader.readLine()) != null){ //Buffered Reader searches for the user
 						if (line.equals("pu_u_id=" + input)) { //Check if this is the user line
-							data[0] = prop.getProperty("pu_u_id=");
-							reader.readLine();
-							data[1] = prop.getProperty("pu_p_id=");
+							for (int i = 0; i < 2; i++) {
+								data[i] = line;
+								data[i] = data[i].replaceAll(".+=", "");
+								if (i < 1) {
+									reader.readLine();
+								}
+							}
 							break;
 						}
 					}
@@ -100,13 +100,13 @@ public class io_text {
 					data = new String[4];
 					while((line = reader.readLine()) != null){ //Buffered Reader searches for the user
 						if (line.equals("p_id=" + input)) { //Check if this is the user line
-							data[0] = prop.getProperty("p_id=");
-							reader.readLine();
-							data[1] = prop.getProperty("p_name=");
-							reader.readLine();
-							data[2] = prop.getProperty("p_category=");
-							reader.readLine();
-							data[3] = prop.getProperty("p_stock=");
+							for (int i = 0; i < 4; i++) {
+								data[i] = line;
+								data[i] = data[i].replaceAll(".+=", "");
+								if (i < 3) {
+									reader.readLine();
+								}
+							}
 							break;
 						}
 					}
@@ -117,7 +117,6 @@ public class io_text {
 		catch (Exception FileNotFoundException) { //Exception Catch
 			System.out.println("ERROR - File not found.");
 		}
-		return data;
 	}
 	
 	protected static void write (String file_type) {	//Writes the new object

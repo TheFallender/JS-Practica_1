@@ -56,7 +56,7 @@ public class amazing {
 								break;
 							case 1: //See info
 								String data[] = new String [4];
-								data = io_text.read_d("d_user",active_user.r_email());
+								//data = io_text.read_d("d_user",active_user.r_email());
 								try {
 									System.out.println("Email: " + encrypter.decrypt(data[0]));
 									System.out.println("Password: " + encrypter.decrypt(data[1]));

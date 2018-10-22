@@ -32,7 +32,7 @@ public class login_method {
 					}
 					else { //User exists
 						String data[] = new String[4];
-						data = io_text.read_d("d_user", "");
+						//data = io_text.read_d("d_user", "");
 						if (e_password.equals(data[2])) {
 							amazing.active_user = new user (data);
 							logged_in = true;
