@@ -44,7 +44,11 @@ public class amazing {
 						for (int i = 0; i < 5; i++) {
 							System.out.println(i + "." + category[i]);
 						}
+						System.out.println("6. Exit");
 						menu_2 = filter.filter_i("Menu select: ", 1, 5);
+					}
+					else if(menu_2 == 6) {
+						menu_1 = 0;
 					}
 					else {
 						io_text.read_every("d_product", category[menu_2]);
@@ -52,7 +56,27 @@ public class amazing {
 						cache_a = new String [cache_c];
 						System.arraycopy(io_text.data, 0, cache_a, 0, cache_c);
 						System.out.println("Product list of " + category[menu_2]);
-						menu_3 = filter.filter_i("Menu select: ", 1, 5);
+						for (int i = 1; i == cache_c; i++) {
+							System.out.println(i + "." + cache_a[i]);
+						}
+						System.out.println(cache_c + 1 + ". Exit");
+						menu_3 = filter.filter_i("Menu select: ", 1, cache_c);
+						if (menu_3 == cache_c + 1) {
+							menu_2 = 0;
+						}
+						else {
+							io_text.read_d("d_product", cache_a[menu_3]);
+							cache_c = io_text.c;
+							cache_a = new String [cache_c];
+							System.arraycopy(io_text.data, 0, cache_a, 0, cache_c);
+							System.out.println(cache_a[1] + ":");
+							System.out.println("Id: " + cache_a[0]);
+							System.out.println("Name: " + cache_a[1]);
+							System.out.println("Category: " + cache_a[2]);
+							System.out.println("Stock: " + cache_a[3]);
+							filter.filter_s("\n\nPress ENTER to continue: ");
+							menu_2 = 0;
+						}
 					}
 					break;
 				case 2:	//Account

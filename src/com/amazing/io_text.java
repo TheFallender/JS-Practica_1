@@ -98,7 +98,7 @@ public class io_text {
 				case "d_product": //Product
 					data = new String[4];
 					while((line = reader.readLine()) != null){ //Buffered Reader searches for the user
-						if (line.equals("p_id=" + input)) { //Check if this is the user line
+						if (line.equals("p_name=" + input)) { //Check if this is the user line
 							for (int i = 0; i < 4; i++) {
 								data[i] = line;
 								data[i] = data[i].replaceAll(".+=", "");
