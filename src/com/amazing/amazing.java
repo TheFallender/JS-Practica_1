@@ -21,10 +21,12 @@ public class amazing {
 			file = new File("src/Data/d_product");
 			file.createNewFile();
 		}
-		int menu_1 = 0, menu_2 = 0;
+		int menu_1 = 0, menu_2 = 0, menu_3 = 0;
 		String category[] = new String [5];
 		io_text.read_every("d_category", "");
 		System.arraycopy(io_text.data, 0, category, 0, 5);
+		String cache_a[];
+		int cache_c;
 		while(true) {
 			switch (menu_1) {
 				case 0: //Menu
@@ -32,16 +34,26 @@ public class amazing {
 					System.out.println("1. Search by category.");
 					System.out.println("2. Account ");
 					System.out.println("3. Sing in or sing out.");
-					System.out.println("4. Exit.");
-					menu_1 = filter.filter_i("Menu select: ", 1, 4);
+					System.out.println("4. Create account");
+					System.out.println("5. Exit.");
+					menu_1 = filter.filter_i("Menu select: ", 1, 5);
 					break;
 				case 1: //Search by category
-
-					for (int i = 0; i < 5; i++) {
-						System.out.println(category[i]);
+					if (menu_2 == 0) {
+						System.out.println("Category menu:");
+						for (int i = 0; i < 5; i++) {
+							System.out.println(i + "." + category[i]);
+						}
+						menu_2 = filter.filter_i("Menu select: ", 1, 5);
 					}
-					menu_1 = filter.filter_i("Menu select: ", 1, 5);
-					menu_1 = 0;
+					else {
+						io_text.read_every("d_product", category[menu_2]);
+						cache_c = io_text.c;
+						cache_a = new String [cache_c];
+						System.arraycopy(io_text.data, 0, cache_a, 0, cache_c);
+						System.out.println("Product list of " + category[menu_2]);
+						menu_3 = filter.filter_i("Menu select: ", 1, 5);
+					}
 					break;
 				case 2:	//Account
 					if (login_method.logged_in) { //Log out
@@ -85,6 +97,7 @@ public class amazing {
 								menu_2 = 0;
 								break;
 						}
+						menu_1 = 0;
 					}
 					else { //Log in
 						System.out.println("ERROR - You have to be logged in to see this.");
@@ -104,7 +117,13 @@ public class amazing {
 					}
 					menu_1 = 0;
 					break;
-				case 4: //Close program
+				case 4: //Create account
+					amazing.active_user = new user();
+					io_text.write("d_user");
+					login_method.logged_in = true;
+					menu_1 = 0;
+					break;
+				case 5: //Close program
 					filter.scan.close();
 					if (login_method.logged_in) { //Log out
 						login_method.login_method_out();

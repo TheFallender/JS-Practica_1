@@ -13,7 +13,7 @@ public class user { //User login
 		while(true) { //User check
 			String e_email = "";
 			String temp_email = filter.filter_s("Insert your email: ");
-			if (temp_email == "exit") {	//Prevent exit as email
+			if (temp_email.equals("exit")) {	//Prevent exit as email
 				System.out.println("ERROR - You can't enter 'exit' as an email.");
 			}
 			else {

@@ -3,17 +3,16 @@ package com.amazing;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileWriter;
-import java.util.Properties;
 
 public class io_text {
 	private static final String data_path = "src/Data/"; //Path to the Data Folder
-	protected static String data[] = null;
+	protected static String data[] = null; //Data array
+	protected static int c = 0; //Counter
 	
 	protected static void read_every (String file_type, String input) {	//Reads all the filtered data from file
 		String file_path = data_path + file_type;	//Path to the file
 		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
 			String line = ""; //Line data
-			int c = 0; //Counter
 			switch (file_type) {
 				case "d_product_u": //Product user
 					data = new String[10];
@@ -128,15 +127,6 @@ public class io_text {
 					writer.write("u_password=" + amazing.active_user.r_pass() + "\n");
 					writer.write("u_login=" + amazing.active_user.r_date(true) + "\n");
 					writer.write("u_last_login=" + amazing.active_user.r_date(false) + "\n");
-					break;
-				case "d_user_p": //User product
-					
-					break;
-				case "d_product": //Product
-					
-					break;
-				case "d_category": //Category
-					
 					break;
 			}
 			writer.close();
