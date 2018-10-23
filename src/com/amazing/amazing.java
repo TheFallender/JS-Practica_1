@@ -6,27 +6,19 @@ import java.io.IOException;
 //Menu, marketplace function
 public class amazing {
 	protected static user active_user = null;
-	public static void main(String args[]) throws IOException {
-		File file = new File("src/Data/Initialized");
-		boolean exist = file.exists();
-		if (!exist) {
-			file = new File("src/Data/Initialized");
-			file.createNewFile();
-			file = new File("src/Data/d_category");
-			file.createNewFile();
-			file = new File("src/Data/d_user");
-			file.createNewFile();
-			file = new File("src/Data/d_pu");
-			file.createNewFile();
-			file = new File("src/Data/d_product");
-			file.createNewFile();
-		}
-		int menu_1 = 0, menu_2 = 0, menu_3 = 0;
-		String category[] = new String [5];
-		io_text.read_every("d_category", "");
-		System.arraycopy(io_text.data, 0, category, 0, 5);
+	
+	public static void main(String args[]){
+		//Variables definitions
+		int menu_1 = 0, menu_2 = 0, menu_3 = 0; //Menu
 		String cache_a[];
 		int cache_c;
+		String aux_a[];
+		//Starting functions
+		io_text.data_check();
+		product_user pu[] = null;
+		product p[] = null
+
+
 		while(true) {
 			switch (menu_1) {
 				case 0: //Menu
@@ -91,21 +83,14 @@ public class amazing {
 								menu_1 = filter.filter_i("Menu select: ", 1, 4);
 								break;
 							case 1: //See info
-								String data[] = new String [4];
-								//data = io_text.read_d("d_user",active_user.r_email());
-								try {
-									System.out.println("Email: " + encrypter.decrypt(data[0]));
-									System.out.println("Password: " + encrypter.decrypt(data[1]));
-									System.out.println("Login: " + data[2]);
-									System.out.println("Last login" + data[3]);
-								} catch (Exception e) {
-									throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");
-								}
+								active_user.print();
 								filter.filter_s("\n\nPress ENTER to continue: ");
 								menu_2 = 0;
 								break;
 							case 2: //Ordered products
-								
+								for (int i = 0; i < cache_c; i += 3) { //Print the products bought
+									pu[i].print();
+								}
 								filter.filter_s("\n\nPress ENTER to continue: ");
 								menu_2 = 0;
 								break;
@@ -136,6 +121,19 @@ public class amazing {
 					}
 					else { //Log in
 						login_method.login_method_in();
+						System.out.println("Login in...");
+						//Load products bought
+						io_text.read("d_product_user", "pu_u_id=" + active_user.r_email(), 90, 1, 0); //Get data
+						System.arraycopy(io_text.data_a, 0, cache_a, 0, cache_c); //Load ordered products
+						cache_c = io_text.data_c; //Set size of cache_c
+						pu = new product_user[cache_c]; //Reset the size of the product
+						for (int i = 1; i <= cache_c; i++) { //Create product_user
+							String aux_i[] = new String [3];
+							aux_i[0] = cache_a[(i*3) - 3];
+							aux_i[1] = cache_a[(i*3) - 2];
+							aux_i[2] = cache_a[(i*3) - 1];
+							pu[i-1] = new product_user(aux_i);
+						}
 						System.out.println("Successfully logged in.");
 						filter.filter_s("\n\nPress ENTER to continue: ");
 					}
@@ -143,7 +141,6 @@ public class amazing {
 					break;
 				case 4: //Create account
 					amazing.active_user = new user();
-					io_text.write("d_user");
 					login_method.logged_in = true;
 					menu_1 = 0;
 					break;

@@ -45,6 +45,12 @@ public class user { //User login
 		Date d = new Date();
 		this.login = d.getTime();
 		this.last_login = 0;
+		String aux[] = new String[4];
+		aux[0] = this.email;
+		aux[1] = this.password;
+		aux[2] = "" + this.login;
+		aux[3] = "" + this.last_login;
+		io_text.write("d_user", aux);
 	}
 	
 	protected user(String data[]) { //Creates a user based on the data String
@@ -70,12 +76,23 @@ public class user { //User login
 		return this.password;
 	}
 	
-	protected long r_date(boolean login_t) { //Returns date
-		if(login_t) { //Login
+	protected long r_date(boolean is_login) { //Returns date
+		if(is_login) { //Login
 			return this.login;
 		}
 		else { //Last login
 			return this.last_login;
+		}
+	}
+
+	protected void print() { //Print user
+		try { //Decrypt try
+			System.out.println("Email: " + encrypter.decrypt(this.email));
+			System.out.println("Password: ********");
+			System.out.println("Login: " + this.login);
+			System.out.println("Last login: " + this.last_login);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");
 		}
 	}
 }
