@@ -7,18 +7,23 @@ import java.io.IOException;
 public class amazing {
 	protected static user active_user = null;
 	
+	//Data array
+	private static category c[] = null;
+	private static product p[] = null;
+	private static product_user pu[] = null;
+	
+	//Main
 	public static void main(String args[]){
 		//Variables definitions
 		int menu_1 = 0, menu_2 = 0, menu_3 = 0; //Menu
-		String cache_a[];
-		int cache_c;
-		String aux_a[];
+		String cache_a[]; //Cache array
+		int cache_c; //Cache size
+		String aux_a[]; //Auxiliar data string
+
 		//Starting functions
 		io_text.data_check();
-		product_user pu[] = null;
-		product p[] = null
 
-
+		//Menu
 		while(true) {
 			switch (menu_1) {
 				case 0: //Menu
@@ -31,19 +36,21 @@ public class amazing {
 					menu_1 = filter.filter_i("Menu select: ", 1, 5);
 					break;
 				case 1: //Search by category
-					if (menu_2 == 0) {
+					if (menu_2 == 0) { //Category list
+						c_category();
 						System.out.println("Category menu:");
-						for (int i = 0; i < 5; i++) {
-							System.out.println(i + "." + category[i]);
+						for (int i = 0; i < c.length; i++) {
+							System.out.println(i+1 + "." + c[i].name());
 						}
-						System.out.println("6. Exit");
-						menu_2 = filter.filter_i("Menu select: ", 1, 5);
+						System.out.println((c.length + 1) + ". Exit");
+						menu_2 = filter.filter_i("Menu select: ", 1, c.length + 1);
 					}
-					else if(menu_2 == 6) {
+					else if(menu_2 == c.length + 1) { //Out of category
 						menu_1 = 0;
+						menu_2 = 0;
 					}
 					else {
-						io_text.read_every("d_product", category[menu_2]);
+						io_text.read("d_product", c[menu_2]);
 						cache_c = io_text.c;
 						cache_a = new String [cache_c];
 						System.arraycopy(io_text.data, 0, cache_a, 0, cache_c);
@@ -124,8 +131,9 @@ public class amazing {
 						System.out.println("Login in...");
 						//Load products bought
 						io_text.read("d_product_user", "pu_u_id=" + active_user.r_email(), 90, 1, 0); //Get data
+						cache_c = io_text.data_c;
+						cache_a = new String[cache_c];
 						System.arraycopy(io_text.data_a, 0, cache_a, 0, cache_c); //Load ordered products
-						cache_c = io_text.data_c; //Set size of cache_c
 						pu = new product_user[cache_c]; //Reset the size of the product
 						for (int i = 1; i <= cache_c; i++) { //Create product_user
 							String aux_i[] = new String [3];
@@ -151,6 +159,22 @@ public class amazing {
 					}
 					return;
 			}
+		}
+	}
+	
+	private static void c_category() { //Category create
+		String cache_a[]; //Cache array
+		int cache_c; //Cache size
+		
+		//Category check and create
+		io_text.read("d_category", "category=", 15, 0, 0); //Get data
+		cache_c = io_text.data_c; //Cache data counter
+		cache_a = new String[cache_c]; //Cache data array
+		System.arraycopy(io_text.data_a, 0, cache_a, 0, cache_c); //Load ordered products
+		c = new category[cache_c]; //Reset the size of the product
+		
+		for (int i = 0; i < cache_c; i++) { //Create product_user
+			c[i] = new category(cache_a[i]);
 		}
 	}
 }
