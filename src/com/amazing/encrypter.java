@@ -6,9 +6,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class encrypter {
 	//Variables
-	private static final byte[] keyBytes = "HaruhiBestWaifu1".getBytes();				//Set the secret key
+	private static final byte[] keyBytes = "BestPasSword2018".getBytes();				//Set the secret key
 	private static final SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");		//Define the secret key as an "AES" key
-	
+	/*
 	public static String encrypt(String input_s) throws Exception {					//Encrypts and writes
 		//Pre-encryption definitions
 	    Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); //Add provider
@@ -42,4 +42,5 @@ public class encrypter {
 		//Returns String
 		return d_text;
 	}
+	*/
 }

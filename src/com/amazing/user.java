@@ -7,6 +7,7 @@ public class user { //User login
 	private String password;
 	private long login;
 	private long last_login;
+	private String admin = "0";
 	
 	protected user() { //Creates a user from scratch
 		//User
@@ -18,8 +19,10 @@ public class user { //User login
 			}
 			else {
 				try {
-					e_email = encrypter.encrypt(temp_email);
-					if (io_text.search_user(temp_email) == 0) { //User doesn't exist, proceed
+					//e_email = encrypter.encrypt(temp_email);
+					e_email = (temp_email);
+					io_text.read("d_user", "u_email=" + e_email, 1, false);
+					if (io_text.data_a[0] == null) { //User doesn't exist, proceed
 						try {
 							this.email = e_email;
 							break;
@@ -38,18 +41,20 @@ public class user { //User login
 		}
 		//Password
 		try {
-			this.password = encrypter.encrypt(filter.filter_s("Insert your password: "));
+			//this.password = encrypter.encrypt(filter.filter_s("Insert your password: "));
+			this.password = filter.filter_s("Insert your password: ");
 		} catch (Exception e) {
 			throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");
 		}
 		Date d = new Date();
 		this.login = d.getTime();
 		this.last_login = 0;
-		String aux[] = new String[4];
+		String aux[] = new String[5];
 		aux[0] = this.email;
 		aux[1] = this.password;
 		aux[2] = "" + this.login;
 		aux[3] = "" + this.last_login;
+		aux[4] = "0";
 		io_text.write("d_user", aux);
 	}
 	
@@ -59,6 +64,7 @@ public class user { //User login
 		Date d = new Date();
 		this.login = d.getTime();
 		this.last_login = Long.parseLong(data[3]);
+		this.admin = data[4];
 	}
 	
 	protected void reset() { //Resets the class
@@ -85,12 +91,19 @@ public class user { //User login
 		}
 	}
 
+	protected boolean r_admin() {
+		return admin.equals("1")?true:false;
+	}
 	protected void print() { //Print user
 		try { //Decrypt try
-			System.out.println("Email: " + encrypter.decrypt(this.email));
+			//System.out.println("Email: " + encrypter.decrypt(this.email));
+			System.out.println("Email: " + (this.email));
 			System.out.println("Password: ********");
 			System.out.println("Login: " + this.login);
 			System.out.println("Last login: " + this.last_login);
+			if(r_admin()) {
+				System.out.println("This user has admin access");
+			}
 		} catch (Exception e) {
 			throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");
 		}

@@ -12,44 +12,22 @@ public class io_text {
 	protected static String data_a[] = null; //Data array
 	protected static int data_c = 0; //Data count size
 	
-	protected static void read (String file_type, String search_for, int search_max,  int skip_in, int skip_length) {	//Reads all the filtered data from file
+	protected static void read (String file_type, String search_for, int array_size, boolean repeat) {	//Reads all the filtered data from file
 		String file_path = data_path + file_type;	//Path to the file
 		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
-			data_a = new String[search_max];
+			data_a = new String[array_size];
 			data_c = 0; //Counter
 			String line = ""; //Line data
-			boolean skip_multiple = true;
-			for (line = reader.readLine(); reader.readLine() != null; reader.readLine()) {
+			for (line = reader.readLine(); line != null; line = reader.readLine()) { //Search in the file
 				if (line.contains(search_for)) { //Check if this is the requested line
-					if (data_c > search_max)
+					if (!repeat) //Remove code if it is not going to search for the same term
+						search_for = "";
+					if (data_c >= array_size) //Break if the array size is reached
 						break;
 					else {
-						if (skip_multiple) { //Avoid multiple skips
-							for(int i = 0; i < skip_in; i++) //Skip next number of lines
-								line = reader.readLine();
-							if (skip_in < 0) {
-								skip_in *= -1;
-								skip_multiple = false;
-							}
-						}
-						//CHANGE THIS CHANGE THIS CHANGE THIS CHANGE THIS CHANGE THIS CHANGE THIS CHANGE THISCHANGE THIS
-						if (skip_length == 0) { //No skips
-							for (int i = 0; i < search_max; i++) {
-								if (i != 0) //Next line
-									line = reader.readLine(); //Reads the line
-								data_a[data_c] = line; //Copies the line
-								data_a[data_c] = data_a[data_c].replaceAll(".+=", ""); //Cleans the line data
-								data_c++; //Increases the data count
-							}
-						}
-						else { //Used for optimization, removes unnecesary checks and jumps straight to the next line with the same type.
-							data_a[data_c] = line; //Copies the line
-							data_a[data_c] = data_a[data_c].replaceAll(".+=", ""); //Cleans the line data
-							data_c++; //Increases the data count
-							for (int i = 0; i < skip_length; i++)
-								if (reader.readLine() != null)
-									reader.readLine();
-						}
+						data_a[data_c] = line; //Copies the line
+						data_a[data_c] = data_a[data_c].replaceAll(".+=", ""); //Cleans the line data
+						data_c++; //Increases the data count
 					}
 				}
 			}
@@ -65,25 +43,26 @@ public class io_text {
 		try(FileWriter writer =  new FileWriter(file_path, true)) {	//Tries to open the file
 			switch (file_type) {
 				case "d_user": //User
-					writer.write("u_email=" + input[0] + "\n");
-					writer.write("u_password=" + input[1] + "\n");
-					writer.write("u_login=" + input[2] + "\n");
-					writer.write("u_last_login=" + input[3] + "\n");
+					writer.write("u_email=" + input[0] + "\r\n");
+					writer.write("u_password=" + input[1] + "\r\n");
+					writer.write("u_login=" + input[2] + "\r\n");
+					writer.write("u_last_login=" + input[3] + "\r\n");
+					writer.write("u_admin=" + input[4] + "\r\n");
 					break;
 				case "d_category": //Category
-					writer.write("category=" + input[0] + "\n");
+					writer.write("category=" + input[0] + "\r\n");
 					break;
 				case "d_product": //Product
-					writer.write("p_category=" + input[0] + "\n");
-					writer.write("p_id=" + input[1] + "\n");
-					writer.write("p_name=" + input[2] + "\n");
-					writer.write("p_price=" + input[3] + "\n");
-					writer.write("p_stock=" + input[4] + "\n");
+					writer.write("p_category=" + input[0] + "\r\n");
+					writer.write("p_id=" + input[1] + "\r\n");
+					writer.write("p_name=" + input[2] + "\r\n");
+					writer.write("p_price=" + input[3] + "\r\n");
+					writer.write("p_stock=" + input[4] + "\r\n");
 					break;
-				case "d_product_user ": //Product User
-					writer.write("pu_u_id=" + input[0] + "\n");
-					writer.write("pu_p_id=" + input[1] + "\n");
-					writer.write("pu_number=" + input[1] + "\n");
+				case "d_product_user": //Product User
+					writer.write("pu_u_id=" + input[0] + "\r\n");
+					writer.write("pu_p_id=" + input[1] + "\r\n");
+					writer.write("pu_number=" + input[2] + "\r\n");
 					break;
 			}
 			writer.close();
@@ -97,14 +76,9 @@ public class io_text {
 	//Starting function
 	protected static void data_check () { //Checks if the data files exist
 		File file_c = new File ("data_path");
+		String aux = "";
 		try(BufferedReader reader = new BufferedReader(new FileReader("data_path"))) { //Tries to open the file
-			String line = ""; //Line data
-			if (reader.readLine() != null) //Line exists
-				line = reader.readLine();
-			else { //Line doesn't exist, corrupted file, delete the old one and create a new one.
-				file_c.delete();
-				file_c.createNewFile();
-			}
+			String line = reader.readLine(); //Line data
 			reader.close();
 			if (line == "") { //If there is no content on the file, add default path
 				try(FileWriter writer =  new FileWriter("data_path", true)) { //Tries to open the file
@@ -115,7 +89,7 @@ public class io_text {
 				catch (Exception IOException) {} //Exception Catch
 			}
 			else { //If there is content on the file, read it and set it
-				data_path = line.replaceAll(".+=", ""); //Sets the defined path
+				data_path = line.replaceAll("DATA_PATH=", ""); //Sets the defined path
 			}
 
 		}
@@ -147,52 +121,45 @@ public class io_text {
 		catch (IOException e) {}
 	}
 	
-	protected static int search_user (String input) { //Searches the user inside the files
-		String file_path = data_path + "d_user";
-		try (BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
-			String line = ""; //Line data
-			while((line = reader.readLine()) != null){ //Buffered Reader searches for the user
-				if (line.equals("u_email=" + input)) //Check if this is the user line
-					return 1; //User found
-			}
-			reader.close();
-		}
-		catch (IOException e) { //Exception Catch
-			System.out.println("ERROR - File not found.");
-			return -1;
-		}
-		return 0; //No user found
-	}
-	
-	protected static void write_login (String username, boolean is_log_in) { //Writes the date of the login on the user
-		String file_path = data_path + "d_user";
+	protected static void modify (String file_type, String input, int skip, int amount) { //Writes the date of the login on the user
+		String file_path = data_path + file_type;
 		try (BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
 			String line = ""; //Line data
 			String text = ""; //Text from the file
+			String aux = "";
+			boolean applied = false;
 			while((line = reader.readLine()) != null){ //Buffered Reader searches for the user
-				if (line.equals(username)) { //Check if this is the user line
-					text += line + "\r\n"; //User
-					line = reader.readLine();
-					text += line + "\r\n"; //Password
-					line = reader.readLine();
-					if (is_log_in) { //Login in, login is written
-						//Login
-						Date d = new Date();
-						text += "u_login=" + d.getTime() + "\r\n";
-						//Last login
-						line = reader.readLine();
+				if (!applied) {
+					if (line.contains(input)) { //Check if this is the user line
+						for (int i = 0; i < skip; i++) { //Once found, lines to skip
+							text += line + "\r\n";
+							line = reader.readLine();
+						}
+						switch (file_type) {
+							case "d_user":
+								if (!login_method.logged_in) { //Login in, login is written
+									Date d = new Date(); //Get date
+									text += "u_login=" + d.getTime() + "\r\n"; //Login
+								}
+								else { //Log out, login is erased and last login gets the value of login
+									text += "u_login=0\r\n"; //Delete login info
+									aux = line; //Use auxiliar
+									aux = aux.replaceAll(".+=", ""); //Modify line
+									reader.readLine(); //Next line
+									text += "u_last_login=" + aux + "\r\n"; //Last login
+								}
+								break;
+							case "d_product":
+								aux = line;
+								aux = aux.replaceAll(".+=", ""); //Modify line
+								int stock = Integer.parseInt(aux);
+								text += "p_stock=" + (stock - amount) + "\r\n";
+								break;
+						}
+						applied = true;
+					}
+					else //Get the line
 						text += line + "\r\n";
-					}
-					else { //Log out, login is erased and last login gets the value of login
-						//Login
-						text += "u_login=0\r\n";
-						//Last login
-						String aux = line;
-						aux.replaceAll(".+=", "");
-						reader.readLine();
-						text += "u_last_login=" + aux + "\r\n";
-					}
-					break;
 				}
 				else //Get the line
 					text += line + "\r\n";
