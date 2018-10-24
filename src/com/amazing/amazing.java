@@ -20,6 +20,10 @@ public class amazing {
 		int cache_c; //Cache size
 		String aux_a[]; //Auxiliar data string
 
+		//Changes detected:
+		boolean change_c = true; //ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY
+		boolean change_pu = true; //ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY
+		boolean change_p = true; //ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY ADD WHEN CREATING CATEGORY
 		//Starting functions
 		io_text.data_check();
 
@@ -37,10 +41,13 @@ public class amazing {
 					break;
 				case 1: //Search by category
 					if (menu_2 == 0) { //Category list
-						c_category();
+						if (change_c) {
+							c_category();
+							change_c = false;
+						}
 						System.out.println("Category menu:");
 						for (int i = 0; i < c.length; i++) {
-							System.out.println(i+1 + "." + c[i].name());
+							System.out.println(i+1 + "." + c[i].r_name());
 						}
 						System.out.println((c.length + 1) + ". Exit");
 						menu_2 = filter.filter_i("Menu select: ", 1, c.length + 1);
@@ -50,14 +57,13 @@ public class amazing {
 						menu_2 = 0;
 					}
 					else {
-						io_text.read("d_product", c[menu_2]);
-						cache_c = io_text.c;
+						io_text.read("d_product", c[menu_2].r_name(), 150, 0, 0);
+						cache_c = io_text.data_c;
 						cache_a = new String [cache_c];
-						System.arraycopy(io_text.data, 0, cache_a, 0, cache_c);
-						System.out.println("Product list of " + category[menu_2]);
-						for (int i = 1; i == cache_c; i++) {
+						System.arraycopy(io_text.data_a, 0, cache_a, 0, cache_c);
+						System.out.println("Product list of " + c[menu_2 - 1]);
+						for (int i = 1; i <= cache_c; i++)
 							System.out.println(i + "." + cache_a[i]);
-						}
 						System.out.println(cache_c + 1 + ". Exit");
 						menu_3 = filter.filter_i("Menu select: ", 1, cache_c);
 						if (menu_3 == cache_c + 1) {
@@ -95,6 +101,22 @@ public class amazing {
 								menu_2 = 0;
 								break;
 							case 2: //Ordered products
+								if(change_pu) {
+									//Load products bought
+									io_text.read("d_product_user", "pu_u_id=" + active_user.r_email(), 90, 1, 0); //Get data
+									cache_c = io_text.data_c;
+									cache_a = new String[cache_c];
+									System.arraycopy(io_text.data_a, 0, cache_a, 0, cache_c); //Load ordered products
+									pu = new product_user[cache_c]; //Reset the size of the product
+									for (int i = 1; i <= cache_c; i++) { //Create product_user
+										String aux_i[] = new String [3];
+										aux_i[0] = cache_a[(i*3) - 3];
+										aux_i[1] = cache_a[(i*3) - 2];
+										aux_i[2] = cache_a[(i*3) - 1];
+										pu[i-1] = new product_user(aux_i);
+									}
+									change_pu = false;
+								}
 								for (int i = 0; i < cache_c; i += 3) { //Print the products bought
 									pu[i].print();
 								}
@@ -129,19 +151,6 @@ public class amazing {
 					else { //Log in
 						login_method.login_method_in();
 						System.out.println("Login in...");
-						//Load products bought
-						io_text.read("d_product_user", "pu_u_id=" + active_user.r_email(), 90, 1, 0); //Get data
-						cache_c = io_text.data_c;
-						cache_a = new String[cache_c];
-						System.arraycopy(io_text.data_a, 0, cache_a, 0, cache_c); //Load ordered products
-						pu = new product_user[cache_c]; //Reset the size of the product
-						for (int i = 1; i <= cache_c; i++) { //Create product_user
-							String aux_i[] = new String [3];
-							aux_i[0] = cache_a[(i*3) - 3];
-							aux_i[1] = cache_a[(i*3) - 2];
-							aux_i[2] = cache_a[(i*3) - 1];
-							pu[i-1] = new product_user(aux_i);
-						}
 						System.out.println("Successfully logged in.");
 						filter.filter_s("\n\nPress ENTER to continue: ");
 					}

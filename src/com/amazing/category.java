@@ -11,7 +11,7 @@ public class category {
 		this.name = input;
 	}
 	
-	protected String name() { //Return a name
+	protected String r_name() { //Return a name
 		return this.name;
 	}
 }

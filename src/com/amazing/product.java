@@ -1,9 +1,10 @@
 package com.amazing;
 
 public class product {
+	private String category_id;
 	private int id;
 	private String name;
-	private int category_id;
+	private float price;
 	private int stock;
 	
 	protected int r_id () {

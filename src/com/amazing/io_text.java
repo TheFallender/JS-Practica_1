@@ -32,6 +32,7 @@ public class io_text {
 								skip_multiple = false;
 							}
 						}
+						//CHANGE THIS CHANGE THIS CHANGE THIS CHANGE THIS CHANGE THIS CHANGE THIS CHANGE THISCHANGE THIS
 						if (skip_length == 0) { //No skips
 							for (int i = 0; i < search_max; i++) {
 								if (i != 0) //Next line
@@ -73,10 +74,11 @@ public class io_text {
 					writer.write("category=" + input[0] + "\n");
 					break;
 				case "d_product": //Product
-					writer.write("p_id=" + input[0] + "\n");
-					writer.write("p_name=" + input[1] + "\n");
-					writer.write("p_category=" + input[2] + "\n");
-					writer.write("p_stock=" + input[3] + "\n");
+					writer.write("p_category=" + input[0] + "\n");
+					writer.write("p_id=" + input[1] + "\n");
+					writer.write("p_name=" + input[2] + "\n");
+					writer.write("p_price=" + input[3] + "\n");
+					writer.write("p_stock=" + input[4] + "\n");
 					break;
 				case "d_product_user ": //Product User
 					writer.write("pu_u_id=" + input[0] + "\n");
