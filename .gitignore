@@ -20,5 +20,8 @@
 *.tar.gz
 *.rar
 
+# you can skip this first one if it is not already excluded by prior patterns
+!libraries/bouncycastle.jar
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
