@@ -6,12 +6,17 @@ It also has an inbuilt Euro-Dollar converter.
 If you want to be the admin, simply go to your user on the d_user file and change "u_admin=0" to "u_admin=1". Will implement a better and safer system in the future.
 
 
-## Manually modify settings
+## How to manually modify settings
 In case you want to manually create things outside of the app, here is the template for the files.
 
-data_path // You can use this file to change the data location
+Note that you shouldn't modify the password and that you can't see it in plain text. In case you want the password you could decrypt it. I will add a password recovery method.
 
-d_user //User data
+data_path // You can use this file to change the data location
+```
+DATA_PATH=
+```
+
+d_user //User data - All the user data is loaded here
 ```
 u_email=
 u_password=
@@ -20,12 +25,12 @@ u_last_login=
 u_admin=
 ```
 
-d_category //Category data
+d_category //Category data - All the categories should be here, note that this is the string.
 ```
 category=
 ```
 
-d_product //Product data
+d_product //Product data - Product data will be here
 ```
 p_category=
 p_id=
@@ -34,7 +39,7 @@ p_price=
 p_stock=
 ```
 
-d_product_user //Product user data
+d_product_user //Product user data - The data from the orders
 ```
 pu_u_id=
 pu_p_id=
