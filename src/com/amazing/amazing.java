@@ -34,7 +34,10 @@ public class amazing {
 					System.out.println("\nAmazing:");
 					System.out.println("1. Search by category.");
 					System.out.println("2. Account ");
-					System.out.println("3. Sing in or sing out.");
+					if (login_method.logged_in)
+						System.out.println("3. Sing out.");
+					else
+						System.out.println("3. Sing in.");
 					System.out.println("4. Create account.");
 					if (!dollar_a)
 						System.out.println("5. From USA? Change to dollars.");
@@ -266,7 +269,7 @@ public class amazing {
 		}
 	}
 	
-	private static void c_category() { //Category create
+	protected static void c_category() { //Category create
 		String cache_a[]; //Cache array
 		int cache_c; //Cache size
 		
@@ -282,7 +285,7 @@ public class amazing {
 		}
 	}
 	
-	private static void c_product () { //Product create
+	protected static void c_product () { //Product create
 		String aux_i[] = new String[5];
 		io_text.read("d_product", "", 30, true); //Get data
 		p = new product[io_text.data_c/5]; //Reset the size of the product
@@ -298,7 +301,7 @@ public class amazing {
 		}
 	}
 	
-	private static void c_product_user() { //Product user create
+	protected static void c_product_user() { //Product user create
 		String aux_i[] = new String[5];
 		io_text.read("d_product_user", "", 900, false); //Get data
 		pu = new product_user[io_text.data_c/3]; //Reset the size of the product

@@ -104,21 +104,27 @@ public class io_text {
 			catch (IOException e_2) {}
 		}
 		//Files check
-		files_check(data_path + "d_category");
-		files_check(data_path + "d_product");
-		files_check(data_path + "d_user");
-		files_check(data_path + "d_product_user");
+		files_check(data_path, true);
+		files_check(data_path + "d_category", false);
+		files_check(data_path + "d_product", false);
+		files_check(data_path + "d_user", false);
+		files_check(data_path + "d_product_user", false);
 	}
 	
 	
 	//Auxiliary functions
-	private static void files_check(String path) { //Checks if file exists, if not it creates one
+	private static void files_check(String path, boolean folder) { //Checks if file exists, if not it creates one
 		try {
 			File file = new File(path);
 			if (!file.exists())
-				file.createNewFile();
+				if (folder)
+					file.mkdir();
+				else		
+					file.createNewFile();
 		} 
-		catch (IOException e) {}
+		catch (IOException e) {
+			System.out.println("WAIT WHAT?");
+		}
 	}
 	
 	protected static void modify (String file_type, String input, int skip, int amount) { //Writes the date of the login on the user

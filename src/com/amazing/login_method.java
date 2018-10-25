@@ -10,28 +10,22 @@ public class login_method {
 		String e_password; //Encrypted password
 		while(true) { //User check
 			email = filter.filter_s("Insert your email: ");
-			e_email = email;
 			if (email.equals("exit"))
 				return false;
-			/*
 			try {
-				e_email = encrypter.encrypt(email);
-				System.out.println(e_email);
 				e_password = encrypter.encrypt(filter.filter_s("Insert your password: "));
 			}
 			catch (Exception e) {
 				throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");
 			}
-			*/
-			e_password = filter.filter_s("Insert your password: ");
-			io_text.read("d_user", "u_email=" + e_email, 5, false);
+			io_text.read("d_user", "u_email=" + email, 5, false);
 			if (io_text.data_a[0] == null) { //User not found
 				System.out.println("ERROR - Username and password doesn't match.");
 			}
 			else { //User exists
 				if (e_password.equals(io_text.data_a[1])) { //Password match login in
 					amazing.active_user = new user (io_text.data_a);
-					io_text.modify("d_user" , e_email, 2, 0);
+					io_text.modify("d_user" , email, 2, 0);
 					logged_in = true;
 					return true;
 				}

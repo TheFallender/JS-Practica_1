@@ -1,5 +1,7 @@
 package com.amazing;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class user { //User login
@@ -12,19 +14,16 @@ public class user { //User login
 	protected user() { //Creates a user from scratch
 		//User
 		while(true) { //User check
-			String e_email = "";
-			String temp_email = filter.filter_s("Insert your email: ");
-			if (temp_email.equals("exit")) {	//Prevent exit as email
+			String email = filter.filter_s("Insert your email: ");
+			if (email.equals("exit")) {	//Prevent exit as email
 				System.out.println("ERROR - You can't enter 'exit' as an email.");
 			}
 			else {
 				try {
-					//e_email = encrypter.encrypt(temp_email);
-					e_email = (temp_email);
-					io_text.read("d_user", "u_email=" + e_email, 1, false);
+					io_text.read("d_user", "u_email=" + email, 1, false);
 					if (io_text.data_a[0] == null) { //User doesn't exist, proceed
 						try {
-							this.email = e_email;
+							this.email = email;
 							break;
 						}
 						catch (Exception e) {
@@ -42,7 +41,7 @@ public class user { //User login
 		//Password
 		try {
 			//this.password = encrypter.encrypt(filter.filter_s("Insert your password: "));
-			this.password = filter.filter_s("Insert your password: ");
+			this.password = encrypter.encrypt(filter.filter_s("Insert your password: "));
 		} catch (Exception e) {
 			throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");
 		}
@@ -95,17 +94,25 @@ public class user { //User login
 		return admin.equals("1")?true:false;
 	}
 	protected void print() { //Print user
+
 		try { //Decrypt try
 			//System.out.println("Email: " + encrypter.decrypt(this.email));
 			System.out.println("Email: " + (this.email));
 			System.out.println("Password: ********");
-			System.out.println("Login: " + this.login);
-			System.out.println("Last login: " + this.last_login);
+			System.out.println("Login: " + date_s("" + Instant.ofEpochMilli(this.login).atZone(ZoneId.of("Europe/Paris"))));
+			System.out.println("Last login: " + date_s("" + Instant.ofEpochMilli(this.last_login).atZone(ZoneId.of("Europe/Paris"))));
 			if(r_admin()) {
 				System.out.println("This user has admin access");
 			}
 		} catch (Exception e) {
 			throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");
 		}
+	}
+	
+	protected String date_s(String input) {
+		String aux_p[] = input.split("T");
+		aux_p[0].replaceAll("-", "/");
+		aux_p[1] = aux_p[1].replaceAll("\\..*", "");
+		return aux_p[0] + "	- " + aux_p[1];
 	}
 }
