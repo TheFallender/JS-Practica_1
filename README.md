@@ -1,4 +1,4 @@
-#Amazing
+# Amazing
 This project tries to immitate how a marketstore like Amazon would work. It gives you the option to create products, category (only if you are an admin) and buy the products.
 
 It also has an inbuilt Euro-Dollar converter.
@@ -6,7 +6,7 @@ It also has an inbuilt Euro-Dollar converter.
 If you want to be the admin, simply go to your user on the d_user file and change "u_admin=0" to "u_admin=1". Will implement a better and safer system in the future.
 
 
-##Manually modify settings
+## Manually modify settings
 In case you want to manually create things outside of the app, here is the template for the files.
 
 data_path // You can use this file to change the data location
