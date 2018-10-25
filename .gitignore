@@ -11,6 +11,7 @@
 .mtj.tmp/
 # ignore an entire directory
 /src/data
+/bin/data
 # Package Files #
 *.jar
 *.war
