@@ -47,7 +47,7 @@ public class user { //User login
 		}
 		Date d = new Date();
 		this.login = d.getTime();
-		this.last_login = 0;
+		this.last_login = this.login;
 		String aux[] = new String[5];
 		aux[0] = this.email;
 		aux[1] = this.password;
@@ -96,11 +96,10 @@ public class user { //User login
 	protected void print() { //Print user
 
 		try { //Decrypt try
-			//System.out.println("Email: " + encrypter.decrypt(this.email));
 			System.out.println("Email: " + (this.email));
 			System.out.println("Password: ********");
-			System.out.println("Login: " + date_s("" + Instant.ofEpochMilli(this.login).atZone(ZoneId.of("Europe/Paris"))));
-			System.out.println("Last login: " + date_s("" + Instant.ofEpochMilli(this.last_login).atZone(ZoneId.of("Europe/Paris"))));
+			System.out.println("Login: " + date_s("		" + Instant.ofEpochMilli(this.login).atZone(ZoneId.of("Europe/Paris"))));
+			System.out.println("Last login: " + date_s("	" + Instant.ofEpochMilli(this.last_login).atZone(ZoneId.of("Europe/Paris"))));
 			if(r_admin()) {
 				System.out.println("This user has admin access");
 			}

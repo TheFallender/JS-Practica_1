@@ -40,11 +40,11 @@ public class filter {
 					return val;
 				}
 				else { //Error
-					System.out.println("ERROR - The interger has to be between " + low + " and " + high + ".");
+					System.out.println("ERROR - The value has to be between " + low + " and " + high + ".");
 				}
 			}  
 			catch(NumberFormatException e)  { //Catch error
-				System.out.println("ERROR - You must enter an integer.");
+				System.out.println("ERROR - You must enter valid value.");
 			}
 		}
 	}
