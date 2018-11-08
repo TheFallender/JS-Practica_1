@@ -1,31 +1,31 @@
 package com.amazing;
 
-import com.amazing.user;
+import com.amazing.User;
 
-public class login_method {
+public class Login_method {
 	protected static boolean logged_in = false;
 	protected static boolean login_method_in() {
 		String email;
 		String e_email; //Encrypted email
 		String e_password; //Encrypted password
 		while(true) { //User check
-			email = filter.filter_s("Insert your email: ");
+			email = Filter.filter_s("Insert your email: ");
 			if (email.equals("exit"))
 				return false;
 			try {
-				e_password = encrypter.encrypt(filter.filter_s("Insert your password: "));
+				e_password = Encrypter.encrypt(Filter.filter_s("Insert your password: "));
 			}
 			catch (Exception e) {
 				throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");
 			}
-			io_text.read("d_user", "u_email=" + email, 5, false);
-			if (io_text.data_a[0] == null) { //User not found
+			IO.read("d_user", "u_email=" + email, 5, false);
+			if (IO.data_a[0] == null) { //User not found
 				System.out.println("ERROR - Username and password doesn't match.");
 			}
 			else { //User exists
-				if (e_password.equals(io_text.data_a[1])) { //Password match login in
-					amazing.active_user = new user (io_text.data_a);
-					io_text.modify("d_user" , email, 2, 0);
+				if (e_password.equals(IO.data_a[1])) { //Password match login in
+					Amazing.active_user = new User (IO.data_a);
+					IO.modify("d_user" , email, 2, 0);
 					logged_in = true;
 					return true;
 				}
@@ -37,9 +37,9 @@ public class login_method {
 	}
 	
 	protected static void login_method_out() {
-		io_text.modify("d_user", "u_email=" + amazing.active_user.r_email(), 2, 0);
-		amazing.active_user.reset();
-		amazing.active_user = null;
+		IO.modify("d_user", "u_email=" + Amazing.active_user.r_email(), 2, 0);
+		Amazing.active_user.reset();
+		Amazing.active_user = null;
 		logged_in = false;
 	}
 }

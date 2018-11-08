@@ -7,7 +7,7 @@ import java.io.FileWriter;		//File Writer
 import java.util.Date;			//Date
 import java.io.IOException;		//Exception
 
-public class io_text {
+public class IO {
 	protected static String data_path = ""; //Path to the Data Folder
 	protected static String data_a[] = null; //Data array
 	protected static int data_c = 0; //Data count size
@@ -143,7 +143,7 @@ public class io_text {
 						}
 						switch (file_type) {
 							case "d_user":
-								if (!login_method.logged_in) { //Login in, login is written
+								if (!Login_method.logged_in) { //Login in, login is written
 									Date d = new Date(); //Get date
 									text += "u_login=" + d.getTime() + "\r\n"; //Login
 								}

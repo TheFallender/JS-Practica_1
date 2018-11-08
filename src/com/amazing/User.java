@@ -4,24 +4,24 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class user { //User login
+public class User { //User login
 	private String email;
 	private String password;
 	private long login;
 	private long last_login;
 	private String admin = "0";
 	
-	protected user() { //Creates a user from scratch
+	protected User() { //Creates a user from scratch
 		//User
 		while(true) { //User check
-			String email = filter.filter_s("Insert your email: ");
+			String email = Filter.filter_s("Insert your email: ");
 			if (email.equals("exit")) {	//Prevent exit as email
 				System.out.println("ERROR - You can't enter 'exit' as an email.");
 			}
 			else {
 				try {
-					io_text.read("d_user", "u_email=" + email, 1, false);
-					if (io_text.data_a[0] == null) { //User doesn't exist, proceed
+					IO.read("d_user", "u_email=" + email, 1, false);
+					if (IO.data_a[0] == null) { //User doesn't exist, proceed
 						try {
 							this.email = email;
 							break;
@@ -41,7 +41,7 @@ public class user { //User login
 		//Password
 		try {
 			//this.password = encrypter.encrypt(filter.filter_s("Insert your password: "));
-			this.password = encrypter.encrypt(filter.filter_s("Insert your password: "));
+			this.password = Encrypter.encrypt(Filter.filter_s("Insert your password: "));
 		} catch (Exception e) {
 			throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");
 		}
@@ -54,10 +54,10 @@ public class user { //User login
 		aux[2] = "" + this.login;
 		aux[3] = "" + this.last_login;
 		aux[4] = "0";
-		io_text.write("d_user", aux);
+		IO.write("d_user", aux);
 	}
 	
-	protected user(String data[]) { //Creates a user based on the data String
+	protected User(String data[]) { //Creates a user based on the data String
 		this.email = data[0];
 		this.password = data[1];
 		Date d = new Date();

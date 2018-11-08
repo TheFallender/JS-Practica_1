@@ -1,14 +1,14 @@
 package com.amazing;
 
 //Menu, marketplace function
-public class amazing {
-	protected static user active_user = null;
+public class Amazing {
+	protected static User active_user = null;
 	
 	//Data array
-	private static category c[] = null;
-	private static product p[] = null;
-	private static product pl[] = null;
-	private static product_user pu[] = null;
+	private static Category c[] = null;
+	private static Product p[] = null;
+	private static Product pl[] = null;
+	private static Product_user pu[] = null;
 	private static int pu_s = 0;
 	
 	//Dollar
@@ -25,7 +25,7 @@ public class amazing {
 		String comp_pr[] = new String[2]; //Compare product
 		comp_pr[0] = ""; //Set base
 		//Starting functions
-		io_text.data_check();
+		IO.data_check();
 		
 		//Menu
 		while(true) {
@@ -34,7 +34,7 @@ public class amazing {
 					System.out.println("\nAmazing:");
 					System.out.println("1. Search by category.");
 					System.out.println("2. Account ");
-					if (login_method.logged_in)
+					if (Login_method.logged_in)
 						System.out.println("3. Sing out.");
 					else
 						System.out.println("3. Sing in.");
@@ -44,7 +44,7 @@ public class amazing {
 					else
 						System.out.println("5. From Europe? Change to euros.");
 					System.out.println("6. Exit.");
-					menu[0] = filter.filter_i("\nMenu select: ", 1, 6);
+					menu[0] = Filter.filter_i("\nMenu select: ", 1, 6);
 					break;
 				case 1: //Search by category
 					if (menu[1] == 0) { //Category list
@@ -57,7 +57,7 @@ public class amazing {
 						for (int i = 0; i < c.length; i++) //Print categories
 							System.out.println(i+1 + ". " + c[i].r_name());
 						System.out.println((c.length + 1) + ". Exit"); //Print exit
-						menu[1] = filter.filter_i("\nMenu select: ", 1, c.length + 1); //Request selection
+						menu[1] = Filter.filter_i("\nMenu select: ", 1, c.length + 1); //Request selection
 					}
 					else if(menu[1] == c.length + 1) { //Exit
 						menu[0] = 0;
@@ -69,7 +69,7 @@ public class amazing {
 							c_product();
 							System.out.println("\nProduct list of " + c[menu[1] - 1].r_name() + ":");
 							String aux_pr[] = new String [5];
-							pl = new product[p.length];
+							pl = new Product[p.length];
 							for (int i = 0; i < p.length; i++) { //Print products
 								if (p[i].r_category().equals(c[menu[1] - 1].r_name())) {
 									System.out.println((pl_n + 1) + ". " + p[i].r_name());
@@ -78,12 +78,12 @@ public class amazing {
 									aux_pr[2] = p[i].r_name();
 									aux_pr[3] = "" + p[i].r_price();
 									aux_pr[4] = "" + p[i].r_stock();
-									pl[pl_n] = new product (aux_pr);
+									pl[pl_n] = new Product (aux_pr);
 									pl_n++;
 								}
 							}
 							System.out.println((pl_n + 1) + ". Exit"); //Print exit
-							menu[2] = filter.filter_i("\nMenu select: ", 1, pl_n + 1); //Request selection
+							menu[2] = Filter.filter_i("\nMenu select: ", 1, pl_n + 1); //Request selection
 						}
 						else if(menu[2] == pl_n + 1) { //Exit
 							menu[1] = 0;
@@ -97,36 +97,36 @@ public class amazing {
 									System.out.println("1. Buy.");
 									System.out.println("2. Compare. ");
 									System.out.println("3. Exit.");
-									menu[3] = filter.filter_i("\nMenu select: ", 1, 3);
+									menu[3] = Filter.filter_i("\nMenu select: ", 1, 3);
 									break;
 								case 1: //Buy
-									if (login_method.logged_in) {
+									if (Login_method.logged_in) {
 										if (pl[menu[2] - 1].r_stock() > 0) {
 											aux_a = new String [3];
 											aux_a[0] = "" + pl[menu[2] - 1].r_id();
 											aux_a[1] = active_user.r_email();
-											int amount = filter.filter_i("How many do you want to buy? ", 1, 10);
+											int amount = Filter.filter_i("How many do you want to buy? ", 1, 10);
 											aux_a[2] = "" + amount;
 											if (pl[menu[2] - 1].r_stock() - Integer.parseInt(aux_a[2]) >= 0) {
-												product_user bought_product = new product_user(aux_a);
+												Product_user bought_product = new Product_user(aux_a);
 												pl[menu[2] - 1].buy(aux_a[2]);
-												io_text.modify("d_product", aux_a[0], 3, amount);
+												IO.modify("d_product", aux_a[0], 3, amount);
 												changes_pu = true;
 												changes_p = true;
 											}
 											else {
 												System.out.println("ERROR - There's not enough stock.");
-												filter.filter_s("\n\nPress ENTER to continue: ");
+												Filter.filter_s("\n\nPress ENTER to continue: ");
 											}
 										}
 										else {
 											System.out.println("ERROR - There's no stock.");
-											filter.filter_s("\n\nPress ENTER to continue: ");
+											Filter.filter_s("\n\nPress ENTER to continue: ");
 										}
 									}
 									else {
 										System.out.println("ERROR - You must be logged in in order to buy.");
-										filter.filter_s("\n\nPress ENTER to continue: ");
+										Filter.filter_s("\n\nPress ENTER to continue: ");
 									}
 									menu[3] = 0;
 									break;
@@ -152,7 +152,7 @@ public class amazing {
 					}
 					break;
 				case 2:	//Account
-					if (login_method.logged_in) { //Log out
+					if (Login_method.logged_in) { //Log out
 						switch(menu[1]) {
 							case 0: //Menu
 								System.out.println("\nAccount menu:");
@@ -162,15 +162,15 @@ public class amazing {
 								System.out.println("4. Homepage.");
 								if (active_user.r_admin()) {
 									System.out.println("5. Admin settings.");
-									menu[1] = filter.filter_i("\nMenu select: ", 1, 5);
+									menu[1] = Filter.filter_i("\nMenu select: ", 1, 5);
 								}
 								else {
-									menu[1] = filter.filter_i("\nMenu select: ", 1, 4);
+									menu[1] = Filter.filter_i("\nMenu select: ", 1, 4);
 								}
 								break;
 							case 1: //See info
 								active_user.print();
-								filter.filter_s("\n\nPress ENTER to continue: ");
+								Filter.filter_s("\n\nPress ENTER to continue: ");
 								menu[1] = 0;
 								break;
 							case 2: //Ordered products
@@ -180,13 +180,13 @@ public class amazing {
 								for (int i = 0; i < pu_s; i++) { //Print the products bought
 									pu[i].print();
 								}
-								filter.filter_s("\n\nPress ENTER to continue: ");
+								Filter.filter_s("\n\nPress ENTER to continue: ");
 								menu[1] = 0;
 								break;
 							case 3: //Log out
-								login_method.login_method_out();
+								Login_method.login_method_out();
 								System.out.println("Successfully logged out.");
-								filter.filter_s("\n\nPress ENTER to continue: ");
+								Filter.filter_s("\n\nPress ENTER to continue: ");
 								menu[0] = 0;
 								menu[1] = 0;
 								break;
@@ -201,15 +201,15 @@ public class amazing {
 										System.out.println("1. New category.");
 										System.out.println("2. New Product.");
 										System.out.println("3. Exit.");
-										menu[2] = filter.filter_i("\nMenu select: ", 1, 3);
+										menu[2] = Filter.filter_i("\nMenu select: ", 1, 3);
 										break;
 									case 1:
-										category new_c = new category();
+										Category new_c = new Category();
 										changes_c = true;
 										menu[2] = 0;
 										break;
 									case 2:
-										product new_p = new product();
+										Product new_p = new Product();
 										changes_p = true;
 										menu[2] = 0;
 										break;
@@ -223,46 +223,46 @@ public class amazing {
 					}
 					else { //Log in
 						System.out.println("ERROR - You have to be logged in to see this.");
-						filter.filter_s("\n\nPress ENTER to continue: ");
+						Filter.filter_s("\n\nPress ENTER to continue: ");
 						menu[0] = 0;
 					}
 					break;
 				case 3: //Log in
-					if (login_method.logged_in) { //Log out
-						login_method.login_method_out();
+					if (Login_method.logged_in) { //Log out
+						Login_method.login_method_out();
 						System.out.println("Successfully logged out.");
-						filter.filter_s("\n\nPress ENTER to continue: ");
+						Filter.filter_s("\n\nPress ENTER to continue: ");
 					}
 					else { //Log in
-						if (login_method.login_method_in()) {
+						if (Login_method.login_method_in()) {
 							System.out.println("Login in...");
 							System.out.println("Successfully logged in.");
 						}
-						filter.filter_s("\n\nPress ENTER to continue: ");
+						Filter.filter_s("\n\nPress ENTER to continue: ");
 					}
 					menu[0] = 0;
 					break;
 				case 4: //Create account
-					if (login_method.logged_in) {
+					if (Login_method.logged_in) {
 						System.out.println("ERROR - You are already logged in.");
-						filter.filter_s("\n\nPress ENTER to continue: ");
+						Filter.filter_s("\n\nPress ENTER to continue: ");
 					}
 					else {
-						active_user = new user();
-						login_method.logged_in = true;
+						active_user = new User();
+						Login_method.logged_in = true;
 					}
 					menu[0] = 0;
 					break;
 				case 5: //Change dollar
 					dollar_a = !dollar_a;
 					System.out.println("Changed the currency.");
-					filter.filter_s("\n\nPress ENTER to continue: ");
+					Filter.filter_s("\n\nPress ENTER to continue: ");
 					menu[0] = 0;
 					break;
 				case 6: //Close program
-					filter.scan.close();
-					if (login_method.logged_in) { //Log out
-						login_method.login_method_out();
+					Filter.scan.close();
+					if (Login_method.logged_in) { //Log out
+						Login_method.login_method_out();
 					}
 					return;
 			}
@@ -274,46 +274,46 @@ public class amazing {
 		int cache_c; //Cache size
 		
 		//Load categories
-		io_text.read("d_category", "", 15, false); //Get data
-		cache_c = io_text.data_c; //Cache data counter
+		IO.read("d_category", "", 15, false); //Get data
+		cache_c = IO.data_c; //Cache data counter
 		cache_a = new String[cache_c]; //Cache data array
-		System.arraycopy(io_text.data_a, 0, cache_a, 0, cache_c); //Load categories
-		c = new category[cache_c]; //Reset the size of the category
+		System.arraycopy(IO.data_a, 0, cache_a, 0, cache_c); //Load categories
+		c = new Category[cache_c]; //Reset the size of the category
 		
 		for (int i = 0; i < cache_c; i++) { //Create categories
-			c[i] = new category(cache_a[i]);
+			c[i] = new Category(cache_a[i]);
 		}
 	}
 	
 	protected static void c_product () { //Product create
 		String aux_i[] = new String[5];
-		io_text.read("d_product", "", 30, true); //Get data
-		p = new product[io_text.data_c/5]; //Reset the size of the product
+		IO.read("d_product", "", 30, true); //Get data
+		p = new Product[IO.data_c/5]; //Reset the size of the product
 		
 		//Product list
-		for(int i = 1; i <= io_text.data_c/5; i++) {
-			aux_i[0] = io_text.data_a[(i*5) - 5];
-			aux_i[1] = io_text.data_a[(i*5) - 4];
-			aux_i[2] = io_text.data_a[(i*5) - 3];
-			aux_i[3] = io_text.data_a[(i*5) - 2];
-			aux_i[4] = io_text.data_a[(i*5) - 1];
-			p[i-1] = new product(aux_i);
+		for(int i = 1; i <= IO.data_c/5; i++) {
+			aux_i[0] = IO.data_a[(i*5) - 5];
+			aux_i[1] = IO.data_a[(i*5) - 4];
+			aux_i[2] = IO.data_a[(i*5) - 3];
+			aux_i[3] = IO.data_a[(i*5) - 2];
+			aux_i[4] = IO.data_a[(i*5) - 1];
+			p[i-1] = new Product(aux_i);
 		}
 	}
 	
 	protected static void c_product_user() { //Product user create
 		String aux_i[] = new String[5];
-		io_text.read("d_product_user", "", 900, false); //Get data
-		pu = new product_user[io_text.data_c/3]; //Reset the size of the product
+		IO.read("d_product_user", "", 900, false); //Get data
+		pu = new Product_user[IO.data_c/3]; //Reset the size of the product
 		pu_s = 0;
 		int size = 0;
 		//Product list
-		for(int i = 1; i <= io_text.data_c/3; i++) {
-			aux_i[0] = io_text.data_a[(i*3) - 3];
-			aux_i[1] = io_text.data_a[(i*3) - 2];
-			aux_i[2] = io_text.data_a[(i*3) - 1];
-			if(aux_i[1].equals(amazing.active_user.r_email())) {
-				pu[pu_s] = new product_user(aux_i, false);
+		for(int i = 1; i <= IO.data_c/3; i++) {
+			aux_i[0] = IO.data_a[(i*3) - 3];
+			aux_i[1] = IO.data_a[(i*3) - 2];
+			aux_i[2] = IO.data_a[(i*3) - 1];
+			if(aux_i[1].equals(Amazing.active_user.r_email())) {
+				pu[pu_s] = new Product_user(aux_i, false);
 				pu_s++;
 			}
 		}

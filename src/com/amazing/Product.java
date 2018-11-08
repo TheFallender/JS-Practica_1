@@ -1,19 +1,19 @@
 package com.amazing;
 
-public class product {
+public class Product {
 	private String category_id;
 	private int id;
 	private String name;
 	private float price;
 	private int stock;
 	
-	protected product() { //Default constructor
+	protected Product() { //Default constructor
 		String aux[] = new String[5];
-		this.name = filter.filter_s("Name of the product: ");
-		this.id = filter.filter_i("Id of the product: ", 0, 1000000);
-		this.category_id = filter.filter_s("Category of the product: ");
-		this.price = filter.filter_f("Value of the product (€): ", 0 , 10000);
-		this.stock = filter.filter_i("Stock of this product: ", 0 , 10000);
+		this.name = Filter.filter_s("Name of the product: ");
+		this.id = Filter.filter_i("Id of the product: ", 0, 1000000);
+		this.category_id = Filter.filter_s("Category of the product: ");
+		this.price = Filter.filter_f("Value of the product (€): ", 0 , 10000);
+		this.stock = Filter.filter_i("Stock of this product: ", 0 , 10000);
 		
 		aux[0] = this.category_id;
 		aux[1] = "" + this.id;
@@ -21,10 +21,10 @@ public class product {
 		aux[3] = "" + this.price;
 		aux[4] = "" + this.stock;
 		
-		io_text.write("d_product", aux);
+		IO.write("d_product", aux);
 	}
 	
-	protected product(String data[]) { //
+	protected Product(String data[]) { //
 		this.category_id = data[0];
 		this.id = Integer.parseInt(data[1]);
 		this.name = data[2];
@@ -57,8 +57,8 @@ public class product {
 		System.out.println("Name: " + this.name);
 		System.out.println("Id: " + this.id);
 		System.out.println("Category: " + this.category_id);
-		if (amazing.dollar_a)
-			System.out.println("Price: " + this.price * amazing.dollar + "$");
+		if (Amazing.dollar_a)
+			System.out.println("Price: " + this.price * Amazing.dollar + "$");
 		else
 			System.out.println("Price: " + this.price + "€");
 		System.out.println("Stock: " + this.stock);
@@ -69,8 +69,8 @@ public class product {
 		aux += this.category_id + "/";
 		aux += this.id + "/";
 		aux += this.name + "/";
-		if (amazing.dollar_a)
-			aux += this.price * amazing.dollar + "$/";
+		if (Amazing.dollar_a)
+			aux += this.price * Amazing.dollar + "$/";
 		else
 			aux += this.price + "€/";
 		aux += this.stock;

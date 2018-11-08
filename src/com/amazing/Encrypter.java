@@ -5,7 +5,7 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-public class encrypter {
+public class Encrypter {
 	//Variables
 	private static final byte[] keyBytes = "BestPasSword2018".getBytes();				//Set the secret key
 	private static final SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");		//Define the secret key as an "AES" key

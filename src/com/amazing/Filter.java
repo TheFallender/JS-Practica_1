@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Scanner;
 
-public class filter {
+public class Filter {
 	public static Scanner scan = new Scanner(System.in); //Scanner definition
 	private static InputStream skipper = new ByteArrayInputStream("".getBytes());
 	
