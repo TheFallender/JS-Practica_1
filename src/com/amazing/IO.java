@@ -16,6 +16,7 @@ public class IO {
 		String file_path = data_path + file_type;	//Path to the file
 		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
 			data_a = new String[array_size];
+			data_a[0] = ""; //Check if no data is found
 			data_c = 0; //Counter
 			String line = ""; //Line data
 			for (line = reader.readLine(); line != null; line = reader.readLine()) { //Search in the file
@@ -38,9 +39,9 @@ public class IO {
 		}
 	}
 	
-	protected static void write (String file_type, String input[]) {	//Writes the new object
+	protected static void write (String file_type, String input[], boolean append) {	//Writes the new object
 		String file_path = data_path + file_type;	//Path to the file
-		try(FileWriter writer =  new FileWriter(file_path, true)) {	//Tries to open the file
+		try(FileWriter writer =  new FileWriter(file_path, append)) {	//Tries to open the file
 			switch (file_type) {
 				case "d_user": //User
 					writer.write("u_email=" + input[0] + "\r\n");
@@ -64,6 +65,8 @@ public class IO {
 					writer.write("pu_p_id=" + input[1] + "\r\n");
 					writer.write("pu_number=" + input[2] + "\r\n");
 					break;
+				case "d_conversor_rate":
+					writer.write("latest_conversor_rate=" + input[0] + "\r\n");
 			}
 			writer.close();
 		}
@@ -109,6 +112,7 @@ public class IO {
 		files_check(data_path + "d_product", false);
 		files_check(data_path + "d_user", false);
 		files_check(data_path + "d_product_user", false);
+		files_check(data_path + "d_conversor_rate", false);
 	}
 	
 	

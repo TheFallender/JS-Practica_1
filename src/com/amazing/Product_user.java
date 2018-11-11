@@ -19,7 +19,7 @@ public class Product_user {
 		aux[0] = "" + this.product_id;
 		aux[1] = this.user_id;
 		aux[2] = "" + this.number_items;
-		IO.write("d_product_user", aux);
+		IO.write("d_product_user", aux, true);
 	}
 
 	protected void print() {
@@ -27,7 +27,7 @@ public class Product_user {
 		IO.read("d_product", "p_id=" + this.product_id, 3, false); //Get one data
 		System.out.println("Name: " + IO.data_a[1]);
 		if (Amazing.dollar_a)
-			System.out.println("Price: " + Float.parseFloat(IO.data_a[2]) * Amazing.dollar + "$");
+			System.out.println("Price: " + Float.parseFloat(IO.data_a[2]) * Amazing.eur_dollar + "$");
 		else
 			System.out.println("Price: " + IO.data_a[2] + "€");
 		System.out.println("Ordered: " + this.number_items + "\n\n");

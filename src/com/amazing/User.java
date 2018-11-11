@@ -54,7 +54,7 @@ public class User { //User login
 		aux[2] = "" + this.login;
 		aux[3] = "" + this.last_login;
 		aux[4] = "0";
-		IO.write("d_user", aux);
+		IO.write("d_user", aux, true);
 	}
 	
 	protected User(String data[]) { //Creates a user based on the data String

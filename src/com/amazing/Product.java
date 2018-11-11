@@ -21,7 +21,7 @@ public class Product {
 		aux[3] = "" + this.price;
 		aux[4] = "" + this.stock;
 		
-		IO.write("d_product", aux);
+		IO.write("d_product", aux, true);
 	}
 	
 	protected Product(String data[]) { //
@@ -58,7 +58,7 @@ public class Product {
 		System.out.println("Id: " + this.id);
 		System.out.println("Category: " + this.category_id);
 		if (Amazing.dollar_a)
-			System.out.println("Price: " + this.price * Amazing.dollar + "$");
+			System.out.println("Price: " + this.price * Amazing.eur_dollar + "$");
 		else
 			System.out.println("Price: " + this.price + "€");
 		System.out.println("Stock: " + this.stock);
@@ -70,7 +70,7 @@ public class Product {
 		aux += this.id + "/";
 		aux += this.name + "/";
 		if (Amazing.dollar_a)
-			aux += this.price * Amazing.dollar + "$/";
+			aux += this.price * Amazing.eur_dollar + "$/";
 		else
 			aux += this.price + "€/";
 		aux += this.stock;
