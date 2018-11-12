@@ -92,7 +92,7 @@ public class IO {
 		files_check(data_path + "d_product", false);
 		files_check(data_path + "d_user", false);
 		files_check(data_path + "d_product_user", false);
-		files_check(data_path + "d_conversor_rate", false);
+		files_check(data_path + "d_converter_rate", false);
 	}
 	
 	
