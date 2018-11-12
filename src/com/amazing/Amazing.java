@@ -32,7 +32,7 @@ public class Amazing {
 			
 			//Starting functions
 			IO.data_check();
-			eur_dollar = Conversor.factor("eur", "usd");
+			eur_dollar = Converter.factor("eur", "usd");
 			
 			//Menu
 			while(true) {

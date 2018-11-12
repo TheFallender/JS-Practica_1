@@ -3,10 +3,10 @@ package com.amazing;
 public class Test_inside extends Test {
 	@Override
 	public void test() {
-		//Conversor test
+		//Converter test
 		IO.data_check();
-		System.out.println(Conversor.factor("eur", "usd")); //Get the value from the net
-		System.out.println(Conversor.factor("TEST", "ERROR")); //Will find and error and check for the stored value
+		System.out.println(Converter.factor("eur", "usd")); //Get the value from the net
+		System.out.println(Converter.factor("TEST", "ERROR")); //Will find and error and check for the stored value
 		
 		
 		//Test if the encrypter and the decrypter works
