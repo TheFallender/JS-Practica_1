@@ -1,9 +1,9 @@
 package com.amazing;
 
 public class Product {
-	private String category_id;
 	private int id;
 	private String name;
+	private String category_id;
 	private float price;
 	private int stock;
 	
@@ -15,19 +15,19 @@ public class Product {
 		this.price = Filter.filter_f("Value of the product (€): ", 0 , 10000);
 		this.stock = Filter.filter_i("Stock of this product: ", 0 , 10000);
 		
-		aux[0] = "p_category=" + this.category_id;
-		aux[1] = "p_id=" + this.id;
-		aux[2] = "p_name=" + this.name;
+		aux[0] = "p_id=" + this.id;
+		aux[1] = "p_name=" + this.name;
+		aux[2] = "p_category=" + this.category_id;
 		aux[3] = "p_price=" + this.price;
 		aux[4] = "p_stock=" + this.stock;
 		
 		IO.write("d_product", aux, true);
 	}
 	
-	protected Product(String data[]) { //
-		this.category_id = data[0];
-		this.id = Integer.parseInt(data[1]);
-		this.name = data[2];
+	protected Product(String data[]) { //Product data passed
+		this.id = Integer.parseInt(data[0]);
+		this.name = data[1];
+		this.category_id = data[2];
 		this.price = Float.parseFloat(data[3]);
 		this.stock = Integer.parseInt(data[4]);
 	}
