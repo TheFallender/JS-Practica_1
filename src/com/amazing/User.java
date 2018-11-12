@@ -21,7 +21,7 @@ public class User { //User login
 			else {
 				try {
 					IO.read("d_user", "u_email=" + email, 1, false);
-					if (IO.data_a[0] == null) { //User doesn't exist, proceed
+					if (IO.data_a[0] == "") { //User doesn't exist, proceed
 						try {
 							this.email = email;
 							break;
@@ -49,11 +49,11 @@ public class User { //User login
 		this.login = d.getTime();
 		this.last_login = this.login;
 		String aux[] = new String[5];
-		aux[0] = this.email;
-		aux[1] = this.password;
-		aux[2] = "" + this.login;
-		aux[3] = "" + this.last_login;
-		aux[4] = "0";
+		aux[0] = "u_email=" + this.email;
+		aux[1] = "u_password=" + this.password;
+		aux[2] = "u_login=" + this.login;
+		aux[3] = "u_last_login=" + this.last_login;
+		aux[4] = "u_admin=" + "0";
 		IO.write("d_user", aux, true);
 	}
 	

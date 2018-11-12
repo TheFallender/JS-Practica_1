@@ -19,7 +19,7 @@ public class Conversor {
 			
 			//Writes the new data
 			String data[] = new String[1];
-			data[0] = "" + last_value;
+			data[0] = "latest_conversor_rate=" + last_value;
 			IO.write("d_conversor_rate", data, false);
     	}
     	catch (Exception e){ //If there is any error, it checks for the stored value

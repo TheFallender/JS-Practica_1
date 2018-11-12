@@ -39,34 +39,11 @@ public class IO {
 		}
 	}
 	
-	protected static void write (String file_type, String input[], boolean append) {	//Writes the new object
+	protected static void write (String file_type, String input[], boolean append) { //Writes the new object
 		String file_path = data_path + file_type;	//Path to the file
 		try(FileWriter writer =  new FileWriter(file_path, append)) {	//Tries to open the file
-			switch (file_type) {
-				case "d_user": //User
-					writer.write("u_email=" + input[0] + "\r\n");
-					writer.write("u_password=" + input[1] + "\r\n");
-					writer.write("u_login=" + input[2] + "\r\n");
-					writer.write("u_last_login=" + input[3] + "\r\n");
-					writer.write("u_admin=" + input[4] + "\r\n");
-					break;
-				case "d_category": //Category
-					writer.write("category=" + input[0] + "\r\n");
-					break;
-				case "d_product": //Product
-					writer.write("p_category=" + input[0] + "\r\n");
-					writer.write("p_id=" + input[1] + "\r\n");
-					writer.write("p_name=" + input[2] + "\r\n");
-					writer.write("p_price=" + input[3] + "\r\n");
-					writer.write("p_stock=" + input[4] + "\r\n");
-					break;
-				case "d_product_user": //Product User
-					writer.write("pu_u_id=" + input[0] + "\r\n");
-					writer.write("pu_p_id=" + input[1] + "\r\n");
-					writer.write("pu_number=" + input[2] + "\r\n");
-					break;
-				case "d_conversor_rate":
-					writer.write("latest_conversor_rate=" + input[0] + "\r\n");
+			for (int i = 0; i < input.length; i++) {
+				writer.write(input[i] + "\r\n");
 			}
 			writer.close();
 		}
@@ -106,6 +83,9 @@ public class IO {
 			} 
 			catch (IOException e_2) {}
 		}
+		if (Amazing.test) {
+			data_path = "src/Test/";
+		}
 		//Files check
 		files_check(data_path, true);
 		files_check(data_path + "d_category", false);
@@ -117,7 +97,7 @@ public class IO {
 	
 	
 	//Auxiliary functions
-	private static void files_check(String path, boolean folder) { //Checks if file exists, if not it creates one
+	protected static void files_check(String path, boolean folder) { //Checks if file exists, if not it creates one
 		try {
 			File file = new File(path);
 			if (!file.exists())
@@ -127,7 +107,7 @@ public class IO {
 					file.createNewFile();
 		} 
 		catch (IOException e) {
-			System.out.println("WAIT WHAT?");
+			System.out.println("Error - Invalid path.");
 		}
 	}
 	

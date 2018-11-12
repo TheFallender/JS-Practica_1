@@ -15,7 +15,11 @@ public class Filter {
 			String input = scan.nextLine(); //Scan the next line
 			try {  
 				int val = Integer.parseInt(input); //Value to return
-				if (val >= low && val <= high) { //Check if the integer is valid
+				if (low == high) { //No limit
+					System.setIn(skipper);
+					return val;
+				}
+				else if (val >= low && val <= high) { //Check if the integer is valid
 					System.setIn(skipper);
 					return val;
 				}
@@ -29,13 +33,17 @@ public class Filter {
 		}
 	}
 	
-	protected static float filter_f(String ask, int low, int high) { //Filters Float input
+	protected static float filter_f(String ask, float low, float high) { //Filters Float input
 		while (true) {
 			System.out.print(ask); //Ask string
 			String input = scan.nextLine(); //Scan the next line
 			try {  
 				Float val = Float.parseFloat(input); //Value to return
-				if (val >= low && val <= high) { //Check if the integer is valid
+				if (low == high) { //No limit
+					System.setIn(skipper);
+					return val;
+				}
+				else if (val >= low && val <= high) { //Check if the integer is valid
 					System.setIn(skipper);
 					return val;
 				}

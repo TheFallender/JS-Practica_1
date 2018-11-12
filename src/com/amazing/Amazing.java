@@ -3,7 +3,7 @@ package com.amazing;
 //Menu, marketplace function
 public class Amazing {
 	//Test variable
-	private static boolean test = true; //Change this to start the test system
+	public static boolean test = false; //Change this to start the test system
 	
 	//User data
 	protected static User active_user = null;
@@ -117,7 +117,7 @@ public class Amazing {
 												if (pl[menu[2] - 1].r_stock() - Integer.parseInt(aux_a[2]) >= 0) {
 													Product_user bought_product = new Product_user(aux_a);
 													pl[menu[2] - 1].buy(aux_a[2]);
-													IO.modify("d_product", aux_a[0], 3, amount);
+													IO.modify("d_product", "p_id=" + aux_a[0], 3, amount);
 													changes_pu = true;
 													changes_p = true;
 												}
@@ -276,7 +276,8 @@ public class Amazing {
 			}
 		}
 		else { //Test enviroment
-			Tests.test();
+			Test t = new Test();
+			t.test();
 		}
 	}
 	
@@ -298,7 +299,7 @@ public class Amazing {
 	
 	protected static void c_product () { //Product create
 		String aux_i[] = new String[5];
-		IO.read("d_product", "", 30, true); //Get data
+		IO.read("d_product", "", 100, true); //Get data
 		p = new Product[IO.data_c/5]; //Reset the size of the product
 		
 		//Product list
@@ -320,10 +321,10 @@ public class Amazing {
 		int size = 0;
 		//Product list
 		for(int i = 1; i <= IO.data_c/3; i++) {
-			aux_i[0] = IO.data_a[(i*3) - 3];
-			aux_i[1] = IO.data_a[(i*3) - 2];
-			aux_i[2] = IO.data_a[(i*3) - 1];
-			if(aux_i[1].equals(Amazing.active_user.r_email())) {
+			aux_i[0] = IO.data_a[(i*3) - 3]; //Email
+			aux_i[1] = IO.data_a[(i*3) - 2]; //Id
+			aux_i[2] = IO.data_a[(i*3) - 1]; //Ordered
+			if(aux_i[0].equals(Amazing.active_user.r_email())) {
 				pu[pu_s] = new Product_user(aux_i, false);
 				pu_s++;
 			}
@@ -333,10 +334,10 @@ public class Amazing {
 	private static void compare_pr (String data[]) {
 		String[] pr_1 = data[0].split("/");
 		String[] pr_2 = data[1].split("/");
-		System.out.println(pr_1[2] + "			" + pr_2[2]);
-		System.out.println(pr_1[1] + "			" + pr_2[1]);
-		System.out.println(pr_1[0] + "			" + pr_2[0]);
-		System.out.println(pr_1[3] + "			" + pr_2[3]);
-		System.out.println(pr_1[4] + "			" + pr_2[4]);
+		System.out.println("Product name:	" + pr_1[2] + "			" + pr_2[2]);
+		System.out.println("Product id:	" + pr_1[1] + "			" + pr_2[1]);
+		System.out.println("Category:	" + pr_1[0] + "			" + pr_2[0]);
+		System.out.println("Price:	" + pr_1[3] + "			" + pr_2[3]);
+		System.out.println("Stock:	" + pr_1[4] + "			" + pr_2[4]);
 	}
 }

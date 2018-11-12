@@ -6,8 +6,8 @@ public class Product_user {
 	private int number_items;
 	
 	protected Product_user(String data[], boolean nothing) {
-		product_id = Integer.parseInt(data[0]);
-		user_id = (data[1]);
+		user_id = (data[0]);
+		product_id = Integer.parseInt(data[1]);
 		number_items = Integer.parseInt(data[2]);
 	}
 	
@@ -16,9 +16,9 @@ public class Product_user {
 		product_id = Integer.parseInt(data[0]);
 		user_id = (data[1]);
 		number_items = Integer.parseInt(data[2]);
-		aux[0] = "" + this.product_id;
-		aux[1] = this.user_id;
-		aux[2] = "" + this.number_items;
+		aux[0] = "pu_u_id=" + this.user_id;
+		aux[1] = "pu_p_id=" + this.product_id;
+		aux[2] = "pu_number=" + this.number_items;
 		IO.write("d_product_user", aux, true);
 	}
 

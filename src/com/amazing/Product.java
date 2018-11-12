@@ -15,11 +15,11 @@ public class Product {
 		this.price = Filter.filter_f("Value of the product (€): ", 0 , 10000);
 		this.stock = Filter.filter_i("Stock of this product: ", 0 , 10000);
 		
-		aux[0] = this.category_id;
-		aux[1] = "" + this.id;
-		aux[2] = this.name;
-		aux[3] = "" + this.price;
-		aux[4] = "" + this.stock;
+		aux[0] = "p_category=" + this.category_id;
+		aux[1] = "p_id=" + this.id;
+		aux[2] = "p_name=" + this.name;
+		aux[3] = "p_price=" + this.price;
+		aux[4] = "p_stock=" + this.stock;
 		
 		IO.write("d_product", aux, true);
 	}
