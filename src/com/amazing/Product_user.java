@@ -24,12 +24,12 @@ public class Product_user {
 
 	protected void print() {
 		System.out.println("Product:\n\n");
-		IO.read("d_product", "p_id=" + this.product_id, 3, false); //Get one data
+		IO.read("d_product", "p_id=" + this.product_id, 5, false); //Get data
 		System.out.println("Name: " + IO.data_a[1]);
 		if (Amazing.dollar_a)
-			System.out.println("Price: " + Float.parseFloat(IO.data_a[2]) * Amazing.eur_dollar + "$");
+			System.out.println("Price: " + Float.parseFloat(IO.data_a[3]) * Amazing.eur_dollar + "$");
 		else
-			System.out.println("Price: " + IO.data_a[2] + "€");
+			System.out.println("Price: " + IO.data_a[3] + "€");
 		System.out.println("Ordered: " + this.number_items + "\n\n");
 	}
 }

@@ -80,9 +80,9 @@ public class Amazing {
 								for (int i = 0; i < p.length; i++) { //Print products
 									if (p[i].r_category().equals(c[menu[1] - 1].r_name())) {
 										System.out.println((pl_n + 1) + ". " + p[i].r_name());
-										aux_pr[0] = p[i].r_category();
-										aux_pr[1] = "" + p[i].r_id();
-										aux_pr[2] = p[i].r_name();
+										aux_pr[0] = "" + p[i].r_id();
+										aux_pr[1] = p[i].r_name();
+										aux_pr[2] = p[i].r_category();
 										aux_pr[3] = "" + p[i].r_price();
 										aux_pr[4] = "" + p[i].r_stock();
 										pl[pl_n] = new Product (aux_pr);
@@ -304,11 +304,11 @@ public class Amazing {
 		
 		//Product list
 		for(int i = 1; i <= IO.data_c/5; i++) {
-			aux_i[0] = IO.data_a[(i*5) - 5];
-			aux_i[1] = IO.data_a[(i*5) - 4];
-			aux_i[2] = IO.data_a[(i*5) - 3];
-			aux_i[3] = IO.data_a[(i*5) - 2];
-			aux_i[4] = IO.data_a[(i*5) - 1];
+			aux_i[0] = IO.data_a[(i*5) - 5]; //Id
+			aux_i[1] = IO.data_a[(i*5) - 4]; //Name
+			aux_i[2] = IO.data_a[(i*5) - 3]; //Category
+			aux_i[3] = IO.data_a[(i*5) - 2]; //Price
+			aux_i[4] = IO.data_a[(i*5) - 1]; //Stock
 			p[i-1] = new Product(aux_i);
 		}
 	}
@@ -319,7 +319,7 @@ public class Amazing {
 		pu = new Product_user[IO.data_c/3]; //Reset the size of the product
 		pu_s = 0;
 		int size = 0;
-		//Product list
+		//Product user list
 		for(int i = 1; i <= IO.data_c/3; i++) {
 			aux_i[0] = IO.data_a[(i*3) - 3]; //Email
 			aux_i[1] = IO.data_a[(i*3) - 2]; //Id
@@ -337,7 +337,7 @@ public class Amazing {
 		System.out.println("Product name:	" + pr_1[2] + "			" + pr_2[2]);
 		System.out.println("Product id:	" + pr_1[1] + "			" + pr_2[1]);
 		System.out.println("Category:	" + pr_1[0] + "			" + pr_2[0]);
-		System.out.println("Price:	" + pr_1[3] + "			" + pr_2[3]);
-		System.out.println("Stock:	" + pr_1[4] + "			" + pr_2[4]);
+		System.out.println("Price:		" + pr_1[3] + "			" + pr_2[3]);
+		System.out.println("Stock:		" + pr_1[4] + "			" + pr_2[4]);
 	}
 }
