@@ -52,7 +52,7 @@ public class User { //User login
 		aux[0] = "u_email=" + this.email;
 		aux[1] = "u_password=" + this.password;
 		aux[2] = "u_login=" + this.login;
-		aux[3] = "u_last_login=" + this.last_login;
+		aux[3] = "u_last_login=0";
 		aux[4] = "u_admin=" + "0";
 		IO.write("d_user", aux, true);
 	}

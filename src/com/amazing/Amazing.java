@@ -117,7 +117,10 @@ public class Amazing {
 												if (pl[menu[2] - 1].r_stock() - Integer.parseInt(aux_a[2]) >= 0) {
 													Product_user bought_product = new Product_user(aux_a);
 													pl[menu[2] - 1].buy(aux_a[2]);
-													IO.modify("d_product", "p_id=" + aux_a[0], 3, amount);
+													String data[] = new String[2];
+													data[0] = "p_id=" + aux_a[0];
+													data[1] = "p_stock=" + (pl[menu[2] - 1].r_stock());
+													IO.modify("d_product", data, 4);
 													changes_pu = true;
 													changes_p = true;
 												}
