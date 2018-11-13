@@ -4,7 +4,6 @@ import java.io.File; 			//File checks
 import java.io.FileReader; 		//File Reader 1
 import java.io.BufferedReader; 	//File Reader 2
 import java.io.FileWriter;		//File Writer
-import java.util.Date;			//Date
 import java.io.IOException;		//Exception
 
 public class IO {
@@ -111,7 +110,7 @@ public class IO {
 		}
 	}
 	
-	protected static void modify (String file_type, String input, int skip, int amount) { //Writes the date of the login on the user
+	protected static void modify (String file_type, String input[], int skip) { //Writes the date of the login on the user
 		String file_path = data_path + file_type;
 		try (BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
 			String line = ""; //Line data
@@ -120,32 +119,17 @@ public class IO {
 			boolean applied = false;
 			while((line = reader.readLine()) != null){ //Buffered Reader searches for the user
 				if (!applied) {
-					if (line.contains(input)) { //Check if this is the user line
-						for (int i = 0; i < skip; i++) { //Once found, lines to skip
+					if (line.contains(input[0])) { //Check if this is the user line
+						for (int j = 0; j < skip; j++) { //Once found, lines to skip
 							text += line + "\r\n";
 							line = reader.readLine();
 						}
-						switch (file_type) {
-							case "d_user":
-								if (!Login_method.logged_in) { //Login in, login is written
-									Date d = new Date(); //Get date
-									text += "u_login=" + d.getTime() + "\r\n"; //Login
-								}
-								else { //Log out, login is erased and last login gets the value of login
-									text += "u_login=0\r\n"; //Delete login info
-									aux = line; //Use auxiliar
-									aux = aux.replaceAll(".+=", ""); //Modify line
-									reader.readLine(); //Next line
-									text += "u_last_login=" + aux + "\r\n"; //Last login
-								}
-								break;
-							case "d_product":
-								aux = line;
-								aux = aux.replaceAll(".+=", ""); //Modify line
-								int stock = Integer.parseInt(aux);
-								text += "p_stock=" + (stock - amount) + "\r\n";
-								break;
+						for (int i = 1; i < input.length; i++) {
+							text += input[i];
+							if(i < input.length - 1)
+								line = reader.readLine();
 						}
+						
 						applied = true;
 					}
 					else //Get the line

@@ -17,8 +17,21 @@ public class Test {
 		Filter.scan.close();
 		
 		//Finished test
-		System.out.println("\n\nTest finished.");
-		
+		System.out.println("\n\nTest finished.\n");
+		System.out.println( "	  ||\r\n" + 
+							"	  ||\r\n" + 
+							"	  ||\r\n" + 
+							"	  ||\r\n" + 
+							"	  ||\r\n" + 
+							"	  ||\r\n" + 
+							"	  || 		Clean and beautiful,\r\n" + 
+							"	  || 		as it should\r\n" + 
+							"	 /||\\\r\n" + 
+							"	/||||\\\r\n" + 
+							"	======         __|__\r\n" + 
+							"	||||||        / ~@~ \\\r\n" + 
+							"	||||||       |-------|\r\n" + 
+							"	||||||       |_______|\r\n"); //Clean code is the base of programming.
 	}
 
 	protected void incPhase() { //Increases the phase

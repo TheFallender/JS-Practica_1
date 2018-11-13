@@ -24,7 +24,7 @@ public class Test_data extends Test {
 		aux[1] = testUser.r_email();
 		aux[2] = "" + Filter.filter_i("Number of items ordered: ", 0, 0);
 		Product_user testProduct_User = new Product_user(aux); //Test product_user
-		IO.read("d_product_user", testUser.r_email(), 3, false); //Read user
+		IO.read("d_product_user", testUser.r_email(), 3, false); //Read product user
 		super.print_data();
 		
 		
