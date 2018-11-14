@@ -1,9 +1,14 @@
 package com.amazing;
 
+import java.io.File;
+
 public class Test {
 	private static int phase = 0; //Which phase is the test located in
 	
 	protected void test() { //Method to override that, by default, calls all the childs
+		
+		System.out.println("Test system started:");
+		
 		//Test calls
 		Test_IO t1 = new Test_IO();
 		t1.test();
@@ -32,6 +37,15 @@ public class Test {
 							"	||||||        / ~@~ \\\r\n" + 
 							"	||||||       |-------|\r\n" + 
 							"	||||||       |_______|\r\n"); //Clean code is the base of programming.
+		
+		//Delete folder
+		File folder = new File ("/src/Folder/");
+		if (folder.exists()) {
+	        File[] files = folder.listFiles();
+	        for (int i = 0; i < files.length; i++)
+	           files[i].delete();
+	        folder.delete();
+		}
 	}
 
 	protected void incPhase() { //Increases the phase

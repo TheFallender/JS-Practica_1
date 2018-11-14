@@ -2,14 +2,15 @@ package com.amazing;
 
 public class Test_inside extends Test {
 	@Override
-	public void test() {
+	public void test() {		
 		//Converter test
-		IO.data_check();
+		System.out.println("\n\n\n\nInside test:\n\n\nConverter:\n");
 		System.out.println(Converter.factor("eur", "usd")); //Get the value from the net
 		System.out.println(Converter.factor("TEST", "ERROR")); //Will find and error and check for the stored value
 		
 		
 		//Test if the encrypter and the decrypter works
+		System.out.println("\n\nEncrypter and Decrypter:\n");
 		String text = Filter.filter_s("Text to test the encryption: "); //Base text
 		String e_text[] = new String[2]; //Encrypted text
 		String d_text[] = new String [2]; //Base text

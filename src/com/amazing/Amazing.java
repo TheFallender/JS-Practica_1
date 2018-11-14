@@ -3,7 +3,7 @@ package com.amazing;
 //Menu, marketplace function
 public class Amazing {
 	//Test variable
-	public static boolean test = false; //Change this to start the test system
+	public static boolean test = true; //Change this to start the test system
 	
 	//User data
 	protected static User active_user = null;
