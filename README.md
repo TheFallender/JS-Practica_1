@@ -31,9 +31,9 @@ category=
 
 d_product //Product data - Product data will be here
 ```
-p_category=
 p_id=
 p_name=
+p_category=
 p_price=
 p_stock=
 ```
@@ -49,3 +49,11 @@ d_conversor_rate //Conversor rate - Currency rate from and to
 ```
 latest_conversor_rate=
 ```
+## To do list:
+☒Give admin to a user without the need to access the files (having a default admin).
+
+☒Allow to change the password.
+
+☒Comentary everywhere.
+
+☒Delete categories and products (will have to update the product user to retain data).
