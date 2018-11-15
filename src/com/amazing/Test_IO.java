@@ -13,7 +13,7 @@ public class Test_IO extends Test {
 		
 		
 		//IO Class test
-		System.out.println("\n\nCheck files exist:\n");
+		System.out.println("\n\nCheck files exist and creates them if they don't:\n");
 		IO.data_check();
 		IO.files_check(IO.data_path + "d_test", false); //Creates a test file
 		String d[] = new String[1]; //String to pass as Data

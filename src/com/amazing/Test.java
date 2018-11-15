@@ -39,11 +39,13 @@ public class Test {
 							"	||||||       |_______|\r\n"); //Clean code is the base of programming.
 		
 		//Delete folder
-		File folder = new File ("/src/Folder/");
+		File folder = new File ("src/Test/");
 		if (folder.exists()) {
-	        File[] files = folder.listFiles();
-	        for (int i = 0; i < files.length; i++)
-	           files[i].delete();
+	        File files[] = folder.listFiles();
+	        for (int i = 0; i < files.length; i++) {
+	        	System.out.println(files[i].getName());
+	        	files[i].delete();
+	        }
 	        folder.delete();
 		}
 	}
