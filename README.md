@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/TheFallender/Amazing/branch/master/graph/badge.svg?token=0vyRPWkJGd)](https://codecov.io/gh/TheFallender/Amazing)
+
 # Amazing
 This project tries to immitate how a marketstore like Amazon would work. It gives you the option to create products, category (only if you are an admin) and buy the products.
 
