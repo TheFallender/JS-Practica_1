@@ -6,21 +6,20 @@ public class Amazing {
 	public static boolean test = false; //Change this to start the test system
 	
 	//User data
-	protected static User active_user = null;
+	protected static User active_user = null; //The active user at the moment
 	
 	//Data array
-	private static Category c[] = null;
-	private static Product p[] = null;
-	private static Product pl[] = null;
-	private static Product_user pu[] = null;
-	private static int pu_s = 0;
+	private static Category c[] = null; //Category list
+	private static Product p[] = null; //Product list
+	private static Product pl[] = null; //Product list array (list of the actual category)
+	private static Product_user pu[] = null; //Product user list
 	
 	//Dollar
-	protected static float eur_dollar;
-	protected static boolean dollar_a = false;
+	protected static float eur_dollar; //Euro dollar ratio
+	protected static boolean dollar_a = false; //Dollar active in the menu
 	
 	//Main
-	public static void main(String args[]){
+	public static void main(String args[]){ //Main code
 		if (!test) { //Default enviroment
 			//Variables definitions
 			int menu[] = new int[4]; //Menu
@@ -187,7 +186,7 @@ public class Amazing {
 									if (changes_pu) {
 										c_product_user();
 									}
-									for (int i = 0; i < pu_s; i++) { //Print the products bought
+									for (int i = 0; i < pu.length; i++) { //Print the products bought
 										pu[i].print();
 									}
 									Filter.filter_s("\n\nPress ENTER to continue: ");
@@ -285,58 +284,72 @@ public class Amazing {
 	}
 	
 	protected static void c_category() { //Category create
-		String cache_a[]; //Cache array
-		int cache_c; //Cache size
-		
-		//Load categories
+		//Get the data from the file
 		IO.read("d_category", "", 15, false); //Get data
-		cache_c = IO.data_c; //Cache data counter
-		cache_a = new String[cache_c]; //Cache data array
-		System.arraycopy(IO.data_a, 0, cache_a, 0, cache_c); //Load categories
-		c = new Category[cache_c]; //Reset the size of the category
 		
-		for (int i = 0; i < cache_c; i++) { //Create categories
-			c[i] = new Category(cache_a[i]);
-		}
+		//Category object
+		c = new Category[IO.data_c]; //Reset the size of the category
+		
+		//Get Category list
+		for (int i = 0; i < IO.data_c; i++) //Create categories
+			c[i] = new Category(IO.data_a[i]); //Sets the new category
 	}
 	
-	protected static void c_product () { //Product create
-		String aux_i[] = new String[5];
+	protected static void c_product () { //Product list
+		//Get the data from the file
 		IO.read("d_product", "", 100, true); //Get data
+		
+		//Variables to use
+		String aux_i[] = new String[5]; //Auxiliar string to use
+		
+		//Product object
 		p = new Product[IO.data_c/5]; //Reset the size of the product
 		
-		//Product list
-		for(int i = 1; i <= IO.data_c/5; i++) {
+		//Get Product list
+		for(int i = 1; i <= IO.data_c/5; i++) { //Write every product in the list
 			aux_i[0] = IO.data_a[(i*5) - 5]; //Id
 			aux_i[1] = IO.data_a[(i*5) - 4]; //Name
 			aux_i[2] = IO.data_a[(i*5) - 3]; //Category
 			aux_i[3] = IO.data_a[(i*5) - 2]; //Price
 			aux_i[4] = IO.data_a[(i*5) - 1]; //Stock
-			p[i-1] = new Product(aux_i);
+			
+			//Create a product
+			p[i-1] = new Product(aux_i); //Sets the new product
 		}
 	}
 	
-	protected static void c_product_user() { //Product user create
-		String aux_i[] = new String[5];
+	protected static void c_product_user() { //Product User list
+		//Get the data from the file
 		IO.read("d_product_user", "", 900, false); //Get data
+		
+		//Variables to use
+		String aux_i[] = new String[5]; //Auxiliar string to check
+		
+		//Product User object
 		pu = new Product_user[IO.data_c/3]; //Reset the size of the product
-		pu_s = 0;
-		int size = 0;
-		//Product user list
-		for(int i = 1; i <= IO.data_c/3; i++) {
+		int pu_s = 0; //Size of the product user
+		
+		//Get Product User list
+		for(int i = 1; i <= IO.data_c/3; i++) { //Search between the created list
 			aux_i[0] = IO.data_a[(i*3) - 3]; //Email
-			aux_i[1] = IO.data_a[(i*3) - 2]; //Id
-			aux_i[2] = IO.data_a[(i*3) - 1]; //Ordered
-			if(aux_i[0].equals(Amazing.active_user.r_email())) {
-				pu[pu_s] = new Product_user(aux_i, false);
-				pu_s++;
+			if(aux_i[0].equals(Amazing.active_user.r_email())) { //Checks if the product user equals the active user email
+				//Now checks for the rest of the data
+				aux_i[1] = IO.data_a[(i*3) - 2]; //Id
+				aux_i[2] = IO.data_a[(i*3) - 1]; //Ordered
+				
+				//Create a product user
+				pu[pu_s] = new Product_user(aux_i, false); //Sets the new product user
+				pu_s++; //Increases the number of product user count
 			}
 		}
 	}
 	
-	private static void compare_pr (String data[]) {
-		String[] pr_1 = data[0].split("/");
-		String[] pr_2 = data[1].split("/");
+	private static void compare_pr (String data[]) { //Compares two products
+		//Products to pass
+		String[] pr_1 = data[0].split("/"); //Splits the first data
+		String[] pr_2 = data[1].split("/"); //Splits the second data
+		
+		//Print comparison
 		System.out.println("Product name:	" + pr_1[2] + "			" + pr_2[2]);
 		System.out.println("Product id:	" + pr_1[1] + "			" + pr_2[1]);
 		System.out.println("Category:	" + pr_1[0] + "			" + pr_2[0]);
