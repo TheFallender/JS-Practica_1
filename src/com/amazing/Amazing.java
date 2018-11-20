@@ -1,40 +1,48 @@
 package com.amazing;
 
-//Menu, marketplace function
+
+//Menu, marketplace class
 public class Amazing {
 	//Test variable
-	public static boolean test = false; //Change this to start the test system
+	protected static boolean test = false; //Change this to start the test system
 	
 	//User data
 	protected static User active_user = null; //The active user at the moment
 	
 	//Data array
-	private static Category c[] = null; //Category list
-	private static Product p[] = null; //Product list
-	private static Product pl[] = null; //Product list array (list of the actual category)
-	private static Product_user pu[] = null; //Product user list
+	private static Category[] c = null; //Category list
+	private static Product[] p = null; //Product list
+	private static Product[] pl = null; //Product list array (list of the actual category)
+	private static Product_user[] pu = null; //Product user list
 	
 	//Dollar
 	protected static float eur_dollar; //Euro dollar ratio
 	protected static boolean dollar_a = false; //Dollar active in the menu
 	
 	//Main
-	public static void main(String args[]){ //Main code
+	public static void main(String[] args){ //Main code
 		if (!test) { //Default enviroment
 			//Variables definitions
-			int menu[] = new int[4]; //Menu
-			boolean changes_c = true, changes_pu = true, changes_p = true;
-			int pl_n = 0; //Product list number
-			String aux_a[] = null; //Auxiliar array
-			String comp_pr[] = new String[2]; //Compare product
-			comp_pr[0] = ""; //Set base
-			
+				//Menu
+				int[] menu = new int[4];
+				
+				//Euro Dollar ratio
+				eur_dollar = Converter.factor("eur", "usd"); //Uses the converter and sets the ratio
+				
+				//Boolean changes
+				boolean changes_c = true; //Changes in the category
+				boolean changes_pu = true; //Changes in the product user
+				
+				//Product
+				int pl_n = 0; //Product list number
+				String[] comp_pr = new String[]{"", ""}; //Compare product array
+
 			//Starting functions
-			IO.data_check();
-			eur_dollar = Converter.factor("eur", "usd");
+			IO.data_check(); //Checks the data files are there, if not, it create them 
+
 			
 			//Menu
-			while(true) {
+			while(true) { //Loop of the menu
 				switch (menu[0]) {
 					case 0: //Menu
 						System.out.println("\nAmazing:");
@@ -66,7 +74,7 @@ public class Amazing {
 							menu[1] = Filter.filter_i("\nMenu select: ", 1, c.length + 1); //Request selection
 						}
 						else if(menu[1] == c.length + 1) { //Exit
-							menu[0] = 0;
+							menu[0] = 0; //Resets the menu first value to the base menu
 							menu[1] = 0;
 						}
 						else { //Category selected
@@ -74,17 +82,17 @@ public class Amazing {
 								pl_n=0;
 								c_product();
 								System.out.println("\nProduct list of " + c[menu[1] - 1].r_name() + ":");
-								String aux_pr[] = new String [5];
+								String[] pr_a = new String [5];
 								pl = new Product[p.length];
 								for (int i = 0; i < p.length; i++) { //Print products
 									if (p[i].r_category().equals(c[menu[1] - 1].r_name())) {
 										System.out.println((pl_n + 1) + ". " + p[i].r_name());
-										aux_pr[0] = "" + p[i].r_id();
-										aux_pr[1] = p[i].r_name();
-										aux_pr[2] = p[i].r_category();
-										aux_pr[3] = "" + p[i].r_price();
-										aux_pr[4] = "" + p[i].r_stock();
-										pl[pl_n] = new Product (aux_pr);
+										pr_a[0] = "" + p[i].r_id();
+										pr_a[1] = p[i].r_name();
+										pr_a[2] = p[i].r_category();
+										pr_a[3] = "" + p[i].r_price();
+										pr_a[4] = "" + p[i].r_stock();
+										pl[pl_n] = new Product (pr_a);
 										pl_n++;
 									}
 								}
@@ -108,20 +116,19 @@ public class Amazing {
 									case 1: //Buy
 										if (Login_method.logged_in) {
 											if (pl[menu[2] - 1].r_stock() > 0) {
-												aux_a = new String [3];
-												aux_a[0] = "" + pl[menu[2] - 1].r_id();
-												aux_a[1] = active_user.r_email();
-												int amount = Filter.filter_i("How many do you want to buy? ", 1, 10);
-												aux_a[2] = "" + amount;
-												if (pl[menu[2] - 1].r_stock() - Integer.parseInt(aux_a[2]) >= 0) {
-													Product_user bought_product = new Product_user(aux_a);
-													pl[menu[2] - 1].buy(aux_a[2]);
-													String data[] = new String[2];
-													data[0] = "p_id=" + aux_a[0];
+												String[] pu_a = new String [3]; //Product user from this order
+												pu_a[0] = "" + pl[menu[2] - 1].r_id();
+												pu_a[1] = active_user.r_email();
+												int amount = Filter.filter_i("Number of items to order: ", 1, 10);
+												pu_a[2] = "" + amount;
+												if (pl[menu[2] - 1].r_stock() - Integer.parseInt(pu_a[2]) >= 0) {
+													Product_user bought_product = new Product_user(pu_a);
+													pl[menu[2] - 1].buy(pu_a[2]);
+													String[] data = new String[2];
+													data[0] = "p_id=" + pu_a[0];
 													data[1] = "p_stock=" + (pl[menu[2] - 1].r_stock());
 													IO.modify("d_product", data, 4);
 													changes_pu = true;
-													changes_p = true;
 												}
 												else {
 													System.out.println("ERROR - There's not enough stock.");
@@ -156,6 +163,9 @@ public class Amazing {
 										menu[2] = 0;
 										menu[3] = 0;
 										break;
+									default: //Default case
+										menu[3] = 0; //Reset the menu
+										break;
 								}
 							}
 						}
@@ -185,6 +195,7 @@ public class Amazing {
 								case 2: //Ordered products
 									if (changes_pu) {
 										c_product_user();
+										changes_pu = false;
 									}
 									for (int i = 0; i < pu.length; i++) { //Print the products bought
 										pu[i].print();
@@ -196,11 +207,11 @@ public class Amazing {
 									Login_method.login_method_out();
 									System.out.println("Successfully logged out.");
 									Filter.filter_s("\n\nPress ENTER to continue: ");
-									menu[0] = 0;
+									menu[0] = 0; //Resets the menu first value to the base menu
 									menu[1] = 0;
 									break;
 								case 4: //Go back
-									menu[0] = 0;
+									menu[0] = 0; //Resets the menu first value to the base menu
 									menu[1] = 0;
 									break;
 								case 5: //Admin
@@ -219,21 +230,27 @@ public class Amazing {
 											break;
 										case 2:
 											Product new_p = new Product();
-											changes_p = true;
 											menu[2] = 0;
 											break;
 										case 3:
 											menu[1] = 0;
 											menu[2] = 0;
 											break;
+										default: //Default case
+											menu[2] = 0;
+											break;
 									}
+									break;
+								default: //Default case
+									for (int i = 1; i < menu.length; i++) //Resets every menu value to 0
+										menu[i] = 0;
 									break;
 							}
 						}
 						else { //Log in
 							System.out.println("ERROR - You have to be logged in to see this.");
 							Filter.filter_s("\n\nPress ENTER to continue: ");
-							menu[0] = 0;
+							menu[0] = 0; //Resets the menu first value to the base menu
 						}
 						break;
 					case 3: //Log in
@@ -249,37 +266,46 @@ public class Amazing {
 							}
 							Filter.filter_s("\n\nPress ENTER to continue: ");
 						}
-						menu[0] = 0;
+						menu[0] = 0; //Resets the menu first value to the base menu
 						break;
 					case 4: //Create account
-						if (Login_method.logged_in) {
+						if (Login_method.logged_in)
 							System.out.println("ERROR - You are already logged in.");
-							Filter.filter_s("\n\nPress ENTER to continue: ");
-						}
 						else {
+							System.out.println("Successfully created an account.");
 							active_user = new User();
 							Login_method.logged_in = true;
 						}
-						menu[0] = 0;
-						break;
-					case 5: //Change dollar
-						dollar_a = !dollar_a;
-						System.out.println("Changed the currency.");
 						Filter.filter_s("\n\nPress ENTER to continue: ");
-						menu[0] = 0;
+						menu[0] = 0; //Resets the menu first value to the base menu
 						break;
+						
+					case 5: //Change dollar
+						dollar_a = !dollar_a; //Changes value of the boolean to the opposite one
+						
+						System.out.println("Changed the currency."); //Prints the info of the change
+						Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+						
+						menu[0] = 0; //Resets the menu first value to the base menu
+						break;
+						
 					case 6: //Close program
-						Filter.scan.close();
-						if (Login_method.logged_in) { //Log out
+						Filter.scan.close(); //Closes the scan
+						
+						if (Login_method.logged_in) //In case that the user is logged in, it logs him out
 							Login_method.login_method_out();
-						}
-						return;
+						
+						return; //Closes the program by getting out of the main function
+					default: //Default case
+						for (int i = 0; i < menu.length; i++) //Resets every menu value to 0
+							menu[i] = 0;
+						break;
 				}
 			}
 		}
 		else { //Test enviroment
-			Test t = new Test();
-			t.test();
+			Test t = new Test(); //Creates a new test object
+			t.test(); //Tests the object
 		}
 	}
 	
@@ -300,7 +326,7 @@ public class Amazing {
 		IO.read("d_product", "", 100, true); //Get data
 		
 		//Variables to use
-		String aux_i[] = new String[5]; //Auxiliar string to use
+		String[] aux_i = new String[5]; //Auxiliar string to use
 		
 		//Product object
 		p = new Product[IO.data_c/5]; //Reset the size of the product
@@ -323,7 +349,7 @@ public class Amazing {
 		IO.read("d_product_user", "", 900, false); //Get data
 		
 		//Variables to use
-		String aux_i[] = new String[5]; //Auxiliar string to check
+		String[] aux_i = new String[5]; //Auxiliar string to check
 		
 		//Product User object
 		pu = new Product_user[IO.data_c/3]; //Reset the size of the product
@@ -344,7 +370,7 @@ public class Amazing {
 		}
 	}
 	
-	private static void compare_pr (String data[]) { //Compares two products
+	private static void compare_pr (String[] data) { //Compares two products
 		//Products to pass
 		String[] pr_1 = data[0].split("/"); //Splits the first data
 		String[] pr_2 = data[1].split("/"); //Splits the second data

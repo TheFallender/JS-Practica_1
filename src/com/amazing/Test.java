@@ -17,8 +17,7 @@ public class Test {
 		Test_data t3 = new Test_data();
 		t3.test();
 		
-		//Finish test
-		//Close the scan
+		//Closes the scan
 		Filter.scan.close();
 		
 		//Finished test
@@ -39,14 +38,12 @@ public class Test {
 							"	||||||       |_______|\r\n"); //Clean code is the base of programming.
 		
 		//Delete folder
-		File folder = new File ("src/Test/");
-		if (folder.exists()) {
-	        File files[] = folder.listFiles();
-	        for (int i = 0; i < files.length; i++) {
-	        	System.out.println(files[i].getName());
-	        	files[i].delete();
-	        }
-	        folder.delete();
+		File folder = new File ("src/Test/"); //Folder to delete
+		if (folder.exists()) { //Checks the folder exists, just for precaution
+	        File files[] = folder.listFiles(); //Makes a list of the files inside the folder
+	        for (int i = 0; i < files.length; i++) //For to delete the files
+	        	files[i].delete(); //Delete the file
+	        folder.delete(); //Delete the folder
 		}
 	}
 

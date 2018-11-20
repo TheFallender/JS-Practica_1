@@ -2,8 +2,6 @@ package com.amazing;
 
 import java.util.Date;
 
-import com.amazing.User;
-
 public class Login_method {
 	protected static boolean logged_in = false;
 	protected static boolean login_method_in() {
@@ -27,7 +25,7 @@ public class Login_method {
 			else { //User exists
 				if (e_password.equals(IO.data_a[1])) { //Password match login in
 					Amazing.active_user = new User (IO.data_a);
-					String data[] = new String[2];
+					String[] data = new String[2];
 					data[0] = email;
 					Date d = new Date(); //Get date
 					data[1] = "u_login=" + d.getTime() + "\r\n"; //Login
@@ -43,7 +41,7 @@ public class Login_method {
 	}
 	
 	protected static void login_method_out() {
-		String data[] = new String[3];
+		String[] data = new String[3];
 		data[0] = "u_email=" + Amazing.active_user.r_email();
 		data[1] = "u_login=0\r\n";
 		Date d = new Date(); //Get date

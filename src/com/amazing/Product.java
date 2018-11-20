@@ -8,7 +8,7 @@ public class Product {
 	private int stock;
 	
 	protected Product() { //Default constructor
-		String aux[] = new String[5];
+		String[] aux = new String[5];
 		this.name = Filter.filter_s("Name of the product: ");
 		this.id = Filter.filter_i("Id of the product: ", 0, 1000000);
 		this.category_id = Filter.filter_s("Category of the product: ");
@@ -24,7 +24,7 @@ public class Product {
 		IO.write("d_product", aux, true);
 	}
 	
-	protected Product(String data[]) { //Product data passed
+	protected Product(String[] data) { //Product data passed
 		this.id = Integer.parseInt(data[0]);
 		this.name = data[1];
 		this.category_id = data[2];

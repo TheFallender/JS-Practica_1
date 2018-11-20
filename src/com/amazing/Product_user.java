@@ -5,14 +5,14 @@ public class Product_user {
 	private String user_id;
 	private int number_items;
 	
-	protected Product_user(String data[], boolean nothing) {
+	protected Product_user(String[] data, boolean b) {
 		user_id = (data[0]);
 		product_id = Integer.parseInt(data[1]);
 		number_items = Integer.parseInt(data[2]);
 	}
 	
-	protected Product_user(String data[]) {
-		String aux[] = new String[3];
+	protected Product_user(String[] data) {
+		String[] aux = new String[3];
 		product_id = Integer.parseInt(data[0]);
 		user_id = (data[1]);
 		number_items = Integer.parseInt(data[2]);
