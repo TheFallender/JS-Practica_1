@@ -4,9 +4,8 @@ public class Category {
 	private String name;
 
 	protected Category() { //Constructor
-		String aux[] = new String[1];
+		String[] aux = new String[] {"category=" + this.name};
 		this.name = Filter.filter_s("Name of the new category: ");
-		aux[0] = "category=" + this.name;
 		IO.write("d_category", aux, true);
 	}
 	

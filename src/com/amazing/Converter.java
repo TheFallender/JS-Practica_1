@@ -6,9 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.io.*;
 
 public class Converter {
-	private static float last_value = 1.14f;
-	
     public static float factor(String from_c, String to_c) { //Gets the latest ratio from the net
+    	float last_value = 0;
     	IO.read("d_converter_rate", "", 2, false); //Read the data from the file
     	
     	//
@@ -16,18 +15,7 @@ public class Converter {
         	try {
         		//Reads the data from the net
                 URL converter_site = new URL("http://currencies.apps.grandtrunk.net/getlatest/" + from_c + "/" + to_c); //Selects the currency
-                BufferedReader r = new BufferedReader(new InputStreamReader(converter_site.openStream())); //Prepares to read the website
-                String line = r.readLine(); //Line that gets from the site
-                r.close(); 
-                
-                //Creates the Float to Write
-                last_value = Float.parseFloat(line); //Value to return
-    			
-    			//Writes the new data
-    			String data[] = new String[2];
-    			data[0] = "latest_check=" + date();
-    			data[1] = "latest_converter_rate=" + last_value;
-    			IO.write("d_converter_rate", data, false);
+                last_value = url_read(converter_site);
         	}
         	catch (Exception e){ //If there is any error, it sets the default value.
         		last_value = 1.14f;
@@ -38,18 +26,7 @@ public class Converter {
             	try {
             		//Reads the data from the net
                     URL converter_site = new URL("http://currencies.apps.grandtrunk.net/getlatest/" + from_c + "/" + to_c); //Selects the currency
-                    BufferedReader r = new BufferedReader(new InputStreamReader(converter_site.openStream())); //Prepares to read the website
-                    String line = r.readLine(); //Line that gets from the site
-                    r.close(); 
-                    
-                    //Creates the Float to Write
-                    last_value = Float.parseFloat(line); //Value to return
-        			
-        			//Writes the new data
-        			String data[] = new String[2];
-        			data[0] = "latest_check=" + date();
-        			data[1] = "latest_converter_rate=" + last_value;
-        			IO.write("d_converter_rate", data, false);
+                    last_value = url_read(converter_site);
             	}
             	catch (Exception e){ //If there is any error, it checks for the stored value
             		last_value = Float.parseFloat(IO.data_a[1]);
@@ -60,6 +37,28 @@ public class Converter {
         	}
     	}
 		return last_value;
+    }
+    
+    private static float url_read(URL site) {    	
+		//Reads the data from the net
+
+    	float val = 0f;
+    	String line = "";
+    	try(BufferedReader r = new BufferedReader(new InputStreamReader(site.openStream()))){
+	        line = r.readLine(); //Line that gets from the site
+    	}
+    	catch (Exception e) { System.out.print("ERROR - Couldn't create the Reader");}
+    	
+        //Creates the Float to Write
+        val = Float.parseFloat(line); //Value to return
+		
+		//Writes the new data
+		String[] data = new String[2];
+		data[0] = "latest_check=" + date();
+		data[1] = "latest_converter_rate=" + val;
+		IO.write("d_converter_rate", data, false);
+		
+		return val;
     }
     
     private static long date() { //Date get and format
