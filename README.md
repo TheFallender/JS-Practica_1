@@ -62,6 +62,10 @@ latest_conversor_rate=
 
 ☒ From Object Array to Array List.
 
-☒ Localize
+☒ Localize.
 
-☒ Extra+++++++ Database
+☒ Remove the use of data_a by returning an string and then splitting it.
+
+☒ Clean code with Lint.
+
+☒ Write outside of the object constructor.
