@@ -15,8 +15,7 @@ public class Test_IO extends Test {
 		//IO Class test
 		System.out.println("\n\nCheck files exist and creates them if they don't:\n");
 		IO.data_check();
-		IO.files_check(IO.data_path + "d_test", false); //Creates a test file
-		String d[] = new String[1]; //String to pass as Data
+		String[] d = new String[1]; //String to pass as Data
 		System.out.println("Checks data save on file:\n");
 		d[0] = "test_info=" + Filter.filter_s("Info you want to save: "); //Data to save
 		System.out.println("Checks file write:\n");

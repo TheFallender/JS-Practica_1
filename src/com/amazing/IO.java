@@ -8,6 +8,7 @@ import java.io.IOException;		//Exception
 
 public class IO {
 	protected static String data_path = ""; //Path to the Data Folder
+	protected static final String[] file_name = {"data_path", "d_category", "d_product", "d_user", "d_product_user", "d_converter_rate", "d_test"};
 	protected static String[] data_a; //Data array
 	protected static int data_c = 0; //Data count size
 	
@@ -51,10 +52,10 @@ public class IO {
 	
 	//Starting function
 	protected static void data_check () { //Checks if the data files exist
-		try(BufferedReader reader = new BufferedReader(new FileReader("data_path"))) { //Tries to open the file
+		try(BufferedReader reader = new BufferedReader(new FileReader(file_name[0]))) { //Tries to open the file
 			String line = reader.readLine(); //Line data
 			if (line == "") { //If there is no content on the file, add default path
-				try(FileWriter writer =  new FileWriter("data_path", true)) { //Tries to open the file
+				try(FileWriter writer =  new FileWriter(file_name[0], true)) { //Tries to open the file
 					writer.write("DATA_PATH=src/Data/");
 					data_path = "src/Data/"; //Sets default path in the app
 				}
@@ -80,12 +81,14 @@ public class IO {
 			data_path = "src/Test/";
 		}
 		//Files check
-		files_check(data_path, true);
-		files_check(data_path + "d_category", false);
-		files_check(data_path + "d_product", false);
-		files_check(data_path + "d_user", false);
-		files_check(data_path + "d_product_user", false);
-		files_check(data_path + "d_converter_rate", false);
+		files_check(data_path, true); //Check folder
+		files_check(data_path + file_name[1], false); //Check Category
+		files_check(data_path + file_name[2], false); //Check Product
+		files_check(data_path + file_name[3], false); //Check User
+		files_check(data_path + file_name[4], false); //Check Product User
+		files_check(data_path + file_name[5], false); //Check Converter Rate
+		if (Amazing.test) 
+			files_check(data_path + file_name[6], false); //Check Test
 	}
 	
 	
@@ -97,7 +100,8 @@ public class IO {
 				if (folder)
 					file.mkdir();
 				else		
-					file.createNewFile();
+					if (!file.createNewFile())
+						System.out.println("Error - Couldn't create file.");
 		} 
 		catch (IOException e) {
 			System.out.println("Error - Invalid path.");

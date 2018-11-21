@@ -23,7 +23,7 @@ public class Test_data extends Test {
 		
 		//Product User
 		System.out.println("\n\nProduct user:\n");
-		String aux[] = new String[3];
+		String[] aux = new String[3];
 		aux[0] = "" + testProduct.r_id();
 		aux[1] = testUser.r_email();
 		aux[2] = "" + Filter.filter_i("Number of items ordered: ", 0, 0);
