@@ -34,8 +34,7 @@ public class Amazing {
 				boolean changes_pu = true; //Changes in the product user
 				
 				//Product
-				int pl_n = 0; //Product list number
-				String[] comp_pr = new String[]{"", ""}; //Compare product array
+				String[] comp_pr = new String[]{null, ""}; //Compare product array
 
 			//Starting functions
 			IO.data_check(); //Checks the data files are there, if not, it create them 
@@ -48,9 +47,9 @@ public class Amazing {
 						System.out.println("\nAmazing:");
 						System.out.println("1. Search by category.");
 						System.out.println("2. Account ");
-						if (Login_method.logged_in)
+						if (active_user != null) //User logged in
 							System.out.println("3. Sing out.");
-						else
+						else //User not logged
 							System.out.println("3. Sing in.");
 						System.out.println("4. Create account.");
 						if (!dollar_a)
@@ -74,231 +73,306 @@ public class Amazing {
 							menu[1] = Filter.filter_i("\nMenu select: ", 1, c.length + 1); //Request selection
 						}
 						else if(menu[1] == c.length + 1) { //Exit
-							menu[0] = 0; //Resets the menu first value to the base menu
-							menu[1] = 0;
+							menu[0] = 0; //Resets Main menu
+							menu[1] = 0; //Reset Category menu
 						}
 						else { //Category selected
-							if (menu[2] == 0) {
-								pl_n=0;
-								c_product();
-								System.out.println("\nProduct list of " + c[menu[1] - 1].r_name() + ":");
-								String[] pr_a = new String [5];
-								pl = new Product[p.length];
-								for (int i = 0; i < p.length; i++) { //Print products
-									if (p[i].r_category().equals(c[menu[1] - 1].r_name())) {
-										System.out.println((pl_n + 1) + ". " + p[i].r_name());
-										pr_a[0] = "" + p[i].r_id();
-										pr_a[1] = p[i].r_name();
-										pr_a[2] = p[i].r_category();
-										pr_a[3] = "" + p[i].r_price();
-										pr_a[4] = "" + p[i].r_stock();
-										pl[pl_n] = new Product (pr_a);
-										pl_n++;
+							if (menu[2] == 0) { //Product Menu
+								//Product list
+								c_product(); //Create the base product list
+								pl = new Product[p.length]; //Resets the product list based on the product length
+								
+								//Menu print
+								System.out.println("\nProduct list of " + c[menu[1] - 1].r_name() + ":"); //Print the info of the Category as a product list
+								for (int i = 0, pl_s = 0; i < p.length; i++) //Prints products
+									if (p[i].r_category().equals(c[menu[1] - 1].r_name())) { //The product category name is equal to the category name
+										//Print
+										System.out.println((pl_s + 1) + ". " + p[i].r_name()); //Print product name
+										
+										//Add the product to the list
+										String[] pr_a = new String [5]; //Product array to use for the creation of the products
+										pr_a[0] = "" + p[i].r_id(); 	//ID
+										pr_a[1] = p[i].r_name();		//Name
+										pr_a[2] = p[i].r_category();	//Category
+										pr_a[3] = "" + p[i].r_price();	//Price
+										pr_a[4] = "" + p[i].r_stock();	//Stock
+										pl[pl_s] = new Product (pr_a); //Create the product based on pr_a
+										
+										//Increase product list size
+										pl_s++;
 									}
-								}
-								System.out.println((pl_n + 1) + ". Exit"); //Print exit
-								menu[2] = Filter.filter_i("\nMenu select: ", 1, pl_n + 1); //Request selection
+								System.out.println((pl.length + 1) + ". Exit"); //Print exit
+								
+								//Menu selection
+								menu[2] = Filter.filter_i("\nMenu select: ", 1, pl.length + 1); //Request selection
 							}
-							else if(menu[2] == pl_n + 1) { //Exit
-								menu[1] = 0;
-								menu[2] = 0;
+							else if(menu[2] == pl.length + 1) { //Exit
+								menu[1] = 0; //Reset Category menu
+								menu[2] = 0; //Reset Product list menu
 							}
 							else { //Show product
-								switch (menu[3]) { //Menu for product
-									case 0: //Menu
-										System.out.println("\n");
-										pl[menu[2] - 1].print();
-										System.out.println("1. Buy.");
-										System.out.println("2. Compare. ");
-										System.out.println("3. Exit.");
-										menu[3] = Filter.filter_i("\nMenu select: ", 1, 3);
+								Product pr_buy = pl[menu[2] -1]; //Set a temp product to make things clean
+								switch (menu[3]) { //Checks selection within Product menu
+									case 0: //Product Menu
+										//Print
+										System.out.println("\n"); //Print newline for print of the product
+										pr_buy.print(); //Print the selected product
+										
+										//Menu print
+										System.out.println("1. Buy.");			//1. Buy.
+										System.out.println("2. Compare. ");		//2. Compare.
+										System.out.println("3. Exit.");			//3. Exit.
+										
+										//Menu selection
+										menu[3] = Filter.filter_i("\nMenu select: ", 1, 3); //Request menu selection
 										break;
+										
+										
 									case 1: //Buy
-										if (Login_method.logged_in) {
-											if (pl[menu[2] - 1].r_stock() > 0) {
-												String[] pu_a = new String [3]; //Product user from this order
-												pu_a[0] = "" + pl[menu[2] - 1].r_id();
-												pu_a[1] = active_user.r_email();
-												int amount = Filter.filter_i("Number of items to order: ", 1, 10);
-												pu_a[2] = "" + amount;
-												if (pl[menu[2] - 1].r_stock() - Integer.parseInt(pu_a[2]) >= 0) {
-													Product_user bought_product = new Product_user(pu_a);
-													pl[menu[2] - 1].buy(pu_a[2]);
-													String[] data = new String[2];
-													data[0] = "p_id=" + pu_a[0];
-													data[1] = "p_stock=" + (pl[menu[2] - 1].r_stock());
-													IO.modify("d_product", data, 4);
-													changes_pu = true;
+										//Check if the user is logged in
+										if (active_user != null) { //The user is logged in
+											//Check if there is stock
+											if (pr_buy.r_stock() > 0) { //There is some stock
+												int amount = Filter.filter_i("Number of items to order: ", 1, 10); //Request the number of items to order
+												
+												//Check if the stock is enough
+												if (pr_buy.r_stock() - amount >= 0) { //There is enough stock for the order
+													//Product User
+													String[] pu_a = new String [3]; //Product user from this order
+													pu_a[0] = "" + pr_buy.r_id(); 		//Product ID of the ordered item
+													pu_a[1] = active_user.r_email(); 	//User that is going to buy the order
+													pu_a[2] = "" + amount; 				//Amount on the order
+													Product_user bought_product = new Product_user(pu_a); //New product user
+													changes_pu = true; //Set that there were changes in the Product User
+													
+													//Product Update
+													pr_buy.buy(amount); //Decrease the value by the amount selected
+													pl[menu[2] - 1] = pr_buy; //Update changes to the selected value
+													
+													//Product Update File
+													String[] data = new String[] {"p_id=" + pr_buy.r_id(), "p_stock=" + pr_buy.r_stock()}; //Data array, first the ID to search, then the stock.
+													IO.modify("d_product", data, 4); //Modify Product with the new data
+													
+													//Print info
+													System.out.println("Successfully bought the product"); //Print that the product was bought
 												}
-												else {
-													System.out.println("ERROR - There's not enough stock.");
-													Filter.filter_s("\n\nPress ENTER to continue: ");
-												}
+												else //There is not enough stock
+													System.out.println("ERROR - There's not enough stock for your order."); //Report that the product doesn't have enough stock
 											}
-											else {
-												System.out.println("ERROR - There's no stock.");
-												Filter.filter_s("\n\nPress ENTER to continue: ");
-											}
+											else //There is no stock
+												System.out.println("ERROR - Product out of stock."); //Report that the product is out of stock
 										}
-										else {
-											System.out.println("ERROR - You must be logged in in order to buy.");
-											Filter.filter_s("\n\nPress ENTER to continue: ");
-										}
-										menu[3] = 0;
+										else //User must be logged in to buy the product
+											System.out.println("ERROR - You must be logged in in order to buy."); //Report that the user must be logged in to buy
+										
+										
+										Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+										
+										menu[3] = 0; //Back to Product basic menu
 										break;
+										
+										
 									case 2: //Compare
-										if (comp_pr[0].equals("")) {
-											comp_pr[0] = pl[menu[2] - 1].compare();
+										//Check if there is a product selected
+										if (comp_pr[0] == null) //No product selected
+											comp_pr[0] = pl[menu[2] - 1].compare(); //First product to compare
+										else { //One product selected, check the other one
+											comp_pr[1] = pl[menu[2] - 1].compare(); //Second product to compare
+											compare_pr(comp_pr); //Compare both products
+											comp_pr[0] = null; //Reset to null the first product (second one won't matter)
 										}
-										else {
-											comp_pr[1] = pl[menu[2] - 1].compare();
-											compare_pr(comp_pr);
-											comp_pr[0] = "";
-											comp_pr[1] = "";
-										}
-										menu[2] = 0;
-										menu[3] = 0;
+										
+										menu[2] = 0; //Reset Product list menu
+										menu[3] = 0; //Reset Product menu
 										break;
+										
+										
 									case 3: //Exit
-										menu[2] = 0;
-										menu[3] = 0;
+										menu[2] = 0; //Reset Product list menu
+										menu[3] = 0; //Reset Product menu
 										break;
+										
+										
 									default: //Default case
-										menu[3] = 0; //Reset the menu
+										menu[0] = -1; //Sends menu to an invalid state to reset it
 										break;
 								}
 							}
 						}
 						break;
+						
+						
 					case 2:	//Account
-						if (Login_method.logged_in) { //Log out
-							switch(menu[1]) {
-								case 0: //Menu
-									System.out.println("\nAccount menu:");
-									System.out.println("1. Account info.");
-									System.out.println("2. Ordered Products.");
-									System.out.println("3. Log out of the account.");
-									System.out.println("4. Homepage.");
-									if (active_user.r_admin()) {
-										System.out.println("5. Admin settings.");
-										menu[1] = Filter.filter_i("\nMenu select: ", 1, 5);
+						if (active_user != null) { //User is logged in
+							switch(menu[1]) { //Checks selection within Account menu
+								case 0: //Account Menu
+									//Print menu
+									System.out.println("\nAccount menu:");				//Account Menu:
+									System.out.println("1. Account Info.");				//1. Account Info.
+									System.out.println("2. Ordered Products.");			//2. Ordered Products.
+									System.out.println("3. Log out of the account.");	//3. Log out.
+									System.out.println("4. Homepage.");					//4. Homepage.
+									
+									//Menu selection
+									if (active_user.r_admin()) { //Checks if the user is admin
+										System.out.println("5. Admin settings.");		//5. Admin
+										menu[1] = Filter.filter_i("\nMenu select: ", 1, 5); //Request menu selection
 									}
-									else {
-										menu[1] = Filter.filter_i("\nMenu select: ", 1, 4);
-									}
+									else
+										menu[1] = Filter.filter_i("\nMenu select: ", 1, 4); //Request menu selection
 									break;
-								case 1: //See info
-									active_user.print();
-									Filter.filter_s("\n\nPress ENTER to continue: ");
-									menu[1] = 0;
+									
+									
+								case 1: //See User Info
+									active_user.print(); //Print info of the user
+									
+									Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+									
+									menu[1] = 0; //Back to Account basic menu
 									break;
+									
+									
 								case 2: //Ordered products
-									if (changes_pu) {
-										c_product_user();
-										changes_pu = false;
+									//Check for changes in the product user
+									if (changes_pu) { //Changes were made
+										c_product_user(); //Recreates the product user list
+										changes_pu = false; //Disable changes made in product user
 									}
-									for (int i = 0; i < pu.length; i++) { //Print the products bought
-										pu[i].print();
-									}
-									Filter.filter_s("\n\nPress ENTER to continue: ");
-									menu[1] = 0;
+									
+									//Print
+									for (int i = 0; i < pu.length; i++) //Print all the orders
+										pu[i].print(); //Prints the product user
+									
+									Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+									
+									menu[1] = 0; //Back to Account basic menu
 									break;
+									
+									
 								case 3: //Log out
-									Login_method.login_method_out();
-									System.out.println("Successfully logged out.");
-									Filter.filter_s("\n\nPress ENTER to continue: ");
-									menu[0] = 0; //Resets the menu first value to the base menu
-									menu[1] = 0;
+									Login_method.login_method_out(); //Log out method
+									System.out.println("Successfully logged out."); //Prints that the user logged out
+									Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+									
+									menu[0] = 0; //Resets Main menu
+									menu[1] = 0; //Back to Account basic menu
 									break;
-								case 4: //Go back
-									menu[0] = 0; //Resets the menu first value to the base menu
-									menu[1] = 0;
+									
+									
+								case 4: //Exit account menu
+									menu[0] = 0; //Resets Main menu
+									menu[1] = 0; //Back to Account basic menu
 									break;
+									
+									
 								case 5: //Admin
-									switch (menu[2]) {
-										case 0:
-											System.out.println("\nAdmin menu:");
-											System.out.println("1. New category.");
-											System.out.println("2. New Product.");
-											System.out.println("3. Exit.");
-											menu[2] = Filter.filter_i("\nMenu select: ", 1, 3);
+									switch (menu[2]) { //Checks selection within Admin menu
+										case 0: //Admin Menu
+											//Print menu
+											System.out.println("\nAdmin menu:"); 	//Admin menu:
+											System.out.println("1. New Category."); //1. New Category.
+											System.out.println("2. New Product."); 	//2. New Product.
+											System.out.println("3. Exit."); 		//3. Exit.
+											
+											//Menu selection
+											menu[2] = Filter.filter_i("\nMenu select: ", 1, 3); //Request menu selection
 											break;
-										case 1:
-											Category new_c = new Category();
-											changes_c = true;
-											menu[2] = 0;
+											
+											
+										case 1: //Create category
+											Category new_c = new Category(); //Create category
+											changes_c = true; //Category was changed
+											menu[2] = 0; //Back to Admin basic menu
 											break;
-										case 2:
-											Product new_p = new Product();
-											menu[2] = 0;
+											
+											
+										case 2: //Create Product
+											Product new_p = new Product(); //Create new product
+											menu[2] = 0; //Back to Admin basic menu
 											break;
-										case 3:
-											menu[1] = 0;
-											menu[2] = 0;
+											
+											
+										case 3: //Exit
+											menu[1] = 0; //Resets Account menu
+											menu[2] = 0; //Resets Admin menu
 											break;
+											
+											
 										default: //Default case
-											menu[2] = 0;
+											menu[0] = -1; //Sends menu to an invalid state to reset it
 											break;
 									}
 									break;
+									
+									
 								default: //Default case
-									for (int i = 1; i < menu.length; i++) //Resets every menu value to 0
-										menu[i] = 0;
+									menu[0] = -1; //Sends menu to an invalid state to reset it
 									break;
 							}
 						}
-						else { //Log in
-							System.out.println("ERROR - You have to be logged in to see this.");
-							Filter.filter_s("\n\nPress ENTER to continue: ");
-							menu[0] = 0; //Resets the menu first value to the base menu
+						else { //User not logged in
+							System.out.println("ERROR - You have to be logged in to see this."); //Report error, user should be logged in to see this.
+							Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+							
+							menu[0] = 0; //Resets Main menu
 						}
 						break;
-					case 3: //Log in
-						if (Login_method.logged_in) { //Log out
-							Login_method.login_method_out();
-							System.out.println("Successfully logged out.");
-							Filter.filter_s("\n\nPress ENTER to continue: ");
+						
+						
+					case 3: //Log in/out
+						//Checks if it should log in or out
+						if (active_user != null) { //Log out
+							Login_method.login_method_out(); //Logs out the user
+							System.out.println("Successfully logged out."); //Prints that the user logged out
+							Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
 						}
 						else { //Log in
-							if (Login_method.login_method_in()) {
-								System.out.println("Login in...");
-								System.out.println("Successfully logged in.");
-							}
-							Filter.filter_s("\n\nPress ENTER to continue: ");
+							if (Login_method.login_method_in()) //Check if the method successfully creates the user
+								System.out.println("Successfully logged in."); //Prints that the user logged in
+							Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
 						}
-						menu[0] = 0; //Resets the menu first value to the base menu
+						
+						menu[0] = 0; //Resets Main menu
 						break;
+						
+						
 					case 4: //Create account
-						if (Login_method.logged_in)
-							System.out.println("ERROR - You are already logged in.");
+						//Check if the user is logged in
+						if (active_user != null)
+							System.out.println("ERROR - You are already logged in."); //Report error as the user is logged in
 						else {
-							System.out.println("Successfully created an account.");
-							active_user = new User();
-							Login_method.logged_in = true;
+							active_user = new User(); //Creates a new user
+							System.out.println("Successfully created an account."); //Print that the user was created successfully
 						}
-						Filter.filter_s("\n\nPress ENTER to continue: ");
-						menu[0] = 0; //Resets the menu first value to the base menu
+						
+						Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+						
+						menu[0] = 0; //Resets Main menu
 						break;
+						
 						
 					case 5: //Change dollar
 						dollar_a = !dollar_a; //Changes value of the boolean to the opposite one
 						
-						System.out.println("Changed the currency."); //Prints the info of the change
+						System.out.println("Changed the currency."); //Prints the change in the currency
 						Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
 						
-						menu[0] = 0; //Resets the menu first value to the base menu
+						menu[0] = 0; //Resets Main menu
 						break;
+						
 						
 					case 6: //Close program
 						Filter.scan.close(); //Closes the scan
 						
-						if (Login_method.logged_in) //In case that the user is logged in, it logs him out
+						if (active_user != null) //In case that the user is logged in, it logs him out
 							Login_method.login_method_out();
-						
 						return; //Closes the program by getting out of the main function
+						
+						
 					default: //Default case
 						for (int i = 0; i < menu.length; i++) //Resets every menu value to 0
 							menu[i] = 0;
+						System.out.println("ERROR - We had some trouble doing your request. Please, try again."); //Report outside of menu selection
 						break;
 				}
 			}
@@ -374,12 +448,12 @@ public class Amazing {
 		//Products to pass
 		String[] pr_1 = data[0].split("/"); //Splits the first data
 		String[] pr_2 = data[1].split("/"); //Splits the second data
-		
+		String spacing = "	|	"; //Spacing
 		//Print comparison
-		System.out.println("Product name:	" + pr_1[2] + "			" + pr_2[2]);
-		System.out.println("Product id:	" + pr_1[1] + "			" + pr_2[1]);
-		System.out.println("Category:	" + pr_1[0] + "			" + pr_2[0]);
-		System.out.println("Price:		" + pr_1[3] + "			" + pr_2[3]);
-		System.out.println("Stock:		" + pr_1[4] + "			" + pr_2[4]);
+		System.out.println("Product Name:	" 	+ pr_1[2] + spacing + pr_2[2]); 	//Product Name 		(Pr1 name)		(Pr2 name)
+		System.out.println("Product ID:	" 		+ pr_1[1] + spacing + pr_2[1]);		//Product Id 		(Pr1 id)		(Pr2 id)
+		System.out.println("Category:	" 		+ pr_1[0] + spacing + pr_2[0]);		//Product Category 	(Pr1 category)	(Pr2 category)
+		System.out.println("Price:		" 		+ pr_1[3] + spacing + pr_2[3]);		//Product Price 	(Pr1 price)		(Pr2 price)
+		System.out.println("Stock:		" 		+ pr_1[4] + spacing + pr_2[4]);		//Product Stock 	(Pr1 stock)		(Pr2 stock)
 	}
 }

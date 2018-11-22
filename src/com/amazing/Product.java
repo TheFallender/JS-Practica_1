@@ -77,7 +77,7 @@ public class Product {
 		return aux;
 	}
 
-	protected void buy(String amount) {
-		this.stock -= Integer.parseInt(amount);
+	protected void buy(int n_ordered) {
+		this.stock -= n_ordered;
 	}
 }

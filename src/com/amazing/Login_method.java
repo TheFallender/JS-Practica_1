@@ -3,7 +3,6 @@ package com.amazing;
 import java.util.Date;
 
 public class Login_method {
-	protected static boolean logged_in = false;
 	protected static boolean login_method_in() {
 		String email;
 		String e_email; //Encrypted email
@@ -30,7 +29,6 @@ public class Login_method {
 					Date d = new Date(); //Get date
 					data[1] = "u_login=" + d.getTime() + "\r\n"; //Login
 					IO.modify("d_user" , data, 2);
-					logged_in = true;
 					return true;
 				}
 				else { //Password doesn't match
@@ -49,6 +47,5 @@ public class Login_method {
 		IO.modify("d_user", data, 2);
 		Amazing.active_user.reset();
 		Amazing.active_user = null;
-		logged_in = false;
 	}
 }
