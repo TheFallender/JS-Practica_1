@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/TheFallender/Amazing/branch/master/graph/badge.svg?token=0vyRPWkJGd)](https://codecov.io/gh/TheFallender/Amazing)
+
 # Amazing
 This project tries to immitate how a marketstore like Amazon would work. It gives you the option to create products, category (only if you are an admin) and buy the products.
 
@@ -50,10 +52,20 @@ d_conversor_rate //Conversor rate - Currency rate from and to
 latest_conversor_rate=
 ```
 ## To do list:
-☒Give admin to a user without the need to access the files (having a default admin).
+☒ Give admin to a user without the need to access the files (having a default admin).
 
-☒Allow to change the password.
+☒ Allow to change the password.
 
-☒Comentary everywhere.
+☒ Comentary everywhere.
 
-☒Delete categories and products (will have to update the product user to retain data).
+☒ Delete categories and products (will have to update the product user to retain data).
+
+☒ From Object Array to Array List.
+
+☒ Localize.
+
+☒ Remove the use of data_a by returning an string and then splitting it.
+
+☒ Clean code with Lint.
+
+☒ Write outside of the object constructor.
