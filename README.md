@@ -42,6 +42,7 @@ d_product_user //Product user data - The data from the orders
 ```
 pu_u_id=
 pu_p_id=
+pu_p_name=
 pu_number=
 ```
 
@@ -66,4 +67,4 @@ latest_conversor_rate=
 
 ☒ Write outside of the object constructor, function inside the object.
 
-☒ Remove IO size data_a, make it unlimited.
+☒ Remove IO size data_a, make it unlimited (arraylist of string).
