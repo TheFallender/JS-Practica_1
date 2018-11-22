@@ -3,14 +3,12 @@
 # Amazing
 This project tries to immitate how a marketstore like Amazon would work. It gives you the option to create products, category (only if you are an admin) and buy the products.
 
-If you want to be the admin, simply go to your user on the d_user file and change "u_admin=0" to "u_admin=1". Will implement a better and safer system in the future.
-
 This project uses a [website](http://currencies.apps.grandtrunk.net/) made by Wim Heirman, thanks to him the converter rate gets the latest value from the net.
 
 ## How to manually modify settings
 In case you want to manually create things outside of the app, here is the template for the files.
 
-Note that you shouldn't modify the password and that you can't see it in plain text. In case you want the password you could decrypt it. I will add a password recovery method.
+Note that you shouldn't modify the password and that you can't see it in plain text. In case you want the password you could decrypt it.
 
 data_path // You can use this file to change the data location
 ```
@@ -64,8 +62,8 @@ latest_conversor_rate=
 
 ☒ Localize.
 
-☒ Remove the use of data_a by returning an string and then splitting it.
-
 ☒ Clean code with Lint.
 
-☒ Write outside of the object constructor.
+☒ Write outside of the object constructor, function inside the object.
+
+☒ Remove IO size data_a, make it unlimited.
