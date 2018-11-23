@@ -43,11 +43,13 @@ d_product_user //Product user data - The data from the orders
 pu_u_id=
 pu_p_id=
 pu_p_name=
+pu_p_price=
 pu_number=
 ```
 
 d_conversor_rate //Conversor rate - Currency rate from and to
 ```
+latest_check=
 latest_conversor_rate=
 ```
 ## To do list:
