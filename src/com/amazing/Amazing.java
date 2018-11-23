@@ -363,7 +363,8 @@ public class Amazing {
 						if (active_user != null)
 							System.out.println("ERROR - You are already logged in."); //Report error as the user is logged in
 						else {
-							active_user = new User(); //Creates a new user
+							active_user = new User(); 								//Creates a new user
+							active_user.save();										//Save the data on the file
 							System.out.println("Successfully created an account."); //Print that the user was created successfully
 						}
 						

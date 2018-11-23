@@ -23,6 +23,7 @@ public class Test_data extends Test { //Data Test class
 		//User
 		System.out.println("\n\nUser:\n"); 								//Prints that the User is going to be tested
 		User testUser = new User(); 									//Check constructor of User
+		testUser.save();												//Save the data on the file
 		IO.read("d_user", testUser.r_email(), 5, false); 				//Read User
 		super.print_data(); 											//Print the data from the data array
 		
