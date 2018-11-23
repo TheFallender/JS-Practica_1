@@ -68,3 +68,5 @@ latest_conversor_rate=
 ☒ Write outside of the object constructor, function inside the object.
 
 ☒ Remove IO size data_a, make it unlimited (arraylist of string).
+
+☒ Change ReplaceALL to Replace to prevent errors.
