@@ -1,149 +1,152 @@
 package com.amazing;
 
-import java.io.File; 			//File checks
-import java.io.FileReader; 		//File Reader 1
-import java.io.BufferedReader; 	//File Reader 2
-import java.io.FileWriter;		//File Writer
-import java.io.IOException;		//Exception
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
-public class IO {
-	protected static String data_path = ""; //Path to the Data Folder
-	protected static final String[] file_name = {"data_path", "d_category", "d_product", "d_user", "d_product_user", "d_converter_rate", "d_test"};
-	protected static String[] data_a; //Data array
-	protected static int data_c = 0; //Data count size
+public class IO { //Input Output class
+	protected static String data_path = ""; 	//Path to the Data Folder
+	protected static String[] data_a; 			//Data array
 	
 	protected static void read (String file_type, String search_for, int array_size, boolean repeat) {	//Reads all the filtered data from file
-		String file_path = data_path + file_type;	//Path to the file
-		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
-			data_a = new String[array_size];
-			data_a[0] = ""; //Check if no data is found
-			data_c = 0; //Counter
-			String line = ""; //Line data
-			for (line = reader.readLine(); line != null; line = reader.readLine()) { //Search in the file
-				if (line.contains(search_for)) { //Check if this is the requested line
-					if (!repeat) //Remove code if it is not going to search for the same term
-						search_for = "";
-					if (data_c >= array_size) //Break if the array size is reached
-						break;
-					else {
-						data_a[data_c] = line; //Copies the line
-						data_a[data_c] = data_a[data_c].replaceAll(".+=", ""); //Cleans the line data
-						data_c++; //Increases the data count
+		String file_path = data_path + file_type;											//Path to the file
+		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { 		//Tries to open the file
+			data_a = new String[array_size]; 												//Data array with the size of the parameter
+			int data_s = 0;																	//Array Data Size 
+			String line; 																	//Line data
+			for (line = reader.readLine(); line != null; line = reader.readLine())			//Search in the file
+				if (line.contains(search_for)) { 												//Check if this is the requested line
+					if (!repeat) 																	//Remove code if it is not going to search for the same term
+						search_for = "";																//Now it accepts anything as the "" contains nothing
+					if (data_s >= array_size) 														//Break if the array size is reached
+						break;																			//Break the loop
+					else {																			//There is space for the data
+						data_a[data_s] = line.replaceAll(".+=", ""); 									//Cleans the line data
+						data_s++; 																		//Increases the data count
 					}
 				}
-			}
 		}
 		catch (Exception FileNotFoundException) { //Exception Catch
-			System.out.println("ERROR - File not found.");
+			System.out.println("ERROR - File not found."); //Reports that there was no file found
 		}
 	}
 	
-	protected static void write (String file_type, String[] input, boolean append) { //Writes the new object
-		String file_path = data_path + file_type;	//Path to the file
+	protected static void write (String file_type, String[] input, boolean append) { //Writes the array inside the selected file
+		String file_path = data_path + file_type; 						//Path to the file
 		try(FileWriter writer =  new FileWriter(file_path, append)) {	//Tries to open the file
-			for (int i = 0; i < input.length; i++)
-				writer.write(input[i] + "\r\n");
+			for (int i = 0; i < input.length; i++)							//For to write the array "input"
+				writer.write(input[i] + "\r\n");								//Writes the selected data from the array
 		}
 		catch (IOException e) { //Exception Catch
-			System.out.println("ERROR - File not found.");
+			System.out.println("ERROR - File not found."); //Reports that there was no file found
 		}
 	}
 
 	
 	//Starting function
-	protected static void data_check () { //Checks if the data files exist
-		try(BufferedReader reader = new BufferedReader(new FileReader(file_name[0]))) { //Tries to open the file
-			String line = reader.readLine(); //Line data
-			if (line == "") { //If there is no content on the file, add default path
-				try(FileWriter writer =  new FileWriter(file_name[0], true)) { //Tries to open the file
-					writer.write("DATA_PATH=src/Data/");
-					data_path = "src/Data/"; //Sets default path in the app
+	protected static void data_check () { //Sets data path and checks files
+		//Try to set the default path
+		if (Amazing.test) 																	//Test is active, set the path for test
+			data_path = "src/Test/";															//Data path set
+		else																				//Test is disabled, proceed
+			try(BufferedReader reader = new BufferedReader(new FileReader("data_path"))) { 		//Tries to open the file
+				String line = reader.readLine(); 													//Line data
+				if (line == "") { 																	//If there is no content on the file, add default path
+					try(FileWriter writer =  new FileWriter("data_path", true)) { 						//Tries to open/create the file
+						writer.write("DATA_PATH=src/Data/");												//Writes the default path
+						data_path = "src/Data/"; 															//Sets default path
+					}
+					catch (Exception IOException) { 													//Couldn't read the file (file not found)
+						System.out.println("ERROR - File not found"); 										//Reports that there was no file found
+					}
 				}
-				catch (Exception IOException) { //Exception Catch
-					System.out.println("ERROR - File not found");
+				else { 																				//If there is content on the file, read it and set it
+					data_path = line.replaceAll("DATA_PATH=", ""); 										//Sets the defined path
 				}
+	
 			}
-			else { //If there is content on the file, read it and set it
-				data_path = line.replaceAll("DATA_PATH=", ""); //Sets the defined path
+			catch (IOException e_1) { 															//There is no file, create a new one and set the default path
+				try (FileWriter writer =  new FileWriter("data_path", true)){						//Tryes to open the new file
+					writer.write("DATA_PATH=src/Data/");												//Writes the default path
+				} 
+				catch (IOException e_2) { 															//Couldn't read the file (file not found)
+					System.out.println("ERROR - File not found"); 										//Reports that there was no file found
+				}
+				data_path = "src/Data/";															//In any case it sets the default path
 			}
 
-		}
-		catch (IOException e_1) { //There is no file, create a new one and set the default path
-			try (FileWriter writer =  new FileWriter("data_path", true)){
-				writer.write("DATA_PATH=src/Data/");
-				data_path = "src/Data/"; //Sets default path in the app
-			} 
-			catch (IOException e_2) {
-				System.out.println("ERROR - File not found");
-			}
-		}
-		if (Amazing.test) {
-			data_path = "src/Test/";
-		}
 		//Files check
-		files_check(data_path, true); //Check folder
-		files_check(data_path + file_name[1], false); //Check Category
-		files_check(data_path + file_name[2], false); //Check Product
-		files_check(data_path + file_name[3], false); //Check User
-		files_check(data_path + file_name[4], false); //Check Product User
-		files_check(data_path + file_name[5], false); //Check Converter Rate
-		if (Amazing.test) 
-			files_check(data_path + file_name[6], false); //Check Test
+		files_check(data_path, true); 							//Check folder
+		files_check(data_path + "d_category", false); 			//Check Category
+		files_check(data_path + "d_product", false); 			//Check Product
+		files_check(data_path + "d_user", false); 				//Check User
+		files_check(data_path + "d_product_user", false); 		//Check Product User
+		files_check(data_path + "d_converter_rate", false); 	//Check Converter Rate
+		if (Amazing.test) //Test is active
+			files_check(data_path + "d_test", false); 			//Check Test
 	}
 	
 	
 	//Auxiliary functions
-	protected static void files_check(String path, boolean folder) { //Checks if file exists, if not it creates one
-		try {
-			File file = new File(path);
-			if (!file.exists())
-				if (folder)
-					file.mkdir();
-				else		
-					if (!file.createNewFile())
-						System.out.println("Error - Couldn't create file.");
+	protected static void files_check(String path, boolean folder) { //Checks if a file exists, if not, it creates one
+		try {																	//Tries to create the file/folder
+			File file = new File(path);												//New file with the path
+			if (!file.exists())	{													//No file exists with the same name
+				if (folder)																//It's a folder
+					file.mkdir();															//Creates the folder
+				else																	//It's a file
+					if (!file.createNewFile())												//Checks if the file couldn't be created
+						System.out.println("Error - Couldn't create file."); 					//Reports that it couldn't create the file
+			}
 		} 
-		catch (IOException e) {
-			System.out.println("Error - Invalid path.");
+		catch (IOException e) { 												//Invalid path selected (admin access, other drive...)
+			System.out.println("Error - Invalid path."); 							//Reports that the selected path is invalid
 		}
 	}
 	
 	protected static void modify (String file_type, String[] input, int skip) { //Writes the date of the login on the user
-		String file_path = data_path + file_type;
-		try (BufferedReader reader = new BufferedReader(new FileReader(file_path))) { //Tries to open the file
-			String line = ""; //Line data
-			StringBuilder text = new StringBuilder(); //Text from the file
-			boolean applied = false;
-			while((line = reader.readLine()) != null){ //Buffered Reader searches for the user
-				if (!applied) {
-					if (line.contains(input[0])) { //Check if this is the user line
-						for (int j = 0; j < skip; j++) { //Once found, lines to skip
-							text.append(line + "\r\n");
-							line = reader.readLine();
-						}
-						for (int i = 1; i < input.length; i++) {
-							text.append(input[i]);
-							if(i < input.length - 1)
-								line = reader.readLine();
+		String file_path = data_path + file_type; 										//Defines the path of the file with data path and the file name
+		try (BufferedReader reader = new BufferedReader(new FileReader(file_path))) { 	//Tries to open the file
+			String line = ""; 																//Line of data
+			StringBuilder text = new StringBuilder(); 										//Text from the file
+			boolean applied = false;														//Boolean to check if the changes were made
+			while((line = reader.readLine()) != null){ 										//Buffered Reader searches for the user
+				if (!applied) {																	//If changes not applied
+					if (line.contains(input[0])) { 													//Check if this is the searched line
+						//Skip
+						for (int j = 0; j < skip; j++) { 												//Once it's found, skips the number of lines selected
+							text.append(line + "\r\n");														//Adds the line to the buffered reader
+							line = reader.readLine();														//Reads the next line
 						}
 						
-						applied = true;
+						//Write modified data
+						for (int i = 1; i < input.length; i++) {										//Writes the lines from the array
+							text.append(input[i]);															//Adds the lines to the text
+							if(i < input.length - 1)														//If it isn't last line
+								line = reader.readLine();														//Reads the next line
+						}
+						
+						//Applied changes
+						applied = true;																	//Changes applied, block access to optimize performance
 					}
-					else //Get the line
-						text.append(line + "\r\n");
+					else 																			//Does not contain the data
+						text.append(line + "\r\n");														//Add lines to the text
 				}
-				else //Get the line
-					text.append(line + "\r\n");
+				else 																			//Changes applied
+					text.append(line + "\r\n");														//Add lines to the text
 			}
-			try(FileWriter writer = new FileWriter(file_path, false)){ //Try to open the file
-	            writer.write(text.toString()); //Write the text on the file
+			//Writer
+			try(FileWriter writer = new FileWriter(file_path, false)){ 						//Try to open the file to write
+	            writer.write(text.toString()); 													//Write the text on the file
 			}
-			catch (IOException e) { //Exception Catch
-				System.out.println("ERROR - File not found.");
+			catch (IOException e) { 														//Couldn't create the writer
+				System.out.println("ERROR - File not found."); 									//Reports that there was no file found
 			}
 		}
-		catch (IOException e) { //Exception Catch
-			System.out.println("ERROR - File not found.");
+		catch (IOException e) { 														//Couldn't create the reader
+			System.out.println("ERROR - File not found."); 									//Reports that there was no file found
 		}
 	}
 }

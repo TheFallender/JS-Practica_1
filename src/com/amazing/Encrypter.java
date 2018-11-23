@@ -7,41 +7,35 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Encrypter {
 	//Variables
-	private static final byte[] keyBytes = "BestPasSword2018".getBytes();				//Set the secret key
-	private static final SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");		//Define the secret key as an "AES" key
+	private static final byte[] keyBytes = "BestPasSword2018".getBytes(); //Set the secret key
+	private static final SecretKeySpec key = new SecretKeySpec(keyBytes, "AES"); //Define the secret key as an "AES" key
 	
-	public static String encrypt(String input_s) throws Exception {					//Encrypts and writes
-		//Pre-encryption definitions
+	public static String encrypt(String input_s) throws Exception { //Encrypts the string
+		//Cipher
 	    Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); //Add provider
-	    String encodedString = Base64.getEncoder().encodeToString(input_s.getBytes());
-		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");						//Define the Cypher
-		byte[] input = encodedString.getBytes();												//Get bytes of the input
+		Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding"); 						//Define the Cipher
+		cipher.init(Cipher.ENCRYPT_MODE, key);											//Cipher mode
 		
-		//Encryption section
-		cipher.init(Cipher.ENCRYPT_MODE, key);											//Start the encryption 
-		byte[] e_text = new byte[cipher.getOutputSize(input.length)];					//Get the encrypted text
-		int e_text_l = cipher.update(input, 0, input.length, e_text, 0);				//Get the length of the encrypted text
-		e_text_l += cipher.doFinal(e_text, e_text_l);									//Updates the text
-
-		//Convert byte[] to String
-		String e_text_f = new String (e_text);											//Redefines the e_text_f (encrypted text final) based on the bytes of e_text
-		
+		//Data
+		String encodedString = Base64.getEncoder().encodeToString(input_s.getBytes()); 	//Encode the string to byte64
+		byte[] input = encodedString.getBytes(); 										//Get bytes of the input
+			
 		//Returns string
-		return e_text_f;
+		return "" + cipher.getOutputSize(input.length);
 	}
 	
-	public static String decrypt(String input_s) throws Exception {					//Encrypts and writes
-		//Pre-decryption definitions
+	public static String decrypt(String input_s) throws Exception {	//Decrypts the string
+		//Cypher
 	    Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); //Add provider
-		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");						//Define the Cypher
-		String d_text = "";																//String to return
+		Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");						//Define the Cipher
+		cipher.init(Cipher.DECRYPT_MODE, key);											//Cipher mode
+
+		//Data
+		byte[] input = cipher.doFinal(input_s.getBytes());
 		
-		//Decryption section
-		cipher.init(Cipher.DECRYPT_MODE, key);
-		byte[] decrypted = Base64.getDecoder().decode(cipher.doFinal(input_s.getBytes()));
-		d_text = new String(decrypted);	
+		
 		//Returns String
-		return d_text;
+		return "" + Base64.getDecoder().decode(input);
 	}
 	
 }
