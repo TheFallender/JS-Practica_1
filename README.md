@@ -52,22 +52,17 @@ d_conversor_rate //Conversor rate - Currency rate from and to
 latest_check=
 latest_conversor_rate=
 ```
+
 ## To do list:
 ☒ Give admin to a user without the need to access the files (having a default admin).
 
 ☒ Allow to change the password.
-
-☒ Comentary everywhere.
 
 ☒ Delete categories and products (will have to update the product user to retain data).
 
 ☒ From Object Array to Array List.
 
 ☒ Localize.
-
-☒ Clean code with Lint.
-
-☒ Write outside of the object constructor, function inside the object.
 
 ☒ Remove IO size data_a, make it unlimited (arraylist of string).
 
