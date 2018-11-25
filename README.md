@@ -64,6 +64,8 @@ latest_conversor_rate=
 
 ☒ Localize.
 
+☒ Prices should only show 2 decimal values.
+
 ☒ Remove IO size data_a, make it unlimited (arraylist of string).
 
 ☒ Change ReplaceALL to Replace to prevent errors.
