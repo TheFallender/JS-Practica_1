@@ -60,12 +60,4 @@ latest_conversor_rate=
 
 ☒ Delete categories and products (will have to update the product user to retain data).
 
-☒ From Object Array to Array List.
-
 ☒ Localize.
-
-☒ Prices should only show 2 decimal values.
-
-☒ Remove IO size data_a, make it unlimited (arraylist of string).
-
-☒ Change ReplaceALL to Replace to prevent errors.
