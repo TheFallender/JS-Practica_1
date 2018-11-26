@@ -10,10 +10,10 @@ public class Product { //Product class
 	
 	protected Product() { //Product basic Constructor 
 		//Request data
-		this.name = Filter.filter_s("Name of the product: "); 				//Request Product Name
 		this.id = Filter.filter_i("Id of the product: ", 0, 0); 			//Request Product ID
+		this.name = Filter.filter_s("Name of the product: "); 				//Request Product Name
 		this.category_id = Filter.filter_s("Category of the product: "); 	//Request Product Category
-		this.price = Filter.filter_f("Value of the product (€): ", 0 , 0); 	//Request Product Price
+		this.price = Filter.filter_f("Value of the product (€): ", 0 , 0, 2); 	//Request Product Price
 		this.stock = Filter.filter_i("Stock of this product: ", 0 , 0); 	//Request Product Stock
 	}
 	
@@ -53,7 +53,7 @@ public class Product { //Product class
 		System.out.println("ID: " + this.id); 													//Print Product name
 		System.out.println("Category: " + this.category_id); 									//Print Product name
 		if (Amazing.dollar_a) //Check if it has the dollar currency
-			System.out.println("Price: " + this.price * Amazing.eur_dollar + "$"); 				//Print the Product Price
+			System.out.println("Price: " + Converter.decimal_conv(this.price * Amazing.eur_dollar, 2) + "$"); 				//Print the Product Price
 		else //The currency is the euro
 			System.out.println("Price: " + this.price + "€"); 									//Print the Product Price
 		System.out.println("Stock: " + this.stock); 											//Print the number of items available
@@ -68,7 +68,7 @@ public class Product { //Product class
 		aux += this.name + "/"; 								//Save Name
 		aux += this.category_id + "/"; 							//Save Category
 		if (Amazing.dollar_a) //Check if it has the dollar currency
-			aux += this.price * Amazing.eur_dollar + "$/"; 		//Save Price
+			aux += "" + Converter.decimal_conv(this.price * Amazing.eur_dollar, 2) + "$/"; 		//Save Price
 		else //The currency is the euro
 			aux += this.price + "€/"; 							//Save Price
 		aux += this.stock; 										//Save Stock

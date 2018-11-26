@@ -17,10 +17,11 @@ public class Test_IO extends Test { //IO Test class
 		Filter.filter_i("Int to check between values: ", i_lh[0], i_lh[1]); 		//Checks if the value works in between works
 		//Float
 		System.out.println("\n\nFilter float:"); 								//Prints that this is the Filter of the float
-		float[] f_lh = new float[2]; 											//Float low high values
-		f_lh[0] = Filter.filter_f("Low value to check: ", 0, 0); 					//Get the low value of the float
-		f_lh[1] = Filter.filter_f("High value to check: ", 0, 0); 					//Get the high value of the float
-		Filter.filter_f("Float to check between values: ", f_lh[0], f_lh[1]); 		//Checks if the value works in between works
+		float[] f_lhd = new float[3]; 											//Float low, high & decimal values
+		f_lhd[0] = Filter.filter_f("Low value to check: ", 0, 0, 0); 					//Get the low value of the float
+		f_lhd[1] = Filter.filter_f("High value to check: ", 0, 0, 0); 					//Get the high value of the float
+		f_lhd[2] = Filter.filter_i("Number of decimal places: ", 0, 0); 					//Get the high value of the int
+		Filter.filter_f("Float to check between values: ", f_lhd[0], f_lhd[1], Math.round(f_lhd[2])); 		//Checks if the value works in between works
 		//String
 		System.out.println("\n\nFilter string:"); 								//Prints that this is the Filter of the string
 		Filter.filter_s("String to get: "); 									//Gets a string
@@ -34,7 +35,8 @@ public class Test_IO extends Test { //IO Test class
 		System.out.println("Checks file write:\n"); 											//Prints that data is going to be written
 		IO.write("d_test", d, false); 																//Creates a test file
 		System.out.println("Checks file read:"); 												//Prints that data is goin to be read
-		IO.read("d_test", "", 1, false); 															//Read Test file
+		IO.read("d_test", "", 1, false); 															//Reads the Test file
+		System.out.println("DADADSD: --> " + IO.data_a.get(0));
 		super.print_data(); 																	//Print the data from the data array
 		
 		

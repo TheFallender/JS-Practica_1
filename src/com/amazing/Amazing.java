@@ -1,5 +1,6 @@
 package com.amazing;
 
+import java.util.ArrayList;
 
 //Menu, marketplace class
 public class Amazing {
@@ -10,10 +11,10 @@ public class Amazing {
 	protected static User active_user = null; 	//The active user at the moment
 	
 	//Data array
-	private static Category[] c = null; 		//Category list
-	private static Product[] p = null; 			//Product list
-	private static Product[] pl = null; 		//Product list array (list of the actual category)
-	private static Product_user[] pu = null; 	//Product user list
+	private static ArrayList<Category> c = new ArrayList<>();		//Category list
+	private static ArrayList<Product> p = new ArrayList<>();		//Product list
+	private static ArrayList<Product> pc = new ArrayList<>(); 		//Product category list array (list of the actual category)
+	private static ArrayList<Product_user> pu = new ArrayList<>();	//Product user list
 	
 	//Dollar
 	protected static float eur_dollar; 			//Euro dollar ratio
@@ -22,6 +23,9 @@ public class Amazing {
 	//Main
 	public static void main(String[] args){ //Main code
 		if (!test) { //Default enviroment
+			//Starting functions
+			IO.data_check(); //Checks the data files are there, if not, it create them 
+
 			//Variables definitions
 				//Menu
 				int[] menu = new int[4]; //Menu int values
@@ -30,16 +34,17 @@ public class Amazing {
 				eur_dollar = Converter.factor("eur", "usd"); //Uses the converter and sets the ratio
 				
 				//Boolean changes
-				boolean changes_c = true; 		//Changes in the category
-				boolean changes_pu = true; 		//Changes in the product user
+				boolean create_success_c = false;		//Detects error in the creation process of category
+				boolean create_success_p = false; 	//Detects error in the creation process of product
+				boolean create_success_pu = false; 	//Detects error in the creation process of product user
 				
 				//Product
 				String[] comp_pr = new String[]{null, ""}; //Compare product array
-
-			//Starting functions
-			IO.data_check(); //Checks the data files are there, if not, it create them 
-
 			
+				//Create data
+				create_success_c = c_category(); 
+				create_success_p = c_product();
+				
 			//Menu
 			while(true) { //Loop of the menu
 				switch (menu[0]) { //Checks selection within Main menu
@@ -66,65 +71,64 @@ public class Amazing {
 						
 					case 1: //Search by category
 						if (menu[1] == 0) { 		//Category list
-							if (changes_c) { 			//Changes in the category
-								c_category(); 				//Create the Category array
-								changes_c = false; 			//Changes in the Category disabled
+							//Detect error creating
+							if(create_success_c) {
+								//Menu
+								System.out.println("\nCategory menu:");					//Prints the Category
+								for (int i = 0; i < c.size(); i++) 						//Print categories
+									System.out.println(i+1 + ". " + c.get(i).r_name()); 		//Print the name of the Category with a dot in front of it 
+								System.out.println((c.size() + 1) + ". Exit"); 			//Print exit
+								
+								//Menu selection
+								menu[1] = Filter.filter_i("\nMenu select: ", 1, c.size() + 1); //Request selection
 							}
-							
-							//Menu
-							System.out.println("\nCategory menu:");					//Prints the Category
-							for (int i = 0; i < c.length; i++) 						//Print categories
-								System.out.println(i+1 + ". " + c[i].r_name()); 		//Print the name of the Category with a dot in front of it 
-							System.out.println((c.length + 1) + ". Exit"); 			//Print exit
-							
-							//Menu selection
-							menu[1] = Filter.filter_i("\nMenu select: ", 1, c.length + 1); //Request selection
+							else {
+								System.out.println("There are no categories registered."); 	//Reports that there are no categories registered
+								create_success_c = c_category(); //Reset the error
+								menu[0] = 0; //Reset to base menu
+							}
 						}
-						else if(menu[1] == c.length + 1) { 	//Exit
+						else if(menu[1] == c.size() + 1) { 	//Exit
 							menu[0] = 0; 						//Resets Main menu
 							menu[1] = 0; 						//Reset Category menu
 						}
 						else { //Category selected
 							if (menu[2] == 0) { 		//Product Menu
-															//Product list
-								c_product(); 					//Create the base product list
-								pl = new Product[p.length]; 	//Resets the product list based on the product length
+								//Product list
+								pc = new ArrayList<>(); 		//Resets the product list
 								
-								//Menu print
-								System.out.println("\nProduct list of " + c[menu[1] - 1].r_name() + ":"); 	//Print the info of the Category as a product list
-								for (int i = 0, pl_s = 0; i < p.length; i++) 								//Prints products
-									if (p[i].r_category().equals(c[menu[1] - 1].r_name())) { 					//The product category name is equal to the category name
-										//Print
-										System.out.println((pl_s + 1) + ". " + p[i].r_name());					//Print product name
-										
-										//Add the product to the list
-										String[] pr_a = new String [5]; //Product array to use for the creation of the products
-										pr_a[0] = "" + p[i].r_id(); 	//ID
-										pr_a[1] = p[i].r_name();		//Name
-										pr_a[2] = p[i].r_category();	//Category
-										pr_a[3] = "" + p[i].r_price();	//Price
-										pr_a[4] = "" + p[i].r_stock();	//Stock
-										pl[pl_s] = new Product (pr_a); //Create the product based on pr_a
-										
-										//Increase product list size
-										pl_s++;
-									}
-								System.out.println((pl.length + 1) + ". Exit"); //Print exit
-								
-								//Menu selection
-								menu[2] = Filter.filter_i("\nMenu select: ", 1, pl.length + 1); //Request selection
+								if (create_success_p) { //No error, there is data
+									//Menu print
+									System.out.println("\nProduct list of " + c.get(menu[1] - 1).r_name() + ":"); 	//Print the info of the Category as a product list
+									for (int i = 0; i < p.size(); i++) 												//Prints products
+										if (p.get(i).r_category().equals(c.get(menu[1] - 1).r_name())) { 					//The product category name is equal to the category name
+											//Print
+											System.out.println((pc.size() + 1) + ". " + p.get(i).r_name());					//Print product name
+											
+											//Add the product to the list
+											pc.add(p.get(i));						//Add the p_aux to the list
+										}
+									System.out.println((pc.size() + 1) + ". Exit"); //Print exit
+									
+									//Menu selection
+									menu[2] = Filter.filter_i("\nMenu select: ", 1, pc.size() + 1); //Request selection
+								}
+								else { //There is no data
+									System.out.println("There are no products registered."); //Reports that there are no products registered
+									create_success_p = c_product(); //Reset the error
+									menu[1] = 0; //Reset to category menu
+								}
 							}
-							else if(menu[2] == pl.length + 1) { //Exit
+							else if(menu[2] == pc.size() + 1) { //Exit
 								menu[1] = 0; 						//Reset Category menu
 								menu[2] = 0; 						//Reset Product list menu
 							}
 							else { //Show product
-								Product pr_buy = pl[menu[2] -1]; //Set a temp product to make things clean
 								switch (menu[3]) { //Checks selection within Product menu
 									case 0: //Product Menu
 										//Print
 										System.out.println("\n"); 				//Print newline for print of the product
-										pr_buy.print(); 						//Print the selected product
+										pc.get(menu[2] - 1).print(); 						//Print the selected product
 										
 										//Menu print
 										System.out.println("1. Buy.");			//1. Buy.
@@ -140,32 +144,36 @@ public class Amazing {
 										//Check if the user is logged in
 										if (active_user != null) { //The user is logged in
 																		//Check if there is stock
-											if (pr_buy.r_stock() > 0) { //There is some stock
+											if (pc.get(menu[2] - 1).r_stock() > 0) { //There is some stock
 												int amount = Filter.filter_i("Number of items to order: ", 1, 10); //Request the number of items to order
 												
 												//Check if the stock is enough
-												if (pr_buy.r_stock() - amount >= 0) { //There is enough stock for the order
+												if (pc.get(menu[2] - 1).r_stock() - amount >= 0) { //There is enough stock for the order
 													//Product user array
 													String[] pu_a = new String [5]; 	//Product user from this order
-													pu_a[0] = active_user.r_email(); 		//User that is going to buy the order
-													pu_a[1] = "" + pr_buy.r_id(); 			//Product ID of the ordered item
-													pu_a[2] = pr_buy.r_name();				//Product Name of the ordered item
-													pu_a[3] = "" + pr_buy.r_price(); 		//Price at the moment of the order
-													pu_a[4] = "" + amount; 					//Amount on the order
+													pu_a[0] = 		active_user.r_email(); 				//User that is going to buy the order
+													pu_a[1] = "" + 	pc.get(menu[2] - 1).r_id(); 		//Product ID of the ordered item
+													pu_a[2] = 		pc.get(menu[2] - 1).r_name();		//Product Name of the ordered item
+													pu_a[3] = "" + 	pc.get(menu[2] - 1).r_price(); 		//Price at the moment of the order
+													pu_a[4] = "" + 	amount; 							//Amount on the order
 													
 													//Product User
 													Product_user bought_product = new Product_user(pu_a); 	//New product user
 													bought_product.save(); 									//Saves the data to the file
 													
-													//Changes
-													changes_pu = true; //Set that there were changes in the Product User
 													
 													//Product Update
-													pr_buy.buy(amount); 		//Decrease the value by the amount selected
-													pl[menu[2] - 1] = pr_buy; 	//Update changes to the selected value
+													pc.get(menu[2] - 1).buy(amount); 		//Decrease the value by the amount selected
+													
+													//Update Product User list
+													pu.add(bought_product);		//Adds the latest order
+													
+													//Update error if there is one
+													if (!create_success_pu)
+														create_success_pu = c_product_user(); //Reset the error
 													
 													//Product Update File
-													String[] data = new String[] {"p_id=" + pr_buy.r_id(), "p_stock=" + pr_buy.r_stock()}; 	//Data array, first the ID to search, then the stock.
+													String[] data = new String[] {"p_id=" + pc.get(menu[2] - 1).r_id(), "p_stock=" + pc.get(menu[2] - 1).r_stock()}; 	//Data array, first the ID to search, then the stock.
 													IO.modify("d_product", data, 4); 														//Modify Product with the new data
 													
 													//Print info
@@ -190,10 +198,10 @@ public class Amazing {
 									case 2: //Compare
 										//Check if there is a product selected
 										if (comp_pr[0] == null) //No product selected
-											comp_pr[0] = pl[menu[2] - 1].compare(); //First product to compare
+											comp_pr[0] = pc.get(menu[2] - 1).compare(); //First product to compare
 										else { //One product selected, check the other one
 											//Set product
-											comp_pr[1] = pl[menu[2] - 1].compare(); //Second product to compare
+											comp_pr[1] = pc.get(menu[2] - 1).compare(); //Second product to compare
 											
 											//Compare function
 											compare_pr(comp_pr); //Compare both products
@@ -252,17 +260,18 @@ public class Amazing {
 									break;
 									
 									
-								case 2: //Ordered products
-									//Check for changes in the product user
-									if (changes_pu) { 		//Changes were made
-										c_product_user(); 		//Recreates the product user list
-										changes_pu = false; 	//Disable changes made in product user
+								case 2: //Ordered products									
+									if (create_success_pu) {//No error, proceed
+										if (!(pu.isEmpty())) //Check if it's empty
+											for (int i = 0; i < pu.size(); i++) //Print all the orders
+												pu.get(i).print(); 						//Prints the product user
+										else
+											System.out.println("You have no orders on your account."); 	//Reports that the user hasn't made any orders
 									}
-									
-									//Print
-									for (int i = 0; i < pu.length; i++) //Print all the orders
-										pu[i].print(); 						//Prints the product user
-									
+									else {
+										System.out.println("You have no orders on your account."); 	//Reports that the user hasn't made any orders
+									}
+
 									Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
 									
 									menu[1] = 0; //Back to Account basic menu
@@ -302,7 +311,7 @@ public class Amazing {
 										case 1: //Create category
 											Category new_c = new Category(); 	//Create category
 											new_c.save(); 						//Saves the data on the file
-											changes_c = true; 					//Category was changed
+											c.add(new_c);						//Add the new category
 											menu[2] = 0; 						//Back to Admin basic menu
 											break;
 											
@@ -310,6 +319,7 @@ public class Amazing {
 										case 2: //Create Product
 											Product new_p = new Product(); 		//Create new product
 											new_p.save();						//Saves the data on the file
+											p.add(new_p);						//Add the new product
 											menu[2] = 0; 						//Back to Admin basic menu
 											break;
 											
@@ -351,6 +361,8 @@ public class Amazing {
 						else { //Log in
 							if (Login_method.login_method_in()) //Check if the method successfully creates the user
 								System.out.println("Successfully logged in."); 	//Prints that the user logged in
+							create_success_pu = c_product_user(); 
+							
 							Filter.filter_s("\n\nPress ENTER to continue: "); 	//Waits for the user input
 						}
 						
@@ -406,67 +418,92 @@ public class Amazing {
 		}
 	}
 	
-	protected static void c_category() { //Category create
+	protected static boolean c_category() { //Category create
+		//Reset list
+		c = new ArrayList<>();
+		
 		//Get the data from the file
 		IO.read("d_category", "", 15, false); //Get data
-		
-		//Category object
-		c = new Category[IO.data_a.length]; //Reset the size of the category
+		if (IO.data_a.isEmpty()) //If there is no data return
+			return false;												//Couldn't get the data		
 		
 		//Get Category list
-		for (int i = 0; i < IO.data_a.length; i++) 	//Create categories
-			c[i] = new Category(IO.data_a[i]); 		//Sets the new category
+		for (int i = 0; i < IO.data_a.size(); i++) 			//Create categories
+			if (IO.data_a.get(i) != null) {							//Prevents creating null objects
+				Category c_aux = new Category (IO.data_a.get(i));		//Creates an auxiliary category
+				c.add(c_aux);										//Adds the category
+			}
+		
+		return true;
 	}
 	
-	protected static void c_product () { //Product list
+	protected static boolean c_product () { //Product list
+		//Reset list
+		p = new ArrayList<>();
+		
 		//Get the data from the file
-		IO.read("d_product", "", 100, true); //Get data
+		IO.read("d_product", "", 100, false); 	//Get data
+		if (IO.data_a.isEmpty()) //If there is no data return
+			return false;												//Couldn't get the data
 		
 		//Variables to use
 		String[] aux_i = new String[5]; //Auxiliar string to use
 		
-		//Product object
-		p = new Product[IO.data_a.length/5]; //Reset the size of the product
-		
 		//Get Product list
-		for(int i = 1; i <= IO.data_a.length/5; i++) { 	//Write every product in the list
-			aux_i[0] = IO.data_a[(i*5) - 5]; 			//Id
-			aux_i[1] = IO.data_a[(i*5) - 4]; 			//Name
-			aux_i[2] = IO.data_a[(i*5) - 3]; 			//Category
-			aux_i[3] = IO.data_a[(i*5) - 2]; 			//Price
-			aux_i[4] = IO.data_a[(i*5) - 1]; 			//Stock
+		for(int i = 1; i <= IO.data_a.size()/5; i++) {	//Write every product in the list		
+			//Null prevent
+			if (IO.data_a.get((i*5) - 5) == null) //Prevents creating null objects
+				break;
+
+			//Auxiliary array
+			aux_i[0] = IO.data_a.get((i*5) - 5); 				//Id
+			aux_i[1] = IO.data_a.get((i*5) - 4); 				//Name
+			aux_i[2] = IO.data_a.get((i*5) - 3); 				//Category
+			aux_i[3] = IO.data_a.get((i*5) - 2); 				//Price
+			aux_i[4] = IO.data_a.get((i*5) - 1); 				//Stock
 			
 			//Create a product
-			p[i-1] = new Product(aux_i); //Sets the new product
+			Product p_aux = new Product (aux_i);		//Creates an auxiliary product
+			p.add(p_aux);								//Adds the product
 		}
+			
+		
+		return true;
 	}
 	
-	protected static void c_product_user() { //Product User list
+	protected static boolean c_product_user() { //Product User list
+		//Reset list
+		pu = new ArrayList<>();
+		
 		//Get the data from the file
 		IO.read("d_product_user", "", 1200, false); //Get data
+		if (IO.data_a.isEmpty()) //If there is no data return
+			return false;												//Couldn't get the data
 		
 		//Variables to use
 		String[] aux_i = new String[5]; //Auxiliar string to check
 		
-		//Product User object
-		pu = new Product_user[IO.data_a.length/5]; //Reset the size of the product
-		int pu_s = 0; //Size of the product user
-		
 		//Get Product User list
-		for(int i = 1; i <= IO.data_a.length/5; i++) { //Search between the created list
-			aux_i[0] = IO.data_a[(i*5) - 5]; 						//User Email
+		for(int i = 1; i <= IO.data_a.size()/5; i++) { //Search between the created list
+			//Null prevent
+			if (IO.data_a.get((i*5) - 5) == null)
+				break;
+			
+			aux_i[0] = IO.data_a.get((i*5) - 5); 						//User Email
 			if(aux_i[0].equals(Amazing.active_user.r_email())) { //Checks if the product user equals the active user email
 				//Now checks for the rest of the data
-				aux_i[1] = IO.data_a[(i*5) - 4]; 					//Product ID
-				aux_i[2] = IO.data_a[(i*5) - 3]; 					//Product Name
-				aux_i[3] = IO.data_a[(i*5) - 2]; 					//Product Price
-				aux_i[4] = IO.data_a[(i*5) - 1]; 					//Number of items Ordered
+				aux_i[1] = IO.data_a.get((i*5) - 4); 					//Product ID
+				aux_i[2] = IO.data_a.get((i*5) - 3); 					//Product Name
+				aux_i[3] = IO.data_a.get((i*5) - 2); 					//Product Price
+				aux_i[4] = IO.data_a.get((i*5) - 1); 					//Number of items Ordered
 				
 				//Create a product user
-				pu[pu_s] = new Product_user(aux_i); //Sets the new product user
-				pu_s++; //Increases the number of product user count
+				Product_user pu_aux = new Product_user(aux_i); 	//Sets the new product user
+				pu.add(pu_aux);									//Adds the auxiliary product user
 			}
 		}
+		
+		return true;
 	}
 	
 	private static void compare_pr (String[] data) { //Compares two products

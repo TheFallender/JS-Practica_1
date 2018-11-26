@@ -19,7 +19,10 @@ public class Filter { //Filter class
 			
 			//Filter
 			try {  
+				//Parse
 				int val = Integer.parseInt(input); //Value to return
+				
+				//Limiters check
 				if (low == high) { 			//No limit
 					System.setIn(skipper); 		//Skip input
 					return val;					//Return value
@@ -39,17 +42,27 @@ public class Filter { //Filter class
 		}
 	}
 	
-	protected static float filter_f(String ask, float low, float high) { //Filters Float
+	protected static float filter_f(String ask, float low, float high, int decimal_slots) { //Filters Float
 		while (true) { //Keeps in the loop until it gets out with the return
 			//Ask
 			System.out.print(ask); //Ask string
 			
 			//Scan
 			String input = scan.nextLine(); //Scan the next line
+			String format = "%." + decimal_slots + "f";
 			
 			//Filter
 			try {  
+				//Parse
 				Float val = Float.parseFloat(input); //Value to return
+				
+				//Decimal format
+				if (decimal_slots != 0) { //There is a decimal slot defined
+					input = String.format (format, val); //Format the string
+					val = Float.parseFloat(input); //Parse again to obtain the reduced value
+				}
+				
+				//Limiters check
 				if (low == high) { 			//No limit
 					System.setIn(skipper); 		//Skip input
 					return val;					//Return value

@@ -3,7 +3,7 @@ package com.amazing;
 import java.io.File;
 
 public class Test { //Test class
-	private static int phase = 0; //Which phase is the test located in
+	private static int phase = 1; //Which phase is the test located in
 	
 	protected void test() { //Method to override that, by default, calls all the childs
 		System.out.println("Test system started:"); //Prints that the Test system has started
@@ -12,7 +12,7 @@ public class Test { //Test class
 		Test_IO t1 = new Test_IO(); 		//Creates the IO Test
 		t1.test(); 								//Tests IO
 		Test_inside t2 = new Test_inside(); //Creates the Inside Test
-		t2.test(); 								//Tests Inside
+		t2.test();								//Tests Inside
 		Test_data t3 = new Test_data(); 	//Creates the Data Test
 		t3.test(); 								//Tests Data
 		
@@ -56,8 +56,8 @@ public class Test { //Test class
 	}
 	
 	protected void print_data() { //Prints the data array from IO class
-		for(int i = 0; i < IO.data_a.length; i++) //For to print data
-			System.out.println("Data number " + i + ": " + IO.data_a[i]); //Prints the data number and it's value
+		for(int i = 0; i < IO.data_a.size(); i++) //For to print data
+			System.out.println("Data number " + i + ": " + IO.data_a.get(i)); //Prints the data number and it's value
 	}
 	
 	protected void throw_exc(String msg, Throwable cause) { //Method to create and throw a new exception based on the error

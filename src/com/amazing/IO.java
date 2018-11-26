@@ -5,27 +5,24 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class IO { //Input Output class
 	protected static String data_path = ""; 	//Path to the Data Folder
-	protected static String[] data_a; 			//Data array
+	protected static ArrayList <String> data_a = new ArrayList<>(); 			//Data array
 	
 	protected static void read (String file_type, String search_for, int array_size, boolean repeat) {	//Reads all the filtered data from file
 		String file_path = data_path + file_type;											//Path to the file
 		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { 		//Tries to open the file
-			data_a = new String[array_size]; 												//Data array with the size of the parameter
-			int data_s = 0;																	//Array Data Size 
-			String line; 																	//Line data
-			for (line = reader.readLine(); line != null; line = reader.readLine())			//Search in the file
-				if (line.contains(search_for)) { 												//Check if this is the requested line
-					if (!repeat) 																	//Remove code if it is not going to search for the same term
-						search_for = "";																//Now it accepts anything as the "" contains nothing
-					if (data_s >= array_size) 														//Break if the array size is reached
-						break;																			//Break the loop
-					else {																			//There is space for the data
-						data_a[data_s] = line.replaceAll(".+=", ""); 									//Cleans the line data
-						data_s++; 																		//Increases the data count
-					}
+			data_a = new ArrayList<>(); 	 													//Data array with the size of the parameter
+			for (String line = reader.readLine(); line != null; line = reader.readLine())				//Search in the file
+				if (line.contains(search_for)) { 													//Check if this is the requested line
+					if (!repeat) 																		//Remove code if it is not going to search for the same term
+						search_for = "";																	//Now it accepts anything as the "" contains nothing
+					if (data_a.size() >= array_size) 													//Break if the array size is reached
+						break;																				//Break the loop
+					else																				//There is space for the data
+						data_a.add(line.replaceFirst("^\\w+=", "")); 										//Cleans the line data
 				}
 		}
 		catch (Exception FileNotFoundException) { //Exception Catch
@@ -62,9 +59,8 @@ public class IO { //Input Output class
 						System.out.println("ERROR - File not found"); 										//Reports that there was no file found
 					}
 				}
-				else { 																				//If there is content on the file, read it and set it
-					data_path = line.replaceAll("DATA_PATH=", ""); 										//Sets the defined path
-				}
+				else 																				//If there is content on the file, read it and set it
+					data_path = line.replaceFirst(".*=", ""); 										//Sets the defined path
 	
 			}
 			catch (IOException e_1) { 															//There is no file, create a new one and set the default path
@@ -123,7 +119,7 @@ public class IO { //Input Output class
 						
 						//Write modified data
 						for (int i = 1; i < input.length; i++) {										//Writes the lines from the array
-							text.append(input[i]);															//Adds the lines to the text
+							text.append(input[i] + "\r\n");															//Adds the lines to the text
 							if(i < input.length - 1)														//If it isn't last line
 								line = reader.readLine();														//Reads the next line
 						}

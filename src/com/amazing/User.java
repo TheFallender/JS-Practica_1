@@ -4,8 +4,8 @@ public class User { //User class
 	
 	private String email; 			//Email of the user
 	private String password; 		//Password of the user
-	private long login = 0; 		//Login date
-	private long last_login = 0; 	//Last login date
+	private String login = "0"; 		//Login date
+	private String last_login = "0"; 	//Last login date
 	private String admin = "0"; 	//Admin
 	
 	protected User() { //User basic Constructor
@@ -16,7 +16,7 @@ public class User { //User class
 				System.out.println("ERROR - You can't enter 'exit' as an email."); 							//Reports that you can't put 'exit' as an email
 			else {
 				IO.read("d_user", "u_email=" + email_data, 1, false);										//Read User
-				if (IO.data_a[0] == null) { 																	//User doesn't exist, proceed
+				if (IO.data_a.isEmpty()) { 																	//User doesn't exist, proceed
 					this.email = email_data;																	//Set email
 					break;																						//Break the loop
 				}
@@ -32,14 +32,14 @@ public class User { //User class
 		}
 		
 		//Date
-		this.login = Long.parseLong(Login_method.date()); //Set the login date to the moment of the creation
+		this.login = Login_method.date(); //Set the login date to the moment of the creation
 	}
 	
 	protected User(String[] data) { //User data Constructor
 		this.email = data[0];								//Set Email
 		this.password = data[1];							//Set Password
-		this.login = Long.parseLong(Login_method.date());	//Set Login
-		this.last_login = Long.parseLong(data[3]);			//Set Last Login
+		this.login = Login_method.date();	//Set Login
+		this.last_login = data[3];			//Set Last Login
 		this.admin = data[4];								//Set Admin
 	}
 	
@@ -51,12 +51,12 @@ public class User { //User class
 		return this.password;
 	}
 	
-	protected long r_date(boolean login) { //Returns the Date
+	protected String r_date(boolean login) { //Returns the Date
 		return (login) ? this.login : this.last_login;
 	}
 
 	protected boolean r_admin() { //Returns the Admin value
-		return (admin.equals("1")) ? true : false;
+		return (admin.equals("1"));
 	}
 	
 	protected void print() { //Prints User

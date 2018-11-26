@@ -19,13 +19,13 @@ public class Product_user { //Product User class
 
 	protected void print() { //Print the Product User
 		//Print
-		System.out.println("Order:\n\n"); 														//Order
-		System.out.println("Name: " + this.product_name); 										//Print Product name
+		System.out.println("Order:"); 														//Order
+		System.out.println("Product name: " + this.product_name); 															//Print Product name
 		if (Amazing.dollar_a) //Check if it has the dollar currency
-			System.out.println("Price: " + this.product_price * Amazing.eur_dollar + "$"); 		//Print the Product Price
+			System.out.println("Price: " + Converter.decimal_conv(this.product_price * Amazing.eur_dollar, 2) + "$"); 		//Print the Product Price
 		else //The currency is the euro
-			System.out.println("Price: " + this.product_price + "€"); 							//Print the Product Price
-		System.out.println("Ordered: " + this.number_items + "\n\n"); 							//Print the number of items ordered of this Product
+			System.out.println("Price: " + this.product_price + "€"); 														//Print the Product Price
+		System.out.println("Ordered: " + this.number_items + "\n\n"); 														//Print the number of items ordered of this Product
 	}
 	
 	protected void save() { //Save the data on the file

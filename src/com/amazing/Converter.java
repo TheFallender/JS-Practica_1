@@ -14,7 +14,7 @@ public class Converter {
     	IO.read("d_converter_rate", "", 2, false); //Read the data from the file
     	
     	//Set the value
-    	if (IO.data_a[0] == null) //There is no data found in the file
+    	if (IO.data_a.isEmpty()) //There is no data found in the file
         	try { //Tries to read the data from the net
         		//Reads the data from the net
                 URL converter_site = new URL("http://currencies.apps.grandtrunk.net/getlatest/" + from_c + "/" + to_c); 	//Selects the currency
@@ -24,17 +24,17 @@ public class Converter {
         		last_value = 1.14f; 	//Default value
         	}
     	else //Data found on the file
-    		if (date() >= Long.parseLong(IO.data_a[0]) + 1) //Checks if it has been at least 1 hour since the last check
+    		if (date() >= Long.parseLong(IO.data_a.get(0)) + 1) //Checks if it has been at least 1 hour since the last check
             	try { //Tries to read the data from the net
             		//Reads the data from the net
                     URL converter_site = new URL("http://currencies.apps.grandtrunk.net/getlatest/" + from_c + "/" + to_c); //Selects the currency
                     last_value = url_read(converter_site); 																	//Value from the method
             	}
             	catch (Exception e){ //If there is any error, it checks for the stored value
-            		last_value = Float.parseFloat(IO.data_a[1]); //Stored value
+            		last_value = Float.parseFloat(IO.data_a.get(1)); //Stored value
             	}
         	else //Use stored value
-        		last_value = Float.parseFloat(IO.data_a[1]); //Stored value
+        		last_value = Float.parseFloat(IO.data_a.get(1)); //Stored value
     	
     	//Return value
 		return last_value;
@@ -74,5 +74,10 @@ public class Converter {
 
     	//Return value
     	return Long.parseLong(date_format.format(date)); //Date with the defined format
+    }
+    
+    protected static float decimal_conv(float original_price, int decimal_places) { //Returns a formated price with the asked decimal places
+    	String format = "%." + decimal_places + "f"; //Format to follow
+    	return Float.parseFloat(String.format (format, original_price)); //Format the string
     }
 }

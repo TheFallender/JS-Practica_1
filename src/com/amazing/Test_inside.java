@@ -7,12 +7,6 @@ public class Test_inside extends Test { //Inside Test class
 		System.out.println("\n\n\n\nInside test:"); //Prints that this is the Inside test
 		
 		
-		//Converter test
-		System.out.println("\n\n\nConverter:\n"); 				//Prints that the converter is going to be tested
-		System.out.println(Converter.factor("eur", "usd")); 	//Get the value from the net
-		System.out.println(Converter.factor("TEST", "ERROR")); 	//Will find and error and check for the stored value
-		System.out.println("Date now:" + Converter.date()); 	//Will find and error and check for the stored value
-		
 		//Encrypter and decryption test
 		System.out.println("\n\nEncrypter and Decrypter:\n"); 			//Prints that the Encrypter is going to be tested
 		String text = Filter.filter_s("Text to test the encryption: "); //Base text
@@ -55,6 +49,14 @@ public class Test_inside extends Test { //Inside Test class
 		} catch (Exception e) { //Illegal exception
 			super.throw_exc("ERROR - Illegal operation detected.", e); //Reports that there was an error in the process
 		}
+		
+		
+		//Converter test
+		System.out.println("\n\n\nConverter:\n"); 				//Prints that the converter is going to be tested
+		System.out.println(Converter.factor("eur", "usd")); 	//Get the value from the net
+		System.out.println(Converter.factor("TEST", "ERROR")); 	//Will find and error and check for the stored value
+		System.out.println("Date now:" + Converter.date()); 	//Will find and error and check for the stored value
+		
 		
 		//Phase completed, 
 		super.incPhase(); //Increase the phase
