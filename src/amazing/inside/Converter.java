@@ -21,6 +21,10 @@ public class Converter {
 		return Float.parseFloat(conv_val.get(active_currency_pos)[2]); //Selects the data from the active currency and it parses it
 	}
 	
+	public static String get_currency_symbol() {
+		return conv_val.get(active_currency_pos)[3];
+	}
+	
 	private static int get_factor_pos(String from_to_c) { //Gets the factor from the array
 		for (int i = 0; i < conv_val.size(); i++) //Searches within the list
 			if(conv_val.get(i)[0].equals(from_to_c)) //If the preset equals the currency selected
@@ -28,15 +32,19 @@ public class Converter {
 		return -1; //Error mark
 	}
 	
-	public static void set_factor(String from_to_c) { //Sets the new factor
+	public static void set_factor(String from_to_c, String symb) { //Sets the new factor
 		int pos = get_factor_pos(from_to_c);
 		active_currency = from_to_c;
-		if (pos < 0) { //Factor found on the file
-			new_factor(from_to_c);
+		if (pos < 0) { //Factor not found on the file
+			new_factor(from_to_c, symb);
 			active_currency_pos = conv_val.size();
 		}
 		else
 			active_currency_pos = pos;
+	}
+	
+	public static void set_acr(int new_a_currency) { //Sets the active converter rate
+		active_currency_pos = new_a_currency;
 	}
 	
 	public static void set_conv_list() { //Sets the converter list
@@ -44,16 +52,17 @@ public class Converter {
 		IO.read("d_converter_rate", "", 0, false);
 		
 		//Get Converter list
-		for(int i = 1; i <= IO.data().size()/3; i++) { //Search between the created list
+		for(int i = 1; i <= IO.data().size()/4; i++) { //Search between the created list
 			//Null prevent
-			if (IO.data().get((i*3) - 3) == null)
+			if (IO.data().get((i*4) - 4) == null)
 				break;
 			
 			//Add to the list
-			String[] conv_aux = new String[3];
-			conv_aux[0] = IO.data().get((i * 3) - 3);	//Sets the currency
-			conv_aux[1] = IO.data().get((i * 3) - 2);	//Sets the date check
-			conv_aux[2] = IO.data().get((i * 3) - 1);	//Sets the value
+			String[] conv_aux = new String[4];
+			conv_aux[0] = IO.data().get((i * 4) - 4);	//Sets the currency
+			conv_aux[1] = IO.data().get((i * 4) - 3);	//Sets the date check
+			conv_aux[2] = IO.data().get((i * 4) - 2);	//Sets the value
+			conv_aux[3] = IO.data().get((i * 4) - 1);	//Sets the symbol
 			conv_val.add(conv_aux);					//Adds the auxiliary converter
 		}
 		
@@ -61,7 +70,7 @@ public class Converter {
 		update_data();
 	}
 	
-	public static void update_data() { //Updates all the data from the list and the file
+	private static void update_data() { //Updates all the data from the list and the file
 		long actual_date = date();
 		for (int i = 0; i < conv_val.size(); i++) //Searches within the list
 			if (actual_date >= Long.parseLong(conv_val.get(i)[1]) + 48) { //Checks if it has been at least 1 hour since the last check
@@ -80,21 +89,31 @@ public class Converter {
 			}
 	}
 	
-    private static void new_factor(String from_to_c) { //Gets the latest ratio from the net   
+    private static void new_factor(String from_to_c, String symb) { //Gets the latest ratio from the net   
     	//Set the value
     	try { //Tries to read the data from the net
-    		//Sets the string
-    		String[] data = new String[3]; 																			//Data to pass to the file
+    		String[] currency_check = from_to_c.split("/");	//Currency to prevent excesive requests
+    		//Data list
+    		String[] data = new String[4]; 																			//Data to save to the list
     		data[0] = from_to_c; 																						//Set the Currency
-    		data[1] = "conv_date=" + date();		 																	//Set the Check Date
-    		data[2] = "conv_val=" + url_read(new URL("http://currencies.apps.grandtrunk.net/getlatest/" + from_to_c)); 	//Value from the net
+    		data[1] = "" + date();
+    		if (currency_check[0].equals(currency_check[1]))														//Unnecesary check
+    			data[2] = "1.0";																					//Set to 1
+    		else
+    			data[2] = "" + url_read(new URL("http://currencies.apps.grandtrunk.net/getlatest/" + from_to_c)); 	//Set rate from the net
+    		data[3] = symb;
+    		conv_val.add(data);
     		
-     		//Writes the data
-    		IO.write("d_converter_rate", data, true); 	//Write the data on the file
-    		set_conv_list();
+    		//Data file
+    		String[] data_file = new String[4]; 																	//Data to pass to the file
+    		data_file[0] = data[0];																						//Set the Currency
+    		data_file[1] = "conv_date=" + data[1];		 																//Set the Check Date
+    		data_file[2] = "conv_rate=" + data[2];																		//Set the converter rate
+    		data_file[3] = "conv_symb=" + data[3];										 								//Set the Symbol
+    		IO.write("d_converter_rate", data_file, true); 	//Write the data on the file
     	}
-    	catch (Exception e){ //Error, no file and no internet
-    		System.out.println("ERROR - Couldn't get the data from the net nor from the stored values."); //Reports that it couldn't set the value
+    	catch (Exception e){ //Error, no internet
+    		System.out.println("ERROR - Couldn't get the data from the net."); //Reports that it couldn't set the value
     	}
     }
     

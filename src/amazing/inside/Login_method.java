@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import amazing.amazing.Amazing;
-import amazing.amazing.User;
 
 public class Login_method { //Login class
 	public static boolean login_method_in() { //Log in method
@@ -38,7 +37,7 @@ public class Login_method { //Login class
 				//Checks if password matches
 				if (e_password.equals(IO.data().get(1))) { //Password match login in
 					//User create
-					Amazing.active_user = new User (IO.data().toArray(new String[IO.data().size()])); //Set the new user based on the array
+					Amazing.set_a_user(true); //Set the new user based on the array
 					
 					//Data array
 					String[] data = new String[2]; //String to pass through modify
@@ -60,7 +59,7 @@ public class Login_method { //Login class
 	public static void login_method_out() { //Log out method
 		//Data array
 		String[] data = new String[3]; 							//String to pass through modify
-		data[0] = "u_email=" + Amazing.active_user.r_email(); 	//Set the email
+		data[0] = "u_email=" + Amazing.get_a_user().r_email(); 	//Set the email
 		data[1] = "u_login=0"; 								//Set the login
 		data[2] = "u_last_login=" + date(); 			//Set the last login
 		
@@ -68,7 +67,7 @@ public class Login_method { //Login class
 		IO.modify("d_user", data, 2); //Modify the login info
 		
 		//Reset the user
-		Amazing.active_user = null;
+		Amazing.set_a_user(false);
 	}
 	
 	public static String date() { //Get the actual date

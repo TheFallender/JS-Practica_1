@@ -3,6 +3,7 @@ package amazing.test;
 import amazing.inside.Converter;
 import amazing.inside.Encrypter;
 import amazing.inside.Filter;
+import amazing.inside.Region;
 
 public class Test_inside extends Test { //Inside Test class
 	@Override
@@ -56,10 +57,16 @@ public class Test_inside extends Test { //Inside Test class
 		
 		
 		//Converter test
-		System.out.println("\n\n\nConverter:\n"); 				//Prints that the converter is going to be tested
-		System.out.println(Converter.factor("eur", "usd")); 	//Get the value from the net
-		System.out.println(Converter.factor("TEST", "ERROR")); 	//Will find and error and check for the stored value
-		System.out.println("Date now:" + Converter.date()); 	//Will find and error and check for the stored value
+		System.out.println("\n\n\nConverter:\n"); 																															//Prints that the converter is going to be tested
+		System.out.println("Active currency: " + Converter.get_currency());																									//Prints the current currency
+		System.out.println("Converter value: " + Converter.get_factor()); 																									//Prints the converter value of the active currency
+		System.out.println("Date now: " + Converter.date()); 																												//Prints the date
+		System.out.print("Decimal price: ");																																//Prints that is going to test the decimal method
+		System.out.println(Converter.decimal_conv(Filter.filter_f("Number to round to X decimal places:", 0, 0, 0), Filter.filter_i("Number of decimal places", 0, 0)));	//Prints the decimal out of the method
+		
+		//Region
+		Region.region_add(Filter.filter_s("New region name: "), Filter.filter_s("Region currency: "));
+		System.out.println("Actual Region: " + Region.get_region());
 		
 		
 		//Phase completed, 

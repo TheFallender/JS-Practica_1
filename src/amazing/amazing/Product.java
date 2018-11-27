@@ -52,15 +52,12 @@ public class Product { //Product class
 	
 	public void print () { //Print Product
 		//Print
-		System.out.println("Product:\n\n"); 												//Product
-		System.out.println("Name: " + this.name); 												//Print Product name
-		System.out.println("ID: " + this.id); 													//Print Product name
-		System.out.println("Category: " + this.category_id); 									//Print Product name
-		if (Amazing.dollar_a) //Check if it has the dollar currency
-			System.out.println("Price: " + Converter.decimal_conv(this.price * Amazing.eur_dollar, 2) + "$"); 				//Print the Product Price
-		else //The currency is the euro
-			System.out.println("Price: " + this.price + "€"); 									//Print the Product Price
-		System.out.println("Stock: " + this.stock); 											//Print the number of items available
+		System.out.println("Product:\n\n"); 																							//Product
+		System.out.println("Name: " + this.name); 																							//Print Product name
+		System.out.println("ID: " + this.id); 																								//Print Product name
+		System.out.println("Category: " + this.category_id); 																				//Print Product name
+		System.out.println("Price: " + Converter.decimal_conv(this.price * Converter.get_factor(), 2) + Converter.get_currency_symbol()); 	//Print the Product Price
+		System.out.println("Stock: " + this.stock); 																						//Print the number of items available
 	}
 	
 	public String compare() { //Compare Products
@@ -68,14 +65,11 @@ public class Product { //Product class
 		String aux = ""; //Auxiliar String
 		
 		//Save String
-		aux += this.id + "/"; 									//Save ID
-		aux += this.name + "/"; 								//Save Name
-		aux += this.category_id + "/"; 							//Save Category
-		if (Amazing.dollar_a) //Check if it has the dollar currency
-			aux += "" + Converter.decimal_conv(this.price * Amazing.eur_dollar, 2) + "$/"; 		//Save Price
-		else //The currency is the euro
-			aux += this.price + "€/"; 							//Save Price
-		aux += this.stock; 										//Save Stock
+		aux += this.id + "/"; 																							//Save ID
+		aux += this.name + "/"; 																						//Save Name
+		aux += this.category_id + "/"; 																					//Save Category
+		aux += Converter.decimal_conv(this.price * Converter.get_factor(), 2) + Converter.get_currency_symbol() + "/"; 	//Set Price
+		aux += this.stock; 																								//Save Stock
 		
 		//Return the String
 		return aux;

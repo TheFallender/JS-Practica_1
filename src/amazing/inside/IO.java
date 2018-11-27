@@ -12,7 +12,7 @@ import amazing.amazing.Amazing;
 
 public class IO { //Input Output class
 	private static String data_path = ""; 	//Path to the Data Folder
-	private static ArrayList <String> data_a = new ArrayList<>(); 			//Data array
+	private static ArrayList<String> data_a = new ArrayList<>(); 			//Data array
 	
 	public static final List<String> data(){ //Returns the Data List
 		return data_a;
@@ -52,7 +52,7 @@ public class IO { //Input Output class
 	//Starting function
 	public static void data_check () { //Sets data path and checks files
 		//Try to set the default path
-		if (Amazing.test) 																	//Test is active, set the path for test
+		if (Amazing.get_test()) 																	//Test is active, set the path for test
 			data_path = "src/Test/";															//Data path set
 		else																				//Test is disabled, proceed
 			try(BufferedReader reader = new BufferedReader(new FileReader("data_path"))) { 		//Tries to open the file
@@ -88,7 +88,7 @@ public class IO { //Input Output class
 		files_check(data_path + "d_product_user", false); 		//Check Product User
 		files_check(data_path + "d_converter_rate", false); 	//Check Converter Rate
 		files_check(data_path + "d_region", false); 			//Check Region
-		if (Amazing.test) //Test is active
+		if (Amazing.get_test()) //Test is active
 			files_check(data_path + "d_test", false); 			//Check Test
 	}
 	

@@ -1,6 +1,7 @@
 package amazing.amazing;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import amazing.inside.Converter;
 import amazing.inside.Filter;
@@ -12,10 +13,10 @@ import amazing.test.Test;
 //Menu, marketplace class
 public class Amazing {
 	//Test variable
-	public static boolean test = false; 		//Change this to start the test system
+	private static boolean test = false; 		//Change this to start the test system
 	
 	//User data
-	public static User active_user = null; 	//The active user at the moment
+	private static User active_user = null; 	//The active user at the moment
 	
 	//Data array
 	private static ArrayList<Category> c = new ArrayList<>();		//Category list
@@ -30,18 +31,26 @@ public class Amazing {
 				//Data
 				IO.data_check(); //Checks the data files are there, if not, it create them 
 				
-				//Euro Dollar ratio
-				Converter.set_conv_list();			//Sets the Converter list
-				Converter.set_factor("eur/usd"); 	//Sets the new factor
+				//Converter
+				Converter.set_conv_list();				//Sets the Converter list
+				Converter.set_factor("eur/eur", "€"); 	//Sets the new factor rate
+				Converter.set_factor("eur/usd", "$"); 	//Sets the new factor rate
+				Converter.set_acr(0);					//Sets the active rate
 				
-				
+				//Region
+				Region.region_list();
+				Region.region_add("ES", "eur/eur"); 	//Sets the new region
+				Region.region_add("US", "eur/usd"); 	//Sets the new region
+				Region.set_ar(0);						//Sets the active region
 			//Variables definitions
 				//Menu
 				int[] menu = new int[4]; //Menu int values
 				
 				//Boolean changes
 				boolean create_success_c = c_category();	//Detects error in the creation process of category
+				boolean changes_c = false;					//Detects changes in the category list
 				boolean create_success_p = c_product(); 	//Detects error in the creation process of product
+				boolean changes_p = false;					//Detects changes in the product list
 				boolean create_success_pu = false; 			//Detects error in the creation process of product user
 				
 				//Product
@@ -53,7 +62,7 @@ public class Amazing {
 				switch (menu[0]) { //Checks selection within Main menu
 					case 0: //Main menu
 						//Menu
-						System.out.println("\nAmazing" + Region.get_region() + ":"); 	//Amazing (Region):
+						System.out.println("\nAmazing " + Region.get_region() + ":"); 	//Amazing (Region):
 						System.out.println("1. Search by category.");					//1. Search by Category
 						System.out.println("2. Account ");								//2. Account
 						if (active_user != null) //User logged in
@@ -83,9 +92,14 @@ public class Amazing {
 								menu[1] = Filter.filter_i("\nMenu select: ", 1, c.size() + 1); //Request selection
 							}
 							else {
-								System.out.println("There are no categories registered."); 	//Reports that there are no categories registered
-								create_success_c = c_category(); //Reset the error
-								menu[0] = 0; //Reset to base menu
+								if (!changes_c) { //There were no changes
+									System.out.println("There are no categories registered."); 	//Reports that there are no categories registered
+									menu[0] = 0; //Reset to base menu
+								}
+								else {
+									create_success_c = c_category(); //Reset the error
+									changes_c = false;
+								}
 							}
 						}
 						else if(menu[1] == c.size() + 1) { 	//Exit
@@ -114,9 +128,14 @@ public class Amazing {
 									menu[2] = Filter.filter_i("\nMenu select: ", 1, pc.size() + 1); //Request selection
 								}
 								else { //There is no data
-									System.out.println("There are no products registered."); //Reports that there are no products registered
-									create_success_p = c_product(); //Reset the error
-									menu[1] = 0; //Reset to category menu
+									if (!changes_p) { //There were no changes
+										System.out.println("There are no products registered."); //Reports that there are no products registered
+										menu[1] = 0; //Reset to category menu
+									}
+									else {
+										create_success_p = c_product(); //Reset the error
+										changes_p = false;
+									}
 								}
 							}
 							else if(menu[2] == pc.size() + 1) { //Exit
@@ -312,6 +331,7 @@ public class Amazing {
 											Category new_c = new Category(); 	//Create category
 											new_c.save(); 						//Saves the data on the file
 											c.add(new_c);						//Add the new category
+											changes_c = true;					//Changes in the Category
 											menu[2] = 0; 						//Back to Admin basic menu
 											break;
 											
@@ -320,6 +340,7 @@ public class Amazing {
 											Product new_p = new Product(); 		//Create new product
 											new_p.save();						//Saves the data on the file
 											p.add(new_p);						//Add the new product
+											changes_p = true;					//Changes in the Product
 											menu[2] = 0; 						//Back to Admin basic menu
 											break;
 											
@@ -386,13 +407,30 @@ public class Amazing {
 						break;
 						
 						
-					case 5: //Change dollar
+					case 5: //Change region
+						//Auxiliary list
+						List<String[]> aux_l = Region.get_list();	//Set the list
 						
+						//Print
+						for (int i = 1; i <= aux_l.size(); i++) { //Print the list
+							System.out.println(i + ". " + aux_l.get(i - 1)[0] + "."); //Prints the numbered list item
+						}
+						System.out.println((aux_l.size() + 1) + ". Exit.");
 						
-						System.out.println("Welcome to " + region.get(active_region) + "."); 	//Welcomes the user to the new region
+						//Menu selection
+						menu[1] = Filter.filter_i("\nMenu select: ", 1, (aux_l.size() + 1)); //Request selection
+						
+						//Selection
+						if (menu[1] != (aux_l.size() + 1)) { //Select the region
+							Region.set_ar(menu[1] - 1);										//Sets the new active region
+							Converter.set_factor(Region.get_currency(), "");				//Sets the new factor
+							System.out.println("Welcome to " + Region.get_region() + "."); 	//Welcomes the user to the new region
+						}
 						Filter.filter_s("\n\nPress ENTER to continue: "); 	//Waits for the user input
 						
+						//Menu resets
 						menu[0] = 0; //Resets Main menu
+						menu[1] = 0; //Resets Region menu
 						break;
 						
 						
@@ -418,6 +456,10 @@ public class Amazing {
 		}
 	}
 	
+	
+	
+	
+	//Create
 	private static boolean c_category() { //Category create
 		//Reset list
 		c = new ArrayList<>();
@@ -436,6 +478,7 @@ public class Amazing {
 		
 		return true;
 	}
+	
 	
 	private static boolean c_product () { //Product list
 		//Reset list
@@ -470,6 +513,7 @@ public class Amazing {
 		
 		return true;
 	}
+	
 	
 	private static boolean c_product_user() { //Product User list
 		//Reset list
@@ -506,6 +550,10 @@ public class Amazing {
 		return true;
 	}
 	
+	
+	
+	
+	//Compare
 	private static void compare_pr (String[] data) { //Compares two products
 		//Products to pass
 		String[] pr_1 = data[0].split("/"); //Splits the first data
@@ -517,5 +565,28 @@ public class Amazing {
 		System.out.println("Category:	" 		+ pr_1[0] + spacing + pr_2[0]);		//Product Category 	(Pr1 category)	(Pr2 category)
 		System.out.println("Price:		" 		+ pr_1[3] + spacing + pr_2[3]);		//Product Price 	(Pr1 price)		(Pr2 price)
 		System.out.println("Stock:		" 		+ pr_1[4] + spacing + pr_2[4]);		//Product Stock 	(Pr1 stock)		(Pr2 stock)
+	}
+	
+	
+	
+	
+	//Active User
+	public static User get_a_user() {
+		return active_user;
+	}
+	
+	public static void set_a_user(boolean set) {
+		if (set)
+			active_user = new User (IO.data().toArray(new String[IO.data().size()])); //Set the new user based on the array
+		else
+			active_user = null;
+	}
+	
+	
+	
+	
+	//Test
+	public static boolean get_test() {
+		return test;
 	}
 }
