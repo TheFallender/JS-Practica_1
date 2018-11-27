@@ -1,4 +1,7 @@
-package com.amazing;
+package amazing.test;
+
+import amazing.inside.Filter;
+import amazing.inside.IO;
 
 public class Test_IO extends Test { //IO Test class
 	@Override
@@ -36,7 +39,7 @@ public class Test_IO extends Test { //IO Test class
 		IO.write("d_test", d, false); 																//Creates a test file
 		System.out.println("Checks file read:"); 												//Prints that data is goin to be read
 		IO.read("d_test", "", 1, false); 															//Reads the Test file
-		System.out.println("DADADSD: --> " + IO.data_a.get(0));
+		System.out.println("DADADSD: --> " + IO.data().get(0));
 		super.print_data(); 																	//Print the data from the data array
 		
 		

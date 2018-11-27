@@ -1,4 +1,8 @@
-package com.amazing;
+package amazing.amazing;
+
+import amazing.inside.Converter;
+import amazing.inside.Filter;
+import amazing.inside.IO;
 
 public class Product { //Product class
 	
@@ -8,7 +12,7 @@ public class Product { //Product class
 	private float price; 			//Price of the Product
 	private int stock; 				//Stock of the Product
 	
-	protected Product() { //Product basic Constructor 
+	public Product() { //Product basic Constructor 
 		//Request data
 		this.id = Filter.filter_i("Id of the product: ", 0, 0); 			//Request Product ID
 		this.name = Filter.filter_s("Name of the product: "); 				//Request Product Name
@@ -17,7 +21,7 @@ public class Product { //Product class
 		this.stock = Filter.filter_i("Stock of this product: ", 0 , 0); 	//Request Product Stock
 	}
 	
-	protected Product(String[] data) { //Product data Consturctor
+	public Product(String[] data) { //Product data Consturctor
 		//Set the data
 		this.id = Integer.parseInt(data[0]); 		//Set Product ID
 		this.name = data[1]; 						//Set Name Id
@@ -26,27 +30,27 @@ public class Product { //Product class
 		this.stock = Integer.parseInt(data[4]); 	//Set Product Stock
 	}
 
-	protected int r_id () { //Return Product ID
+	public int r_id () { //Return Product ID
 		return this.id;
 	}
 	
-	protected String r_name () { //Return Product Name
+	public String r_name () { //Return Product Name
 		return this.name;
 	}
 	
-	protected String r_category () { //Return Product Category
+	public String r_category () { //Return Product Category
 		return this.category_id;
 	}
 	
-	protected float r_price () { //Return Product Price
+	public float r_price () { //Return Product Price
 		return this.price;
 	}
 	
-	protected int r_stock () { //Return Product Stock
+	public int r_stock () { //Return Product Stock
 		return this.stock;
 	}
 	
-	protected void print () { //Print Product
+	public void print () { //Print Product
 		//Print
 		System.out.println("Product:\n\n"); 												//Product
 		System.out.println("Name: " + this.name); 												//Print Product name
@@ -59,7 +63,7 @@ public class Product { //Product class
 		System.out.println("Stock: " + this.stock); 											//Print the number of items available
 	}
 	
-	protected String compare() { //Compare Products
+	public String compare() { //Compare Products
 		//Auxiliar String
 		String aux = ""; //Auxiliar String
 		
@@ -77,11 +81,11 @@ public class Product { //Product class
 		return aux;
 	}
 
-	protected void buy(int n_ordered) { //This method decreases the product stock by the amount entered
+	public void buy(int n_ordered) { //This method decreases the product stock by the amount entered
 		this.stock -= n_ordered;
 	}
 	
-	protected void save() { //Saves the data on the file
+	public void save() { //Saves the data on the file
 		//String
 		String[] aux = new String[5]; 					//Auxiliar string to save
 		aux[0] = "p_id=" + this.id; 						//Set ID

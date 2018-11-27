@@ -1,4 +1,4 @@
-package com.amazing;
+package amazing.inside;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -9,7 +9,7 @@ public class Filter { //Filter class
 	private static InputStream skipper = new ByteArrayInputStream("".getBytes()); //Skip the next input
 	
 	
-	protected static int filter_i(String ask, int low, int high) { //Filters Int
+	public static int filter_i(String ask, int low, int high) { //Filters Int
 		while (true) { //Keeps in the loop until it gets out with the return
 			//Ask
 			System.out.print(ask); //Ask string
@@ -42,7 +42,7 @@ public class Filter { //Filter class
 		}
 	}
 	
-	protected static float filter_f(String ask, float low, float high, int decimal_slots) { //Filters Float
+	public static float filter_f(String ask, float low, float high, int decimal_slots) { //Filters Float
 		while (true) { //Keeps in the loop until it gets out with the return
 			//Ask
 			System.out.print(ask); //Ask string
@@ -82,7 +82,7 @@ public class Filter { //Filter class
 		}
 	}
 	
-	protected static String filter_s(String ask) { //Filters Strings
+	public static String filter_s(String ask) { //Filters Strings
 		System.out.print(ask); 		//Ask string
 		return scan.nextLine(); 	//Return the next line
 	}

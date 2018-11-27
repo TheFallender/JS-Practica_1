@@ -1,4 +1,4 @@
-package com.amazing;
+package amazing.inside;
 
 public class Custom_Exception extends RuntimeException { //This is a runtime exception, Eclipse can recover from it
 	private static final long serialVersionUID = -1375331979705542972L; //Serial of the exception

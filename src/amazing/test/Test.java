@@ -1,11 +1,15 @@
-package com.amazing;
+package amazing.test;
 
 import java.io.File;
+
+import amazing.inside.Custom_Exception;
+import amazing.inside.Filter;
+import amazing.inside.IO;
 
 public class Test { //Test class
 	private static int phase = 1; //Which phase is the test located in
 	
-	protected void test() { //Method to override that, by default, calls all the childs
+	public void test() { //Method to override that, by default, calls all the childs
 		System.out.println("Test system started:"); //Prints that the Test system has started
 		
 		//Test calls
@@ -56,8 +60,8 @@ public class Test { //Test class
 	}
 	
 	protected void print_data() { //Prints the data array from IO class
-		for(int i = 0; i < IO.data_a.size(); i++) //For to print data
-			System.out.println("Data number " + i + ": " + IO.data_a.get(i)); //Prints the data number and it's value
+		for(int i = 0; i < IO.data().size(); i++) //For to print data
+			System.out.println("Data number " + i + ": " + IO.data().get(i)); //Prints the data number and it's value
 	}
 	
 	protected void throw_exc(String msg, Throwable cause) { //Method to create and throw a new exception based on the error

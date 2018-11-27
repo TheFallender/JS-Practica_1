@@ -1,4 +1,11 @@
-package com.amazing;
+package amazing.test;
+
+import amazing.amazing.Category;
+import amazing.amazing.Product;
+import amazing.amazing.Product_user;
+import amazing.amazing.User;
+import amazing.inside.Filter;
+import amazing.inside.IO;
 
 public class Test_data extends Test { //Data Test class
 	@Override

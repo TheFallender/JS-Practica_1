@@ -1,10 +1,13 @@
-package com.amazing;
+package amazing.inside;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import amazing.amazing.Amazing;
+import amazing.amazing.User;
+
 public class Login_method { //Login class
-	protected static boolean login_method_in() { //Log in method
+	public static boolean login_method_in() { //Log in method
 		//Variables
 		String email; //Email
 		String e_password; //Encrypted password
@@ -29,13 +32,13 @@ public class Login_method { //Login class
 			IO.read("d_user", "u_email=" + email, 5, false);
 			
 			//Check if User exists
-			if (IO.data_a.isEmpty()) 													//User not found
+			if (IO.data().isEmpty()) 													//User not found
 				System.out.println("ERROR - Username and password doesn't match."); 		//For security reasons, it doesn't report that there isn't a user with that email
 			else { //User exists
 				//Checks if password matches
-				if (e_password.equals(IO.data_a.get(1))) { //Password match login in
+				if (e_password.equals(IO.data().get(1))) { //Password match login in
 					//User create
-					Amazing.active_user = new User (IO.data_a.toArray(new String[IO.data_a.size()])); //Set the new user based on the array
+					Amazing.active_user = new User (IO.data().toArray(new String[IO.data().size()])); //Set the new user based on the array
 					
 					//Data array
 					String[] data = new String[2]; //String to pass through modify
@@ -54,7 +57,7 @@ public class Login_method { //Login class
 		}
 	}
 	
-	protected static void login_method_out() { //Log out method
+	public static void login_method_out() { //Log out method
 		//Data array
 		String[] data = new String[3]; 							//String to pass through modify
 		data[0] = "u_email=" + Amazing.active_user.r_email(); 	//Set the email
@@ -68,7 +71,7 @@ public class Login_method { //Login class
 		Amazing.active_user = null;
 	}
 	
-	protected static String date() { //Get the actual date
+	public static String date() { //Get the actual date
     	DateTimeFormatter date_format = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm"); 	//Date format of the Date
     	LocalDateTime date = LocalDateTime.now(); 											//Set the Date now
     	

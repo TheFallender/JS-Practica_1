@@ -1,4 +1,8 @@
-package com.amazing;
+package amazing.test;
+
+import amazing.inside.Converter;
+import amazing.inside.Encrypter;
+import amazing.inside.Filter;
 
 public class Test_inside extends Test { //Inside Test class
 	@Override

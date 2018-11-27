@@ -1,14 +1,21 @@
-package com.amazing;
+package amazing.amazing;
 
 import java.util.ArrayList;
+
+import amazing.inside.Converter;
+import amazing.inside.Filter;
+import amazing.inside.IO;
+import amazing.inside.Login_method;
+import amazing.inside.Region;
+import amazing.test.Test;
 
 //Menu, marketplace class
 public class Amazing {
 	//Test variable
-	protected static boolean test = false; 		//Change this to start the test system
+	public static boolean test = false; 		//Change this to start the test system
 	
 	//User data
-	protected static User active_user = null; 	//The active user at the moment
+	public static User active_user = null; 	//The active user at the moment
 	
 	//Data array
 	private static ArrayList<Category> c = new ArrayList<>();		//Category list
@@ -16,41 +23,37 @@ public class Amazing {
 	private static ArrayList<Product> pc = new ArrayList<>(); 		//Product category list array (list of the actual category)
 	private static ArrayList<Product_user> pu = new ArrayList<>();	//Product user list
 	
-	//Dollar
-	protected static float eur_dollar; 			//Euro dollar ratio
-	protected static boolean dollar_a = false; 	//Dollar active in the menu
-	
 	//Main
 	public static void main(String[] args){ //Main code
 		if (!test) { //Default enviroment
 			//Starting functions
-			IO.data_check(); //Checks the data files are there, if not, it create them 
-
+				//Data
+				IO.data_check(); //Checks the data files are there, if not, it create them 
+				
+				//Euro Dollar ratio
+				Converter.set_conv_list();			//Sets the Converter list
+				Converter.set_factor("eur/usd"); 	//Sets the new factor
+				
+				
 			//Variables definitions
 				//Menu
 				int[] menu = new int[4]; //Menu int values
 				
-				//Euro Dollar ratio
-				eur_dollar = Converter.factor("eur", "usd"); //Uses the converter and sets the ratio
-				
 				//Boolean changes
-				boolean create_success_c = false;		//Detects error in the creation process of category
-				boolean create_success_p = false; 	//Detects error in the creation process of product
-				boolean create_success_pu = false; 	//Detects error in the creation process of product user
+				boolean create_success_c = c_category();	//Detects error in the creation process of category
+				boolean create_success_p = c_product(); 	//Detects error in the creation process of product
+				boolean create_success_pu = false; 			//Detects error in the creation process of product user
 				
 				//Product
 				String[] comp_pr = new String[]{null, ""}; //Compare product array
-			
-				//Create data
-				create_success_c = c_category(); 
-				create_success_p = c_product();
+				
 				
 			//Menu
 			while(true) { //Loop of the menu
 				switch (menu[0]) { //Checks selection within Main menu
 					case 0: //Main menu
 						//Menu
-						System.out.println("\nAmazing:"); 								//Amazing
+						System.out.println("\nAmazing" + Region.get_region() + ":"); 	//Amazing (Region):
 						System.out.println("1. Search by category.");					//1. Search by Category
 						System.out.println("2. Account ");								//2. Account
 						if (active_user != null) //User logged in
@@ -58,10 +61,7 @@ public class Amazing {
 						else //User not logged
 							System.out.println("3. Sing in.");							//3. Sing in.
 						System.out.println("4. Create account.");						//4. Create account.
-						if (!dollar_a)
-							System.out.println("5. From USA? Change to dollars.");		//5. From USA? Change to dollars.
-						else
-							System.out.println("5. From Europe? Change to euros.");		//5. From Europe? Change to euros.
+						System.out.println("5. Select other region.");					//5. Select other region.
 						System.out.println("6. Exit.");									//6. Exit.
 						
 						//Menu selection
@@ -387,9 +387,9 @@ public class Amazing {
 						
 						
 					case 5: //Change dollar
-						dollar_a = !dollar_a; //Changes value of the boolean to the opposite one
 						
-						System.out.println("Changed the currency."); 		//Prints the change in the currency
+						
+						System.out.println("Welcome to " + region.get(active_region) + "."); 	//Welcomes the user to the new region
 						Filter.filter_s("\n\nPress ENTER to continue: "); 	//Waits for the user input
 						
 						menu[0] = 0; //Resets Main menu
@@ -418,49 +418,49 @@ public class Amazing {
 		}
 	}
 	
-	protected static boolean c_category() { //Category create
+	private static boolean c_category() { //Category create
 		//Reset list
 		c = new ArrayList<>();
 		
 		//Get the data from the file
 		IO.read("d_category", "", 15, false); //Get data
-		if (IO.data_a.isEmpty()) //If there is no data return
+		if (IO.data().isEmpty()) //If there is no data return
 			return false;												//Couldn't get the data		
 		
 		//Get Category list
-		for (int i = 0; i < IO.data_a.size(); i++) 			//Create categories
-			if (IO.data_a.get(i) != null) {							//Prevents creating null objects
-				Category c_aux = new Category (IO.data_a.get(i));		//Creates an auxiliary category
+		for (int i = 0; i < IO.data().size(); i++) 			//Create categories
+			if (IO.data().get(i) != null) {							//Prevents creating null objects
+				Category c_aux = new Category (IO.data().get(i));		//Creates an auxiliary category
 				c.add(c_aux);										//Adds the category
 			}
 		
 		return true;
 	}
 	
-	protected static boolean c_product () { //Product list
+	private static boolean c_product () { //Product list
 		//Reset list
 		p = new ArrayList<>();
 		
 		//Get the data from the file
 		IO.read("d_product", "", 100, false); 	//Get data
-		if (IO.data_a.isEmpty()) //If there is no data return
+		if (IO.data().isEmpty()) //If there is no data return
 			return false;												//Couldn't get the data
 		
 		//Variables to use
 		String[] aux_i = new String[5]; //Auxiliar string to use
 		
 		//Get Product list
-		for(int i = 1; i <= IO.data_a.size()/5; i++) {	//Write every product in the list		
+		for(int i = 1; i <= IO.data().size()/5; i++) {	//Write every product in the list		
 			//Null prevent
-			if (IO.data_a.get((i*5) - 5) == null) //Prevents creating null objects
+			if (IO.data().get((i*5) - 5) == null) //Prevents creating null objects
 				break;
 
 			//Auxiliary array
-			aux_i[0] = IO.data_a.get((i*5) - 5); 				//Id
-			aux_i[1] = IO.data_a.get((i*5) - 4); 				//Name
-			aux_i[2] = IO.data_a.get((i*5) - 3); 				//Category
-			aux_i[3] = IO.data_a.get((i*5) - 2); 				//Price
-			aux_i[4] = IO.data_a.get((i*5) - 1); 				//Stock
+			aux_i[0] = IO.data().get((i*5) - 5); 				//Id
+			aux_i[1] = IO.data().get((i*5) - 4); 				//Name
+			aux_i[2] = IO.data().get((i*5) - 3); 				//Category
+			aux_i[3] = IO.data().get((i*5) - 2); 				//Price
+			aux_i[4] = IO.data().get((i*5) - 1); 				//Stock
 			
 			//Create a product
 			Product p_aux = new Product (aux_i);		//Creates an auxiliary product
@@ -471,31 +471,31 @@ public class Amazing {
 		return true;
 	}
 	
-	protected static boolean c_product_user() { //Product User list
+	private static boolean c_product_user() { //Product User list
 		//Reset list
 		pu = new ArrayList<>();
 		
 		//Get the data from the file
 		IO.read("d_product_user", "", 1200, false); //Get data
-		if (IO.data_a.isEmpty()) //If there is no data return
+		if (IO.data().isEmpty()) //If there is no data return
 			return false;												//Couldn't get the data
 		
 		//Variables to use
 		String[] aux_i = new String[5]; //Auxiliar string to check
 		
 		//Get Product User list
-		for(int i = 1; i <= IO.data_a.size()/5; i++) { //Search between the created list
+		for(int i = 1; i <= IO.data().size()/5; i++) { //Search between the created list
 			//Null prevent
-			if (IO.data_a.get((i*5) - 5) == null)
+			if (IO.data().get((i*5) - 5) == null)
 				break;
 			
-			aux_i[0] = IO.data_a.get((i*5) - 5); 						//User Email
+			aux_i[0] = IO.data().get((i*5) - 5); 						//User Email
 			if(aux_i[0].equals(Amazing.active_user.r_email())) { //Checks if the product user equals the active user email
 				//Now checks for the rest of the data
-				aux_i[1] = IO.data_a.get((i*5) - 4); 					//Product ID
-				aux_i[2] = IO.data_a.get((i*5) - 3); 					//Product Name
-				aux_i[3] = IO.data_a.get((i*5) - 2); 					//Product Price
-				aux_i[4] = IO.data_a.get((i*5) - 1); 					//Number of items Ordered
+				aux_i[1] = IO.data().get((i*5) - 4); 					//Product ID
+				aux_i[2] = IO.data().get((i*5) - 3); 					//Product Name
+				aux_i[3] = IO.data().get((i*5) - 2); 					//Product Price
+				aux_i[4] = IO.data().get((i*5) - 1); 					//Number of items Ordered
 				
 				//Create a product user
 				Product_user pu_aux = new Product_user(aux_i); 	//Sets the new product user

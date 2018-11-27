@@ -1,4 +1,9 @@
-package com.amazing;
+package amazing.amazing;
+
+import amazing.inside.Encrypter;
+import amazing.inside.Filter;
+import amazing.inside.IO;
+import amazing.inside.Login_method;
 
 public class User { //User class
 	
@@ -8,7 +13,7 @@ public class User { //User class
 	private String last_login = "0"; 	//Last login date
 	private String admin = "0"; 	//Admin
 	
-	protected User() { //User basic Constructor
+	public User() { //User basic Constructor
 		//Email
 		while(true) { 																				//Loop to get the email
 			String email_data = Filter.filter_s("Insert your email: "); 								//Email Data 
@@ -16,7 +21,7 @@ public class User { //User class
 				System.out.println("ERROR - You can't enter 'exit' as an email."); 							//Reports that you can't put 'exit' as an email
 			else {
 				IO.read("d_user", "u_email=" + email_data, 1, false);										//Read User
-				if (IO.data_a.isEmpty()) { 																	//User doesn't exist, proceed
+				if (IO.data().isEmpty()) { 																	//User doesn't exist, proceed
 					this.email = email_data;																	//Set email
 					break;																						//Break the loop
 				}
@@ -35,7 +40,7 @@ public class User { //User class
 		this.login = Login_method.date(); //Set the login date to the moment of the creation
 	}
 	
-	protected User(String[] data) { //User data Constructor
+	public User(String[] data) { //User data Constructor
 		this.email = data[0];								//Set Email
 		this.password = data[1];							//Set Password
 		this.login = Login_method.date();	//Set Login
@@ -43,23 +48,23 @@ public class User { //User class
 		this.admin = data[4];								//Set Admin
 	}
 	
-	protected String r_email () { //Returns the Email
+	public String r_email () { //Returns the Email
 		return this.email;
 	}
 	
-	protected String r_pass () { //Returns the Password (encrypted)
+	public String r_pass () { //Returns the Password (encrypted)
 		return this.password;
 	}
 	
-	protected String r_date(boolean login) { //Returns the Date
+	public String r_date(boolean login) { //Returns the Date
 		return (login) ? this.login : this.last_login;
 	}
 
-	protected boolean r_admin() { //Returns the Admin value
+	public boolean r_admin() { //Returns the Admin value
 		return (admin.equals("1"));
 	}
 	
-	protected void print() { //Prints User
+	public void print() { //Prints User
 		System.out.println("Email: " + (this.email));			//Print Email
 		System.out.println("Password: ********");				//Print Password (nothing)
 		System.out.println("Login: " + this.login);				//Print Login
@@ -69,7 +74,7 @@ public class User { //User class
 		}
 	}
 	
-	protected void save() {	//Saves the data on the file
+	public void save() {	//Saves the data on the file
 		//String
 		String[] aux = new String[5];					//Auxiliar string to save
 		aux[0] = "u_email=" + this.email;					//Set Email

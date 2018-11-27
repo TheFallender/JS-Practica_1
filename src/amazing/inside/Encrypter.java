@@ -1,4 +1,4 @@
-package com.amazing;
+package amazing.inside;
 
 import java.security.Security;
 import java.util.Base64;

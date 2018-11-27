@@ -1,4 +1,4 @@
-package com.amazing;
+package amazing.inside;
 
 import java.io.File;
 import java.io.FileReader;
@@ -6,12 +6,19 @@ import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import amazing.amazing.Amazing;
 
 public class IO { //Input Output class
-	protected static String data_path = ""; 	//Path to the Data Folder
-	protected static ArrayList <String> data_a = new ArrayList<>(); 			//Data array
+	private static String data_path = ""; 	//Path to the Data Folder
+	private static ArrayList <String> data_a = new ArrayList<>(); 			//Data array
 	
-	protected static void read (String file_type, String search_for, int array_size, boolean repeat) {	//Reads all the filtered data from file
+	public static final List<String> data(){ //Returns the Data List
+		return data_a;
+	}
+	
+	public static void read (String file_type, String search_for, int array_size, boolean repeat) {	//Reads all the filtered data from file
 		String file_path = data_path + file_type;											//Path to the file
 		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { 		//Tries to open the file
 			data_a = new ArrayList<>(); 	 													//Data array with the size of the parameter
@@ -19,7 +26,7 @@ public class IO { //Input Output class
 				if (line.contains(search_for)) { 													//Check if this is the requested line
 					if (!repeat) 																		//Remove code if it is not going to search for the same term
 						search_for = "";																	//Now it accepts anything as the "" contains nothing
-					if (data_a.size() >= array_size) 													//Break if the array size is reached
+					if ((array_size != 0) && (data_a.size() >= array_size)) 							//Break if the array size is reached
 						break;																				//Break the loop
 					else																				//There is space for the data
 						data_a.add(line.replaceFirst("^\\w+=", "")); 										//Cleans the line data
@@ -30,7 +37,7 @@ public class IO { //Input Output class
 		}
 	}
 	
-	protected static void write (String file_type, String[] input, boolean append) { //Writes the array inside the selected file
+	public static void write (String file_type, String[] input, boolean append) { //Writes the array inside the selected file
 		String file_path = data_path + file_type; 						//Path to the file
 		try(FileWriter writer =  new FileWriter(file_path, append)) {	//Tries to open the file
 			for (int i = 0; i < input.length; i++)							//For to write the array "input"
@@ -43,7 +50,7 @@ public class IO { //Input Output class
 
 	
 	//Starting function
-	protected static void data_check () { //Sets data path and checks files
+	public static void data_check () { //Sets data path and checks files
 		//Try to set the default path
 		if (Amazing.test) 																	//Test is active, set the path for test
 			data_path = "src/Test/";															//Data path set
@@ -80,13 +87,14 @@ public class IO { //Input Output class
 		files_check(data_path + "d_user", false); 				//Check User
 		files_check(data_path + "d_product_user", false); 		//Check Product User
 		files_check(data_path + "d_converter_rate", false); 	//Check Converter Rate
+		files_check(data_path + "d_region", false); 			//Check Region
 		if (Amazing.test) //Test is active
 			files_check(data_path + "d_test", false); 			//Check Test
 	}
 	
 	
 	//Auxiliary functions
-	protected static void files_check(String path, boolean folder) { //Checks if a file exists, if not, it creates one
+	public static void files_check(String path, boolean folder) { //Checks if a file exists, if not, it creates one
 		try {																	//Tries to create the file/folder
 			File file = new File(path);												//New file with the path
 			if (!file.exists())	{													//No file exists with the same name
@@ -102,7 +110,7 @@ public class IO { //Input Output class
 		}
 	}
 	
-	protected static void modify (String file_type, String[] input, int skip) { //Writes the date of the login on the user
+	public static void modify (String file_type, String[] input, int skip) { //Writes the date of the login on the user
 		String file_path = data_path + file_type; 										//Defines the path of the file with data path and the file name
 		try (BufferedReader reader = new BufferedReader(new FileReader(file_path))) { 	//Tries to open the file
 			String line = ""; 																//Line of data

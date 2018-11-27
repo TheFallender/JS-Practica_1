@@ -1,4 +1,7 @@
-package com.amazing;
+package amazing.amazing;
+
+import amazing.inside.Converter;
+import amazing.inside.IO;
 
 public class Product_user { //Product User class
 	
@@ -8,7 +11,7 @@ public class Product_user { //Product User class
 	private float product_price; 	//Product price
 	private int number_items; 		//Number of ordered items
 	
-	protected Product_user(String[] data) { //Product User constructor
+	public Product_user(String[] data) { //Product User constructor
 		//Set the data
 		this.user_id = data[0]; 						//Set User ID
 		this.product_id = Integer.parseInt(data[1]); 	//Set Product ordered ID
@@ -17,7 +20,7 @@ public class Product_user { //Product User class
 		this.number_items = Integer.parseInt(data[4]); 	//Set Number of ordered items
 	}
 
-	protected void print() { //Print the Product User
+	public void print() { //Print the Product User
 		//Print
 		System.out.println("Order:"); 														//Order
 		System.out.println("Product name: " + this.product_name); 															//Print Product name
@@ -28,7 +31,7 @@ public class Product_user { //Product User class
 		System.out.println("Ordered: " + this.number_items + "\n\n"); 														//Print the number of items ordered of this Product
 	}
 	
-	protected void save() { //Save the data on the file
+	public void save() { //Save the data on the file
 		//String
 		String[] aux = new String[5]; 				//Auxiliar string to save
 		aux[0] = "pu_u_id=" + this.user_id; 			//Set User ID
