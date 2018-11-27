@@ -10,45 +10,53 @@ Note that you shouldn't modify the password and that you can't see it in plain t
 
 data_path // You can use this file to change the data location
 ```
-DATA_PATH=
+DATA_PATH=(Path)
 ```
 
 d_user //User data - All the user data is loaded here
 ```
-u_email=
-u_password=
-u_login=
-u_last_login=
-u_admin=
+u_email=(String)
+u_password=(Encrypted string)
+u_login=(Long)
+u_last_login=(Long)
+u_admin=(Int)
 ```
 
-d_category //Category data - All the categories should be here, note that this is the string.
+d_category //Category - Categories will be stored here.
 ```
-category=
-```
-
-d_product //Product data - Product data will be here
-```
-p_id=
-p_name=
-p_category=
-p_price=
-p_stock=
+category=(String)
 ```
 
-d_product_user //Product user data - The data from the orders
+d_product //Product - Product data will be here
 ```
-pu_u_id=
-pu_p_id=
-pu_p_name=
-pu_p_price=
-pu_number=
+p_id=(Int)
+p_name=(String)
+p_category=(String)
+p_price=(Float)
+p_stock=(Int)
+```
+
+d_product_user //Product user - The data from the orders
+```
+pu_u_id=(String)
+pu_p_id=(Int)
+pu_p_name=(String)
+pu_p_price=(Float)
+pu_number=(Int)
 ```
 
 d_conversor_rate //Conversor rate - Currency rate from and to
 ```
-latest_check=
-latest_conversor_rate=
+(From currency)/(To currency)
+conv_date=(Long)
+conv_rate=(Float)
+conv_symb=(String)
+```
+
+d_region //Region - Data for the region and it's currency
+```
+(Region Name)
+r_currency=(String)
 ```
 
 ## To do list:
