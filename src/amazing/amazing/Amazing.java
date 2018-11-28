@@ -38,7 +38,7 @@ public class Amazing {
 				Localization.set_locale_list();			//Sets the Locale list
 				
 				//Adds the default regions and locales
-				Localization.add_locale("en", "EN");
+				Localization.set_locale("en", "EN");
 				Region.region_add("Default", "eur/eur", "en", "€"); 	//Sets the new region
 				Region.region_add("ES", "eur/eur", "es", "€"); 	//Sets the new region
 				Region.region_add("US", "eur/usd", "en", "$"); 	//Sets the new region
