@@ -9,10 +9,14 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+
 # ignore an entire directory
+# Data folders
 /src/Data/
-/src/Test/
 /bin/Data/
+/src/Test/
+/bin/Test/
+
 # Package Files #
 *.jar
 *.war
