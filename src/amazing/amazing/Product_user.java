@@ -1,6 +1,7 @@
 package amazing.amazing;
 
 import amazing.inside.IO;
+import amazing.inside.Localization;
 
 public class Product_user { //Product User class
 	
@@ -23,11 +24,11 @@ public class Product_user { //Product User class
 
 	public void print() { //Print the Product User
 		//Print
-		System.out.println("\n\nOrder:"); 									//Order
-		System.out.println("Product name: " + this.product_name); 			//Print Product name
-		System.out.println("Price: " + this.product_price); 				//Print the Product Price
-		System.out.println("Ordered: " + this.number_items); 		//Print the number of items ordered of this Product
-		System.out.println("Total value of the order: " + this.product_t_price + "\n\n"); 		//Print the number of items ordered of this Product
+		System.out.println(Localization.get("objects", "pu_print_bs")); 									//Order
+		System.out.println(Localization.get("objects", "pu_print_n") + this.product_name); 			//Print Product name
+		System.out.println(Localization.get("objects", "pu_print_val") + this.product_price); 				//Print the Product Price
+		System.out.println(Localization.get("objects", "pu_print_amt") + this.number_items); 		//Print the number of items ordered of this Product
+		System.out.println(Localization.get("objects", "pu_print_tval") + this.product_t_price + "\n\n"); 		//Print the number of items ordered of this Product
 	}
 	
 	public void save() { //Save the data on the file
@@ -38,7 +39,7 @@ public class Product_user { //Product User class
 		aux[2] = "pu_p_name=" + this.product_name; 		//Set Product ordered Name
 		aux[3] = "pu_p_price=" + this.product_price; 	//Set Product Price at the moment of the order
 		aux[4] = "pu_number=" + this.number_items; 		//Set Number of ordered items
-		aux[5] = "pu_t_price=" + this.product_t_price; 		//Set Number of ordered items
+		aux[5] = "pu_p_tprice=" + this.product_t_price; 		//Set Number of ordered items
 		
 		//Write data
 		IO.write("d_product_user", aux, true); //Writes the data on the file

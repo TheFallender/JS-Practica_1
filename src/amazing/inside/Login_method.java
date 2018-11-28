@@ -13,7 +13,7 @@ public class Login_method { //Login class
 		
 		//Loop for the login
 		while(true) { //User check
-			email = Filter.filter_s("Insert your email: "); //Filters the email
+			email = Filter.filter_s(Localization.get("objects", "user_crt_em")); //Filters the email
 			
 			//Exit check
 			if (email.equals("exit")) 	//Email is exit
@@ -21,10 +21,10 @@ public class Login_method { //Login class
 			
 			//Password encryption
 			try {
-				e_password = Encrypter.encrypt(Filter.filter_s("Insert your password: ")); //Get the encrypted password
+				e_password = Encrypter.encrypt(Filter.filter_s(Localization.get("objects", "user_crt_pw"))); //Get the encrypted password
 			}
 			catch (Exception e) { //Illegal operation
-				throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption."); //Report that there was an illegal operation
+				throw new IllegalArgumentException(Localization.get("inside", "enc_err_illgl")); //Report that there was an illegal operation
 			}
 			
 			//Read the data from the User file
@@ -32,7 +32,7 @@ public class Login_method { //Login class
 			
 			//Check if User exists
 			if (IO.data().isEmpty()) 													//User not found
-				System.out.println("ERROR - Username and password doesn't match."); 		//For security reasons, it doesn't report that there isn't a user with that email
+				System.out.println(Localization.get("objects", "user_crt_err_match")); 		//For security reasons, it doesn't report that there isn't a user with that email
 			else { //User exists
 				//Checks if password matches
 				if (e_password.equals(IO.data().get(1))) { //Password match login in
@@ -51,7 +51,7 @@ public class Login_method { //Login class
 					return true;
 				}
 				else //Password doesn't match
-					System.out.println("ERROR - Username and password doesn't match."); //Report that the passwords don't match
+					System.out.println(Localization.get("objects", "user_crt_err_match")); //Report that the passwords don't match
 			}
 		}
 	}

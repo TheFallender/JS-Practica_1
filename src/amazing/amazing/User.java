@@ -3,6 +3,7 @@ package amazing.amazing;
 import amazing.inside.Encrypter;
 import amazing.inside.Filter;
 import amazing.inside.IO;
+import amazing.inside.Localization;
 import amazing.inside.Login_method;
 
 public class User { //User class
@@ -16,9 +17,9 @@ public class User { //User class
 	public User() { //User basic Constructor
 		//Email
 		while(true) { 																				//Loop to get the email
-			String email_data = Filter.filter_s("Insert your email: "); 								//Email Data 
+			String email_data = Filter.filter_s(Localization.get("objects", "user_crt_em")); 							//Email Data 
 			if (email_data.equals("exit")) 																//Prevent exit as email
-				System.out.println("ERROR - You can't enter 'exit' as an email."); 							//Reports that you can't put 'exit' as an email
+				System.out.println(Localization.get("objects", "user_crt_err_exit")); 							//Reports that you can't put 'exit' as an email
 			else {
 				IO.read("d_user", "u_email=" + email_data, 1, false);										//Read User
 				if (IO.data().isEmpty()) { 																	//User doesn't exist, proceed
@@ -26,14 +27,14 @@ public class User { //User class
 					break;																						//Break the loop
 				}
 				else 																						//User already exists
-					System.out.println("ERROR - User already exist, try another email.");						//Report that the user already exists
+					System.out.println(Localization.get("objects", "user_crt_err_exist"));						//Report that the user already exists
 			}
 		}
 		//Password
 		try { 																							//Try to encrypt password
-			this.password = Encrypter.encrypt(Filter.filter_s("Insert your password: ")); 					//Encrypt password and set it
+			this.password = Encrypter.encrypt(Filter.filter_s(Localization.get("objects", "user_crt_pw"))); 	//Encrypt password and set it
 		} catch (Exception e) {																			//Illegal Exception
-			throw new IllegalArgumentException("ERROR - Error illegal operation on the encryption.");		//Report that there was an illegal operation
+			throw new IllegalArgumentException(Localization.get("inside", "enc_err_illgl"));		//Report that there was an illegal operation
 		}
 		
 		//Date
@@ -65,12 +66,12 @@ public class User { //User class
 	}
 	
 	public void print() { //Prints User
-		System.out.println("Email: " + (this.email));			//Print Email
-		System.out.println("Password: ********");				//Print Password (nothing)
-		System.out.println("Login: " + this.login);				//Print Login
-		System.out.println("Last login: " + this.last_login);	//Print Last Login
+		System.out.println(Localization.get("objects", "user_print_em") + (this.email));			//Print Email
+		System.out.println(Localization.get("objects", "user_print_pw") + "********");				//Print Password (nothing)
+		System.out.println(Localization.get("objects", "user_print_lg") + this.login);				//Print Login
+		System.out.println(Localization.get("objects", "user_print_llg") + this.last_login);	//Print Last Login
 		if(r_admin()) {	//Checks if its admin
-			System.out.println("This user has admin access");	//Print Admin
+			System.out.println(Localization.get("objects", "user_print_adm"));	//Print Admin
 		}
 	}
 	

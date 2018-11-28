@@ -6,6 +6,7 @@ import java.util.List;
 import amazing.inside.Converter;
 import amazing.inside.Filter;
 import amazing.inside.IO;
+import amazing.inside.Localization;
 import amazing.inside.Login_method;
 import amazing.inside.Region;
 import amazing.test.Test;
@@ -32,13 +33,16 @@ public class Amazing {
 				IO.data_check(); //Checks the data files are there, if not, it create them 
 						
 				//Region and Converter
-				Region.region_list();					//Sets the Region List
+				Region.region_list();					//Sets the Region list
 				Converter.set_conv_list();				//Sets the Converter list
+				Localization.set_locale_list();			//Sets the Locale list
 				
-				//Adds the default regions
+				//Adds the default regions and locales
+				Localization.add_locale("en", "EN");
+				Region.region_add("Default", "eur/eur", "en", "€"); 	//Sets the new region
 				Region.region_add("ES", "eur/eur", "es", "€"); 	//Sets the new region
 				Region.region_add("US", "eur/usd", "en", "$"); 	//Sets the new region
-				Region.region_add("UK", "eur/gbp", "en", "£"); 	//Sets the new region
+				Region.region_add("GB", "eur/gbp", "en", "£"); 	//Sets the new region
 				
 				//Sets the default region
 				Region.set_ar(0);						//Sets the active region			
@@ -54,6 +58,7 @@ public class Amazing {
 				boolean create_success_p = c_product(); 	//Detects error in the creation process of product
 				boolean changes_p = false;					//Detects changes in the product list
 				boolean create_success_pu = false; 			//Detects error in the creation process of product user
+				boolean changes_pu = false;					//Detects changes in the product user
 				
 				//Product
 				Product[] comp_pr = new Product[]{null, null}; 	//Compare product array
@@ -65,19 +70,19 @@ public class Amazing {
 				switch (menu[0]) { //Checks selection within Main menu
 					case 0: //Main menu
 						//Menu
-						System.out.println("\nAmazing " + Region.get_region() + ":"); 	//Amazing (Region):
-						System.out.println("1. Search by category.");					//1. Search by Category
-						System.out.println("2. Account ");								//2. Account
+						System.out.println(Localization.get("main", "main_site") + Region.get_region() + ":"); 	//Amazing (Region):
+						System.out.println("1. " + Localization.get("main", "main_menu_basic_cat"));				//1. Search by Category
+						System.out.println("2. " + Localization.get("main", "main_menu_basic_acc"));				//2. Account
 						if (active_user != null) //User logged in
-							System.out.println("3. Sing out.");							//3. Sing out.
+							System.out.println("3. " + Localization.get("main", "main_menu_basic_lg_i"));			//3. Sing out.
 						else //User not logged
-							System.out.println("3. Sing in.");							//3. Sing in.
-						System.out.println("4. Create account.");						//4. Create account.
-						System.out.println("5. Select other region.");					//5. Select other region.
-						System.out.println("6. Exit.");									//6. Exit.
+							System.out.println("3. " + Localization.get("main", "main_menu_basic_lg_o"));			//3. Sing in.
+						System.out.println("4. " + Localization.get("main", "main_menu_basic_cracc"));				//4. Create account.
+						System.out.println("5. " + Localization.get("main", "main_menu_basic_reg"));				//5. Select other region.
+						System.out.println("6. " + Localization.get("main", "main_menu_ex"));						//6. Exit.
 						
 						//Menu selection
-						menu[0] = Filter.filter_i("\nMenu select: ", 1, 6); //Request selection
+						menu[0] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 6); //Request selection
 						break;
 						
 						
@@ -86,17 +91,17 @@ public class Amazing {
 							//Detect error creating
 							if(create_success_c) {
 								//Menu
-								System.out.println("\nCategory menu:");					//Prints the Category
-								for (int i = 0; i < c.size(); i++) 						//Print categories
-									System.out.println(i+1 + ". " + c.get(i).r_name()); 		//Print the name of the Category with a dot in front of it 
-								System.out.println((c.size() + 1) + ". Exit"); 			//Print exit
+								System.out.println(Localization.get("main", "main_menu_cat_mn"));								//Prints the Category
+								for (int i = 0; i < c.size(); i++) 																	//Print categories
+									System.out.println(i+1 + ". " + c.get(i).r_name()); 												//Print the name of the Category with a dot in front of it 
+								System.out.println((c.size() + 1) + ". " + Localization.get("main", "main_menu_ex")); 			//Print exit
 								
 								//Menu selection
-								menu[1] = Filter.filter_i("\nMenu select: ", 1, c.size() + 1); //Request selection
+								menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, c.size() + 1); //Request selection
 							}
 							else {
 								if (!changes_c) { //There were no changes
-									System.out.println("There are no categories registered."); 	//Reports that there are no categories registered
+									System.out.println(Localization.get("main", "main_menu_cat_err")); 	//Reports that there are no categories registered
 									menu[0] = 0; //Reset to base menu
 								}
 								else {
@@ -116,7 +121,7 @@ public class Amazing {
 								
 								if (create_success_p) { //No error, there is data
 									//Menu print
-									System.out.println("\nProduct list of " + c.get(menu[1] - 1).r_name() + ":"); 	//Print the info of the Category as a product list
+									System.out.println(Localization.get("main", "main_menu_pr_mn") + c.get(menu[1] - 1).r_name() + ":"); 	//Print the info of the Category as a product list
 									for (int i = 0; i < p.size(); i++) 												//Prints products
 										if (p.get(i).r_category().equals(c.get(menu[1] - 1).r_name())) { 					//The product category name is equal to the category name
 											//Print
@@ -125,14 +130,14 @@ public class Amazing {
 											//Add the product to the list
 											pc.add(p.get(i));						//Add the p_aux to the list
 										}
-									System.out.println((pc.size() + 1) + ". Exit"); //Print exit
+									System.out.println((pc.size() + 1) + ". " + Localization.get("main", "main_menu_ex")); //Print exit
 									
 									//Menu selection
-									menu[2] = Filter.filter_i("\nMenu select: ", 1, pc.size() + 1); //Request selection
+									menu[2] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, pc.size() + 1); //Request selection
 								}
 								else { //There is no data
 									if (!changes_p) { //There were no changes
-										System.out.println("There are no products registered."); //Reports that there are no products registered
+										System.out.println(Localization.get("main", "main_menu_pr_err")); //Reports that there are no products registered
 										menu[1] = 0; //Reset to category menu
 									}
 									else {
@@ -149,16 +154,16 @@ public class Amazing {
 								switch (menu[3]) { //Checks selection within Product menu
 									case 0: //Product Menu
 										//Print
-										System.out.println("\n"); 				//Print newline for print of the product
-										pc.get(menu[2] - 1).print(); 						//Print the selected product
+										System.out.println("\n" + c.get(menu[1] - 1).r_name() + ":"); 	//Print newline for print of the product and the actual category
+										pc.get(menu[2] - 1).print(); 								//Print the selected product
 										
 										//Menu print
-										System.out.println("1. Buy.");			//1. Buy.
-										System.out.println("2. Compare. ");		//2. Compare.
-										System.out.println("3. Exit.");			//3. Exit.
+										System.out.println("1. " + Localization.get("main", "main_menu_pr_buy"));			//1. Buy.
+										System.out.println("2. " + Localization.get("main", "main_menu_pr_comp"));		//2. Compare.
+										System.out.println("3. " + Localization.get("main", "main_menu_ex"));			//3. Exit.
 										
 										//Menu selection
-										menu[3] = Filter.filter_i("\nMenu select: ", 1, 3); //Request menu selection
+										menu[3] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 3); //Request menu selection
 										break;
 										
 										
@@ -167,7 +172,7 @@ public class Amazing {
 										if (active_user != null) { //The user is logged in
 																		//Check if there is stock
 											if (pc.get(menu[2] - 1).r_stock() > 0) { //There is some stock
-												int amount = Filter.filter_i("Number of items to order: ", 1, 10); //Request the number of items to order
+												int amount = Filter.filter_i(Localization.get("main", "main_menu_pr_buy_amt"), 1, 10); //Request the number of items to order
 												
 												//Check if the stock is enough
 												if (pc.get(menu[2] - 1).r_stock() - amount >= 0) { //There is enough stock for the order
@@ -191,28 +196,27 @@ public class Amazing {
 													//Update Product User list
 													pu.add(bought_product);		//Adds the latest order
 													
-													//Update error if there is one
-													if (!create_success_pu)
-														create_success_pu = c_product_user(); //Reset the error
+													//Changes in product user
+													changes_pu = true;
 													
 													//Product Update File
 													String[] data = new String[] {"p_id=" + pc.get(menu[2] - 1).r_id(), "p_stock=" + pc.get(menu[2] - 1).r_stock()}; 	//Data array, first the ID to search, then the stock.
 													IO.modify("d_product", data, 4); 														//Modify Product with the new data
 													
 													//Print info
-													System.out.println("Successfully bought the product"); //Print that the product was bought
+													System.out.println(Localization.get("main", "main_menu_pr_buy_succ")); //Print that the product was bought
 												}
 												else //There is not enough stock
-													System.out.println("ERROR - There's not enough stock for your order."); //Report that the product doesn't have enough stock
+													System.out.println(Localization.get("main", "main_menu_pr_buy_err_nestk")); //Report that the product doesn't have enough stock
 											}
 											else //There is no stock
-												System.out.println("ERROR - Product out of stock."); //Report that the product is out of stock
+												System.out.println(Localization.get("main", "main_menu_pr_buy_err_nstk")); //Report that the product is out of stock
 										}
 										else //User must be logged in to buy the product
-											System.out.println("ERROR - You must be logged in in order to buy."); //Report that the user must be logged in to buy
+											System.out.println(Localization.get("main", "main_menu_pr_buy_err_nlg")); //Report that the user must be logged in to buy
 										
 										
-										Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+										Filter.filter_s(Localization.get("main", "main_menu_wait")); //Waits for the user input
 										
 										menu[3] = 0; //Back to Product basic menu
 										break;
@@ -265,53 +269,60 @@ public class Amazing {
 							switch(menu[1]) { //Checks selection within Account menu
 								case 0: //Account Menu
 									//Print menu
-									System.out.println("\nAccount menu:");				//Account Menu:
-									System.out.println("1. Account Info.");				//1. Account Info.
-									System.out.println("2. Ordered Products.");			//2. Ordered Products.
-									System.out.println("3. Log out of the account.");	//3. Log out.
-									System.out.println("4. Homepage.");					//4. Homepage.
+									System.out.println(Localization.get("main", "main_menu_acc_mn"));				//Account Menu:
+									System.out.println("1. " + Localization.get("main", "main_menu_acc_inf"));				//1. Account Info.
+									System.out.println("2. " + Localization.get("main", "main_menu_acc_pru"));			//2. Ordered Products.
+									System.out.println("3. " + Localization.get("main", "main_menu_acc_lgo"));	//3. Log out.
+									System.out.println("4. " + Localization.get("main", "main_menu_acc_hm") );					//4. Homepage.
 									
 									//Menu selection
 									if (active_user.r_admin()) { //Checks if the user is admin
-										System.out.println("5. Admin settings.");		//5. Admin
-										menu[1] = Filter.filter_i("\nMenu select: ", 1, 5); //Request menu selection
+										System.out.println("5. " + Localization.get("main", "main_menu_acc_adm"));		//5. Admin
+										menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 5); //Request menu selection
 									}
 									else
-										menu[1] = Filter.filter_i("\nMenu select: ", 1, 4); //Request menu selection
+										menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 4); //Request menu selection
 									break;
 									
 									
 								case 1: //See User Info
 									active_user.print(); //Print info of the user
 									
-									Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+									Filter.filter_s(Localization.get("main", "main_menu_wait")); //Waits for the user input
 									
 									menu[1] = 0; //Back to Account basic menu
 									break;
 									
 									
-								case 2: //Ordered products									
+								case 2: //Ordered products				
+									menu[1] = 0; //Back to Account basic menu
+									
 									if (create_success_pu) {//No error, proceed
 										if (!(pu.isEmpty())) //Check if it's empty
 											for (int i = 0; i < pu.size(); i++) //Print all the orders
 												pu.get(i).print(); 						//Prints the product user
 										else
-											System.out.println("You have no orders on your account."); 	//Reports that the user hasn't made any orders
+											System.out.println(Localization.get("main", "main_menu_acc_pru_err")); 	//Reports that the user hasn't made any orders
 									}
 									else {
-										System.out.println("You have no orders on your account."); 	//Reports that the user hasn't made any orders
+										if (!changes_pu) { //There were no changes
+											System.out.println(Localization.get("main", "main_menu_acc_pru_err")); 	//Reports that the user hasn't made any orders
+										}
+										else {
+											create_success_pu = c_product_user();	//Recreates the product user to check for new orders
+											changes_pu = false;
+											menu[1] = 2; //Keep in this menu
+										}
 									}
 
-									Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
-									
-									menu[1] = 0; //Back to Account basic menu
+									Filter.filter_s(Localization.get("main", "main_menu_wait")); //Waits for the user input
 									break;
 									
 									
 								case 3: //Log out
 									Login_method.login_method_out(); 					//Log out method
-									System.out.println("Successfully logged out."); 	//Prints that the user logged out
-									Filter.filter_s("\n\nPress ENTER to continue: "); 	//Waits for the user input
+									System.out.println(Localization.get("main", "main_menu_acc_lgo_succ")); 	//Prints that the user logged out
+									Filter.filter_s(Localization.get("main", "main_menu_wait")); 	//Waits for the user input
 									
 									menu[0] = 0; //Resets Main menu
 									menu[1] = 0; //Back to Account basic menu
@@ -328,13 +339,13 @@ public class Amazing {
 									switch (menu[2]) { //Checks selection within Admin menu
 										case 0: //Admin Menu
 											//Print menu
-											System.out.println("\nAdmin menu:"); 	//Admin menu:
-											System.out.println("1. New Category."); //1. New Category.
-											System.out.println("2. New Product."); 	//2. New Product.
-											System.out.println("3. Exit."); 		//3. Exit.
+											System.out.println(Localization.get("main", "main_menu_adm_mn")); 		//Admin menu:
+											System.out.println("1. " + Localization.get("main", "main_menu_adm_ncat")); //1. New Category.
+											System.out.println("2. " + Localization.get("main", "main_menu_adm_npr")); 	//2. New Product.
+											System.out.println("3. " + Localization.get("main", "main_menu_ex")); 		//3. Exit.
 											
 											//Menu selection
-											menu[2] = Filter.filter_i("\nMenu select: ", 1, 3); //Request menu selection
+											menu[2] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 3); //Request menu selection
 											break;
 											
 											
@@ -375,8 +386,8 @@ public class Amazing {
 							}
 						}
 						else { //User not logged in
-							System.out.println("ERROR - You have to be logged in to see this."); //Report error, user should be logged in to see this.
-							Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+							System.out.println(Localization.get("main", "main_menu_acc_err")); //Report error, user should be logged in to see this.
+							Filter.filter_s(Localization.get("main", "main_menu_wait")); //Waits for the user input
 							
 							menu[0] = 0; //Resets Main menu
 						}
@@ -386,16 +397,16 @@ public class Amazing {
 					case 3: //Log in/out
 						//Checks if it should log in or out
 						if (active_user != null) { //Log out
-							Login_method.login_method_out(); 					//Logs out the user
-							System.out.println("Successfully logged out."); 	//Prints that the user logged out
-							Filter.filter_s("\n\nPress ENTER to continue: "); 	//Waits for the user input
+							Login_method.login_method_out(); 											//Logs out the user
+							System.out.println(Localization.get("main", "main_menu_acc_lgo_succ")); 	//Prints that the user logged out
+							Filter.filter_s(Localization.get("main", "main_menu_wait")); 				//Waits for the user input
 						}
 						else { //Log in
 							if (Login_method.login_method_in()) //Check if the method successfully creates the user
-								System.out.println("Successfully logged in."); 	//Prints that the user logged in
+								System.out.println(Localization.get("main", "main_menu_acc_lgi_succ")); 	//Prints that the user logged in
 							create_success_pu = c_product_user(); 
 							
-							Filter.filter_s("\n\nPress ENTER to continue: "); 	//Waits for the user input
+							Filter.filter_s(Localization.get("main", "main_menu_wait")); 	//Waits for the user input
 						}
 						
 						menu[0] = 0; //Resets Main menu
@@ -405,14 +416,14 @@ public class Amazing {
 					case 4: //Create account
 						//Check if the user is logged in
 						if (active_user != null)
-							System.out.println("ERROR - You are already logged in."); //Report error as the user is logged in
+							System.out.println(Localization.get("main", "main_menu_cracc_err")); //Report error as the user is logged in
 						else {
-							active_user = new User(); 								//Creates a new user
-							active_user.save();										//Save the data on the file
-							System.out.println("Successfully created an account."); //Print that the user was created successfully
+							active_user = new User(); 												//Creates a new user
+							active_user.save();														//Save the data on the file
+							System.out.println(Localization.get("main", "main_menu_cracc_succ")); 	//Print that the user was created successfully
 						}
 						
-						Filter.filter_s("\n\nPress ENTER to continue: "); //Waits for the user input
+						Filter.filter_s(Localization.get("main", "main_menu_wait")); //Waits for the user input
 						
 						menu[0] = 0; //Resets Main menu
 						break;
@@ -426,17 +437,17 @@ public class Amazing {
 						for (int i = 1; i <= aux_l.size(); i++) { //Print the list
 							System.out.println(i + ". " + aux_l.get(i - 1)[0] + "."); //Prints the numbered list item
 						}
-						System.out.println((aux_l.size() + 1) + ". Exit.");
+						System.out.println((aux_l.size() + 1) + ". " + Localization.get("main", "main_menu_ex"));
 						
 						//Menu selection
-						menu[1] = Filter.filter_i("\nMenu select: ", 1, (aux_l.size() + 1)); //Request selection
+						menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, (aux_l.size() + 1)); //Request selection
 						
 						//Selection
 						if (menu[1] != (aux_l.size() + 1)) { //Select the region
 							Region.set_ar(menu[1] - 1);										//Sets the new active region
-							System.out.println("Welcome to " + Region.get_region() + "."); 	//Welcomes the user to the new region
+							System.out.println(Localization.get("main", "main_menu_reg_wcm") + Region.get_region() + "."); 	//Welcomes the user to the new region
 						}
-						Filter.filter_s("\n\nPress ENTER to continue: "); 	//Waits for the user input
+						Filter.filter_s(Localization.get("main", "main_menu_wait")); 	//Waits for the user input
 						
 						//Menu resets
 						menu[0] = 0; //Resets Main menu
@@ -455,7 +466,7 @@ public class Amazing {
 					default: //Default case
 						for (int i = 0; i < menu.length; i++) //Resets every menu value to 0
 							menu[i] = 0; //Reset menu on the i array
-						System.out.println("ERROR - We had some trouble doing your request. Please, try again."); //Report outside of menu selection
+						System.out.println(Localization.get("main", "main_menu_err")); //Report outside of menu selection
 						break;
 				}
 			}
@@ -575,12 +586,12 @@ public class Amazing {
 		String[] prices_s = new String[] {prices[0] + comp_currency[2], prices[1] + comp_currency[5]};		//String with the prices and the symbol
 		
 		//Print comparison
-		System.out.println("Product Name:	" 	+ pr_data[0].r_name()		+ spacing + 	pr_data[1].r_name()); 		//Product Name 		(Pr1 name)		(Pr2 name)
-		System.out.println("Product ID:	" 		+ pr_data[0].r_id()			+ spacing + 	pr_data[1].r_id());			//Product Id 		(Pr1 id)		(Pr2 id)
-		System.out.println("Category:	" 		+ pr_data[0].r_category()	+ spacing + 	pr_data[1].r_category());	//Product Category 	(Pr1 category)	(Pr2 category)
-		System.out.println("Price:		" 		+ prices_s[0]				+ spacing + 	prices_s[1]);				//Product Price 	(Pr1 price)		(Pr2 price)
-		System.out.println("Stock:		" 		+ pr_data[0].r_stock() 		+ spacing + 	pr_data[1].r_stock());		//Product Stock 	(Pr1 stock)		(Pr2 stock)
-		System.out.println("Region: 	"		+ comp_currency[0] 			+ spacing +		comp_currency[3]);			//Product Region	(Region of Pr1)	(Region of Pr2)
+		System.out.println(Localization.get("main", "main_comp_pr_n")			+ pr_data[0].r_name()		+ spacing + 	pr_data[1].r_name()); 		//Product Name 		(Pr1 name)		(Pr2 name)
+		System.out.println(Localization.get("main", "main_comp_pr_id") 			+ pr_data[0].r_id()			+ spacing + 	pr_data[1].r_id());			//Product Id 		(Pr1 id)		(Pr2 id)
+		System.out.println(Localization.get("main", "main_comp_pr_cat") 		+ pr_data[0].r_category()	+ spacing + 	pr_data[1].r_category());	//Product Category 	(Pr1 category)	(Pr2 category)
+		System.out.println(Localization.get("main", "main_comp_pr_val") 		+ prices_s[0]				+ spacing + 	prices_s[1]);				//Product Price 	(Pr1 price)		(Pr2 price)
+		System.out.println(Localization.get("main", "main_comp_pr_stk") 		+ pr_data[0].r_stock() 		+ spacing + 	pr_data[1].r_stock());		//Product Stock 	(Pr1 stock)		(Pr2 stock)
+		System.out.println(Localization.get("main", "main_comp_pr_reg")			+ comp_currency[0] 			+ spacing +		comp_currency[3]);			//Product Region	(Region of Pr1)	(Region of Pr2)
 	}
 	
 	

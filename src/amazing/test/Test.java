@@ -5,12 +5,13 @@ import java.io.File;
 import amazing.inside.Custom_Exception;
 import amazing.inside.Filter;
 import amazing.inside.IO;
+import amazing.inside.Localization;
 
 public class Test { //Test class
 	private static int phase = 1; //Which phase is the test located in
 	
 	public void test() { //Method to override that, by default, calls all the childs
-		System.out.println("Test system started:"); //Prints that the Test system has started
+		System.out.println(Localization.get("test", "test_main_str")); //Prints that the Test system has started
 		
 		//Test calls
 		Test_IO t1 = new Test_IO(); 		//Creates the IO Test
@@ -24,7 +25,7 @@ public class Test { //Test class
 		Filter.scan.close();
 		
 		//Finished test
-		System.out.println("\n\nTest finished.\n"); //Prints that the test is finished
+		System.out.println(Localization.get("test", "test_main_fin")); //Prints that the test is finished
 		System.out.println( "	  ||\r\n" + 
 							"	  ||\r\n" + 
 							"	  ||\r\n" + 
@@ -61,11 +62,11 @@ public class Test { //Test class
 	
 	protected void print_data() { //Prints the data array from IO class
 		for(int i = 0; i < IO.data().size(); i++) //For to print data
-			System.out.println("Data number " + i + ": " + IO.data().get(i)); //Prints the data number and it's value
+			System.out.println(Localization.get("test", "test_main_prt") + i + ": " + IO.data().get(i)); //Prints the data number and it's value
 	}
 	
 	protected void throw_exc(String msg, Throwable cause) { //Method to create and throw a new exception based on the error
-		System.out.println("The error was located in phase: " + phase + "\nError: "); //Phase error location
+		System.out.println(Localization.get("test", "test_main_phs") + phase + Localization.get("test", "test_main_err")); //Phase error location
 		throw new Custom_Exception(msg, cause); //Throw exception
 	}
 }

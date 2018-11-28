@@ -3,6 +3,7 @@ package amazing.amazing;
 import amazing.inside.Converter;
 import amazing.inside.Filter;
 import amazing.inside.IO;
+import amazing.inside.Localization;
 
 public class Product { //Product class
 	
@@ -14,11 +15,11 @@ public class Product { //Product class
 	
 	public Product() { //Product basic Constructor 
 		//Request data
-		this.id = Filter.filter_i("Id of the product: ", 0, 0); 			//Request Product ID
-		this.name = Filter.filter_s("Name of the product: "); 				//Request Product Name
-		this.category_id = Filter.filter_s("Category of the product: "); 	//Request Product Category
-		this.price = Filter.filter_f("Value of the product (€): ", 0 , 0, 2); 	//Request Product Price
-		this.stock = Filter.filter_i("Stock of this product: ", 0 , 0); 	//Request Product Stock
+		this.id = Filter.filter_i(Localization.get("objects", "pr_crt_id"), 0, 0); 			//Request Product ID
+		this.name = Filter.filter_s(Localization.get("objects", "pr_crt_nm")); 				//Request Product Name
+		this.category_id = Filter.filter_s(Localization.get("objects", "pr_crt_cat")); 		//Request Product Category
+		this.price = Filter.filter_f(Localization.get("objects", "pr_crt_val"), 0 , 0, 2); 	//Request Product Price
+		this.stock = Filter.filter_i(Localization.get("objects", "pr_crt_stk"), 0 , 0); 	//Request Product Stock
 	}
 	
 	public Product(String[] data) { //Product data Consturctor
@@ -56,12 +57,12 @@ public class Product { //Product class
 	
 	public void print () { //Print Product
 		//Print
-		System.out.println("Product:\n\n"); 																							//Product
-		System.out.println("Name: " + this.name); 																							//Print Product name
-		System.out.println("ID: " + this.id); 																								//Print Product name
-		System.out.println("Category: " + this.category_id); 																				//Print Product name
-		System.out.println("Price: " + Converter.decimal_conv(this.price * Converter.get_factor(), 2) + Converter.get_a_currency_symbol()); 	//Print the Product Price
-		System.out.println("Stock: " + this.stock); 																						//Print the number of items available
+		System.out.println(Localization.get("objects", "pr_print_bs")); 																									//Product
+		System.out.println(Localization.get("objects", "pr_print_n") + this.name); 																								//Print Product name
+		System.out.println(Localization.get("objects", "pr_print_id") + this.id); 																								//Print Product name
+		System.out.println(Localization.get("objects", "pr_print_cat") + this.category_id); 																					//Print Product name
+		System.out.println(Localization.get("objects", "pr_print_val") + Converter.decimal_conv(this.price * Converter.get_factor(), 2) + Converter.get_a_currency_symbol()); 	//Print the Product Price
+		System.out.println(Localization.get("objects", "pr_print_stk") + this.stock); 																							//Print the number of items available
 	}
 
 	public void buy(int n_ordered) { //This method decreases the product stock by the amount entered

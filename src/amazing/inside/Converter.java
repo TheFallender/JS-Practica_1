@@ -17,7 +17,7 @@ public class Converter {
 		return active_currency;
 	}
 	
-	public static float get_currency(String from_to_c) {
+	public static float get_currency(String from_to_c) { //Gets the active currency string
 		for (int i = 0; i < conv_val.size(); i++) //Searches within the list
 			if(conv_val.get(i)[0].equals(from_to_c)) //If the preset equals the currency selected
 				return Float.parseFloat(conv_val.get(i)[2]); //Return the value
@@ -28,14 +28,14 @@ public class Converter {
 		return Float.parseFloat(conv_val.get(active_currency_pos)[2]); //Selects the data from the active currency and it parses it
 	}
 	
-	public static String get_currency_symbol(String from_to_c) {
+	public static String get_currency_symbol(String from_to_c) { //Gets the currency symbol of one Currency
 		for (int i = 0; i < conv_val.size(); i++) //Searches within the list
 			if(conv_val.get(i)[0].equals(from_to_c)) //If the preset equals the currency selected
 				return conv_val.get(i)[3]; //Return the value
 		return "";
 	}
 	
-	public static String get_a_currency_symbol() {
+	public static String get_a_currency_symbol() { //Gets the current currency symbol
 		return conv_val.get(active_currency_pos)[3];
 	}
 	
@@ -96,8 +96,8 @@ public class Converter {
 	                //Modify values
 	                IO.modify("d_converter_rate", conv_val.get(i), 0);
 	        	}
-	        	catch (Exception e){ //If there is any error, it checks for the stored value
-	        		System.out.println("ERROR - Couldn't get the data from the net."); //Reports that it couldn't get the value
+	        	catch (Exception e){ //Error, no internet
+	        		System.out.println(Localization.get("inside", "cnvrt_err_net")); //Reports that it couldn't get the value
 	        	}
 	        	
 			}
@@ -127,7 +127,7 @@ public class Converter {
     		IO.write("d_converter_rate", data_file, true); 	//Write the data on the file
     	}
     	catch (Exception e){ //Error, no internet
-    		System.out.println("ERROR - Couldn't get the data from the net."); //Reports that it couldn't set the value
+    		System.out.println(Localization.get("inside", "cnvrt_err_net")); //Reports that it couldn't get the value
     	}
     }
     
@@ -136,7 +136,7 @@ public class Converter {
     		return Float.parseFloat(r.readLine()); //Line that gets from the site
     	}
     	catch (IOException e) { //Unexpected error
-    		System.out.print("ERROR - Couldn't create the Reader"); //Reports that there was an error creating the reader
+    		System.out.print(Localization.get("inside", "io_err_rdr")); //Reports that there was an error creating the reader
     		return 0;
     	}
     }

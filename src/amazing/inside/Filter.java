@@ -33,11 +33,11 @@ public class Filter { //Filter class
 						return val;						//Return value
 					}
 					else //Error, out of limit
-						System.out.println("ERROR - The interger has to be between " + low + " and " + high + "."); //Reports that the integer isn't between the values
+						System.out.println(Localization.get("inside", "fltr_err_btw") + low + "-" + high + "."); //Reports that the integer isn't between the values
 				}
 			}  
 			catch(NumberFormatException e) { //Not a valid number
-				System.out.println("ERROR - You must enter an integer."); //Reports that the input is not an integer
+				System.out.println(Localization.get("inside", "fltr_err_inv")); //Reports that the input is not a valid value
 			}
 		}
 	}
@@ -68,16 +68,16 @@ public class Filter { //Filter class
 					return val;					//Return value
 				}
 				else { //There is a limit
-					if (val >= low && val <= high) { 	//Check if the integer is valid
+					if (val >= low && val <= high) { 	//Check if the float is valid
 						System.setIn(skipper); 				//Skip input
 						return val;							//Return value
 					}
 					else //Error, out of limit
-						System.out.println("ERROR - The value has to be between " + low + " and " + high + "."); //Reports that the integer isn't between the values
+						System.out.println(Localization.get("inside", "fltr_err_btw") + low + "-" + high + "."); //Reports that the float isn't between the values
 				}
 			}  
 			catch(NumberFormatException e)  { //Not a valid number
-				System.out.println("ERROR - You must enter valid value."); //Reports that the input is not an integer
+				System.out.println(Localization.get("inside", "fltr_err_inv")); //Reports that the input is not a valid value
 			}
 		}
 	}

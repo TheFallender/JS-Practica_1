@@ -2,13 +2,14 @@ package amazing.amazing;
 
 import amazing.inside.Filter;
 import amazing.inside.IO;
+import amazing.inside.Localization;
 
 public class Category { //Category class
 	
 	private String name; //Name of the Category
 
 	public Category() { //Category basic Constructor
-		this.name = Filter.filter_s("Name of the new category: "); //Gets the desired name
+		this.name = Filter.filter_s(Localization.get("objects", "cat_crt_name")); //Gets the desired name
 	}
 	
 	public Category(String input) { 	//Category data Consturctor

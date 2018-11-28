@@ -22,8 +22,8 @@ public class Region {
 	
 	public static void set_ar(int new_pos) { 	//Sets the new actual region
 		active_region = new_pos;
-		Converter.set_factor(Region.get_currency(), "");				//Sets the new factor
-		Locale.set_locale(Region.get_lang());
+		Converter.set_factor(get_currency(), "");				//Sets the new factor
+		Localization.set_locale(get_lang(), get_region());		//Sets the new locale
 	}
 	
 	
@@ -42,17 +42,16 @@ public class Region {
 	public static void region_add(String new_region, String currency, String lang, String symb) { //Add region based on the string
 		//Check if it exists
 		for (int i = 0; i < region_list.size(); i++)	//Search that there isn't any region already
-			if(region_list.get(i)[0].equals(new_region)) {	//If the preset equals the currency selected
-				active_region = i;
+			if(region_list.get(i)[0].equals(new_region))	//If the preset equals the currency selected
 				return;
-			}
 		
 		//Update Region list
 		String[] aux_s = new String[]{new_region, currency, lang};
 		region_list.add(aux_s);
 		
-		//Set the factor in case it doesn't exist
+		//Set the factor and locale in case it doesn't exist
 		Converter.set_factor(currency, symb);
+		Localization.set_locale(lang, new_region);
 		
 		//Data array
 		String[] string_data = new String[]{new_region, "r_currency=" + currency, "r_lang=" + lang};

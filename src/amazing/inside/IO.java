@@ -33,7 +33,7 @@ public class IO { //Input Output class
 				}
 		}
 		catch (Exception FileNotFoundException) { //Exception Catch
-			System.out.println("ERROR - File not found."); //Reports that there was no file found
+			System.out.println(Localization.get("inside", "io_err_fnf")); //Reports that there was no file found
 		}
 	}
 	
@@ -44,7 +44,7 @@ public class IO { //Input Output class
 				writer.write(input[i] + "\r\n");								//Writes the selected data from the array
 		}
 		catch (IOException e) { //Exception Catch
-			System.out.println("ERROR - File not found."); //Reports that there was no file found
+			System.out.println(Localization.get("inside", "io_err_fnf")); //Reports that there was no file found
 		}
 	}
 
@@ -63,7 +63,7 @@ public class IO { //Input Output class
 						data_path = "src/Data/"; 															//Sets default path
 					}
 					catch (Exception IOException) { 													//Couldn't read the file (file not found)
-						System.out.println("ERROR - File not found"); 										//Reports that there was no file found
+						System.out.println(Localization.get("inside", "io_err_fnf")); 						//Reports that there was no file found
 					}
 				}
 				else 																				//If there is content on the file, read it and set it
@@ -75,7 +75,7 @@ public class IO { //Input Output class
 					writer.write("DATA_PATH=src/Data/");												//Writes the default path
 				} 
 				catch (IOException e_2) { 															//Couldn't read the file (file not found)
-					System.out.println("ERROR - File not found"); 										//Reports that there was no file found
+					System.out.println(Localization.get("inside", "io_err_fnf")); 						//Reports that there was no file found
 				}
 				data_path = "src/Data/";															//In any case it sets the default path
 			}
@@ -88,6 +88,7 @@ public class IO { //Input Output class
 		files_check(data_path + "d_product_user", false); 		//Check Product User
 		files_check(data_path + "d_converter_rate", false); 	//Check Converter Rate
 		files_check(data_path + "d_region", false); 			//Check Region
+		files_check(data_path + "d_locale", false); 			//Check Locale
 		if (Amazing.get_test()) //Test is active
 			files_check(data_path + "d_test", false); 			//Check Test
 	}
@@ -102,11 +103,11 @@ public class IO { //Input Output class
 					file.mkdir();															//Creates the folder
 				else																	//It's a file
 					if (!file.createNewFile())												//Checks if the file couldn't be created
-						System.out.println("Error - Couldn't create file."); 					//Reports that it couldn't create the file
+						System.out.println(Localization.get("inside", "io_err_crf")); 					//Reports that it couldn't create the file
 			}
 		} 
 		catch (IOException e) { 												//Invalid path selected (admin access, other drive...)
-			System.out.println("Error - Invalid path."); 							//Reports that the selected path is invalid
+			System.out.println(Localization.get("inside", "io_err_path")); 							//Reports that the selected path is invalid
 		}
 	}
 	
@@ -146,11 +147,11 @@ public class IO { //Input Output class
 	            writer.write(text.toString()); 													//Write the text on the file
 			}
 			catch (IOException e) { 														//Couldn't create the writer
-				System.out.println("ERROR - File not found."); 									//Reports that there was no file found
+				System.out.println(Localization.get("inside", "io_err_fnf")); 					//Reports that there was no file found
 			}
 		}
 		catch (IOException e) { 														//Couldn't create the reader
-			System.out.println("ERROR - File not found."); 									//Reports that there was no file found
+			System.out.println(Localization.get("inside", "io_err_fnf")); 					//Reports that there was no file found
 		}
 	}
 }
