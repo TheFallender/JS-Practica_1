@@ -59,11 +59,15 @@ d_region //Region - Data for the region and it's currency
 r_currency=(String)
 ```
 
+d_locale //Locale - Data for the locale and it's language
+```
+(Country name)
+l_lang=(String)
+```
+
 ## To do list:
 ☒ Give admin to a user without the need to access the files (having a default admin).
 
 ☒ Allow to change the password.
 
 ☒ Delete categories and products (will have to update the product user to retain data).
-
-☒ Localize.
