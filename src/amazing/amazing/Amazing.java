@@ -30,18 +30,20 @@ public class Amazing {
 			//Starting functions
 				//Data
 				IO.data_check(); //Checks the data files are there, if not, it create them 
-				
-				//Converter
+						
+				//Region and Converter
+				Region.region_list();					//Sets the Region List
 				Converter.set_conv_list();				//Sets the Converter list
-				Converter.set_factor("eur/eur", "€"); 	//Sets the new factor rate
-				Converter.set_factor("eur/usd", "$"); 	//Sets the new factor rate
-				Converter.set_acr(0);					//Sets the active rate
 				
-				//Region
-				Region.region_list();
-				Region.region_add("ES", "eur/eur"); 	//Sets the new region
-				Region.region_add("US", "eur/usd"); 	//Sets the new region
-				Region.set_ar(0);						//Sets the active region
+				//Adds the default regions
+				Region.region_add("ES", "eur/eur", "es", "€"); 	//Sets the new region
+				Region.region_add("US", "eur/usd", "en", "$"); 	//Sets the new region
+				Region.region_add("UK", "eur/gbp", "en", "£"); 	//Sets the new region
+				
+				//Sets the default region
+				Region.set_ar(0);						//Sets the active region			
+				
+				
 			//Variables definitions
 				//Menu
 				int[] menu = new int[4]; //Menu int values
@@ -423,7 +425,6 @@ public class Amazing {
 						//Selection
 						if (menu[1] != (aux_l.size() + 1)) { //Select the region
 							Region.set_ar(menu[1] - 1);										//Sets the new active region
-							Converter.set_factor(Region.get_currency(), "");				//Sets the new factor
 							System.out.println("Welcome to " + Region.get_region() + "."); 	//Welcomes the user to the new region
 						}
 						Filter.filter_s("\n\nPress ENTER to continue: "); 	//Waits for the user input

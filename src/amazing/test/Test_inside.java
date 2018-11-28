@@ -65,7 +65,7 @@ public class Test_inside extends Test { //Inside Test class
 		System.out.println(Converter.decimal_conv(Filter.filter_f("Number to round to X decimal places:", 0, 0, 0), Filter.filter_i("Number of decimal places", 0, 0)));	//Prints the decimal out of the method
 		
 		//Region
-		Region.region_add(Filter.filter_s("New region name: "), Filter.filter_s("Region currency: "));
+		Region.region_add(Filter.filter_s("New region name: "), Filter.filter_s("Region currency: "), Filter.filter_s("Region Language: "), Filter.filter_s("Region currency symb: "));
 		System.out.println("Actual Region: " + Region.get_region());
 		
 		
