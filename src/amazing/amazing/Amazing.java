@@ -56,7 +56,8 @@ public class Amazing {
 				boolean create_success_pu = false; 			//Detects error in the creation process of product user
 				
 				//Product
-				String[] comp_pr = new String[]{null, ""}; //Compare product array
+				Product[] comp_pr = new Product[]{null, null}; 	//Compare product array
+				String[] comp_data = new String[6];				//String with the data of the region
 				
 				
 			//Menu
@@ -171,12 +172,13 @@ public class Amazing {
 												//Check if the stock is enough
 												if (pc.get(menu[2] - 1).r_stock() - amount >= 0) { //There is enough stock for the order
 													//Product user array
-													String[] pu_a = new String [5]; 	//Product user from this order
-													pu_a[0] = 		active_user.r_email(); 				//User that is going to buy the order
-													pu_a[1] = "" + 	pc.get(menu[2] - 1).r_id(); 		//Product ID of the ordered item
-													pu_a[2] = 		pc.get(menu[2] - 1).r_name();		//Product Name of the ordered item
-													pu_a[3] = "" + 	pc.get(menu[2] - 1).r_price(); 		//Price at the moment of the order
-													pu_a[4] = "" + 	amount; 							//Amount on the order
+													String[] pu_a = new String [6]; 	//Product user from this order
+													pu_a[0] = 		active_user.r_email(); 															//User that is going to buy the order
+													pu_a[1] = "" + 	pc.get(menu[2] - 1).r_id(); 													//Product ID of the ordered item
+													pu_a[2] = 		pc.get(menu[2] - 1).r_name();													//Product Name of the ordered item
+													pu_a[3] = "" + 	pc.get(menu[2] - 1).r_price() + Converter.get_a_currency_symbol(); 				//Price at the moment of the order
+													pu_a[4] = "" + 	amount; 																		//Amount on the order
+													pu_a[5] = "" + 	(pc.get(menu[2] - 1).r_price() * amount) + Converter.get_a_currency_symbol();	//Total price of the order
 													
 													//Product User
 													Product_user bought_product = new Product_user(pu_a); 	//New product user
@@ -218,14 +220,21 @@ public class Amazing {
 										
 									case 2: //Compare
 										//Check if there is a product selected
-										if (comp_pr[0] == null) //No product selected
-											comp_pr[0] = pc.get(menu[2] - 1).compare(); //First product to compare
+										if (comp_pr[0] == null) { //No product selected
+											comp_pr[0] = pc.get(menu[2] - 1); //First product to compare
+											comp_data[0] = Region.get_region();
+											comp_data[1] = "" + Converter.get_factor();
+											comp_data[2] = Converter.get_a_currency_symbol(); 
+										}
 										else { //One product selected, check the other one
 											//Set product
-											comp_pr[1] = pc.get(menu[2] - 1).compare(); //Second product to compare
+											comp_pr[1] = pc.get(menu[2] - 1); //Second product to compare
+											comp_data[3] = Region.get_region();
+											comp_data[4] = "" + Converter.get_factor();
+											comp_data[5] = Converter.get_a_currency_symbol(); 
 											
 											//Compare function
-											compare_pr(comp_pr); //Compare both products
+											compare_pr(comp_pr, comp_data); //Compare both products
 											
 											//Reset product
 											comp_pr[0] = null; //Reset to null the first product (second one won't matter)
@@ -521,26 +530,27 @@ public class Amazing {
 		pu = new ArrayList<>();
 		
 		//Get the data from the file
-		IO.read("d_product_user", "", 1200, false); //Get data
+		IO.read("d_product_user", "", 0, false); //Get data
 		if (IO.data().isEmpty()) //If there is no data return
 			return false;												//Couldn't get the data
 		
 		//Variables to use
-		String[] aux_i = new String[5]; //Auxiliar string to check
+		String[] aux_i = new String[6]; //Auxiliar string to check
 		
 		//Get Product User list
-		for(int i = 1; i <= IO.data().size()/5; i++) { //Search between the created list
+		for(int i = 1; i <= IO.data().size()/6; i++) { //Search between the created list
 			//Null prevent
-			if (IO.data().get((i*5) - 5) == null)
+			if (IO.data().get((i * 6) - 6) == null)
 				break;
 			
-			aux_i[0] = IO.data().get((i*5) - 5); 						//User Email
+			aux_i[0] = IO.data().get((i*6) - 6); 						//User Email
 			if(aux_i[0].equals(Amazing.active_user.r_email())) { //Checks if the product user equals the active user email
 				//Now checks for the rest of the data
-				aux_i[1] = IO.data().get((i*5) - 4); 					//Product ID
-				aux_i[2] = IO.data().get((i*5) - 3); 					//Product Name
-				aux_i[3] = IO.data().get((i*5) - 2); 					//Product Price
-				aux_i[4] = IO.data().get((i*5) - 1); 					//Number of items Ordered
+				aux_i[1] = IO.data().get((i * 6) - 5); 					//Product ID
+				aux_i[2] = IO.data().get((i * 6) - 4); 					//Product Name
+				aux_i[3] = IO.data().get((i * 6) - 3); 					//Product Price
+				aux_i[4] = IO.data().get((i * 6) - 2); 					//Number of items Ordered
+				aux_i[5] = IO.data().get((i * 6) - 1); 					//Price of the total order
 				
 				//Create a product user
 				Product_user pu_aux = new Product_user(aux_i); 	//Sets the new product user
@@ -555,17 +565,22 @@ public class Amazing {
 	
 	
 	//Compare
-	private static void compare_pr (String[] data) { //Compares two products
-		//Products to pass
-		String[] pr_1 = data[0].split("/"); //Splits the first data
-		String[] pr_2 = data[1].split("/"); //Splits the second data
-		String spacing = "	|	"; //Spacing
+	private static void compare_pr (Product[] pr_data, String[] comp_currency) { //Compares two products
+		//Formatting
+		String spacing = "			|		"; 	//Spacing
+		//Prices
+		Float[] prices = new Float[2];			//Float with the prices converted
+		prices[0] = Converter.decimal_conv((pr_data[0].r_raw_price() * Float.parseFloat(comp_currency[1])), 2); 	//Gets the price with the decimal places
+		prices[1] = Converter.decimal_conv((pr_data[1].r_raw_price() * Float.parseFloat(comp_currency[4])), 2); 	//Gets the price with the decimal places
+		String[] prices_s = new String[] {prices[0] + comp_currency[2], prices[1] + comp_currency[5]};		//String with the prices and the symbol
+		
 		//Print comparison
-		System.out.println("Product Name:	" 	+ pr_1[2] + spacing + pr_2[2]); 	//Product Name 		(Pr1 name)		(Pr2 name)
-		System.out.println("Product ID:	" 		+ pr_1[1] + spacing + pr_2[1]);		//Product Id 		(Pr1 id)		(Pr2 id)
-		System.out.println("Category:	" 		+ pr_1[0] + spacing + pr_2[0]);		//Product Category 	(Pr1 category)	(Pr2 category)
-		System.out.println("Price:		" 		+ pr_1[3] + spacing + pr_2[3]);		//Product Price 	(Pr1 price)		(Pr2 price)
-		System.out.println("Stock:		" 		+ pr_1[4] + spacing + pr_2[4]);		//Product Stock 	(Pr1 stock)		(Pr2 stock)
+		System.out.println("Product Name:	" 	+ pr_data[0].r_name()		+ spacing + 	pr_data[1].r_name()); 		//Product Name 		(Pr1 name)		(Pr2 name)
+		System.out.println("Product ID:	" 		+ pr_data[0].r_id()			+ spacing + 	pr_data[1].r_id());			//Product Id 		(Pr1 id)		(Pr2 id)
+		System.out.println("Category:	" 		+ pr_data[0].r_category()	+ spacing + 	pr_data[1].r_category());	//Product Category 	(Pr1 category)	(Pr2 category)
+		System.out.println("Price:		" 		+ prices_s[0]				+ spacing + 	prices_s[1]);				//Product Price 	(Pr1 price)		(Pr2 price)
+		System.out.println("Stock:		" 		+ pr_data[0].r_stock() 		+ spacing + 	pr_data[1].r_stock());		//Product Stock 	(Pr1 stock)		(Pr2 stock)
+		System.out.println("Region: 	"		+ comp_currency[0] 			+ spacing +		comp_currency[3]);			//Product Region	(Region of Pr1)	(Region of Pr2)
 	}
 	
 	

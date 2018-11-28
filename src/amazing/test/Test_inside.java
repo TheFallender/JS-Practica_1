@@ -58,7 +58,7 @@ public class Test_inside extends Test { //Inside Test class
 		
 		//Converter test
 		System.out.println("\n\n\nConverter:\n"); 																															//Prints that the converter is going to be tested
-		System.out.println("Active currency: " + Converter.get_currency());																									//Prints the current currency
+		System.out.println("Active currency: " + Converter.get_a_currency());																									//Prints the current currency
 		System.out.println("Converter value: " + Converter.get_factor()); 																									//Prints the converter value of the active currency
 		System.out.println("Date now: " + Converter.date()); 																												//Prints the date
 		System.out.print("Decimal price: ");																																//Prints that is going to test the decimal method

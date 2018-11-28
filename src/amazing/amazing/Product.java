@@ -42,7 +42,11 @@ public class Product { //Product class
 		return this.category_id;
 	}
 	
-	public float r_price () { //Return Product Price
+	public Float r_price () { //Return Product Price
+		return Converter.decimal_conv(this.price * Converter.get_factor(), 2);
+	}
+	
+	public Float r_raw_price () { //Return Product Price
 		return this.price;
 	}
 	
@@ -56,23 +60,8 @@ public class Product { //Product class
 		System.out.println("Name: " + this.name); 																							//Print Product name
 		System.out.println("ID: " + this.id); 																								//Print Product name
 		System.out.println("Category: " + this.category_id); 																				//Print Product name
-		System.out.println("Price: " + Converter.decimal_conv(this.price * Converter.get_factor(), 2) + Converter.get_currency_symbol()); 	//Print the Product Price
+		System.out.println("Price: " + Converter.decimal_conv(this.price * Converter.get_factor(), 2) + Converter.get_a_currency_symbol()); 	//Print the Product Price
 		System.out.println("Stock: " + this.stock); 																						//Print the number of items available
-	}
-	
-	public String compare() { //Compare Products
-		//Auxiliar String
-		String aux = ""; //Auxiliar String
-		
-		//Save String
-		aux += this.id + "/"; 																							//Save ID
-		aux += this.name + "/"; 																						//Save Name
-		aux += this.category_id + "/"; 																					//Save Category
-		aux += Converter.decimal_conv(this.price * Converter.get_factor(), 2) + Converter.get_currency_symbol() + "/"; 	//Set Price
-		aux += this.stock; 																								//Save Stock
-		
-		//Return the String
-		return aux;
 	}
 
 	public void buy(int n_ordered) { //This method decreases the product stock by the amount entered

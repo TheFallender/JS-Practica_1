@@ -13,15 +13,29 @@ public class Converter {
 	private static ArrayList <String[]> conv_val = new ArrayList<>(); //Converter Values list
 	
 	//Get set functions
-	public static String get_currency() { //Gets which is the active currency
+	public static String get_a_currency() { //Gets which is the active currency
 		return active_currency;
+	}
+	
+	public static float get_currency(String from_to_c) {
+		for (int i = 0; i < conv_val.size(); i++) //Searches within the list
+			if(conv_val.get(i)[0].equals(from_to_c)) //If the preset equals the currency selected
+				return Float.parseFloat(conv_val.get(i)[2]); //Return the value
+		return 0;
 	}
 	
 	public static float get_factor() { //Gets the factor value of the active currency
 		return Float.parseFloat(conv_val.get(active_currency_pos)[2]); //Selects the data from the active currency and it parses it
 	}
 	
-	public static String get_currency_symbol() {
+	public static String get_currency_symbol(String from_to_c) {
+		for (int i = 0; i < conv_val.size(); i++) //Searches within the list
+			if(conv_val.get(i)[0].equals(from_to_c)) //If the preset equals the currency selected
+				return conv_val.get(i)[3]; //Return the value
+		return "";
+	}
+	
+	public static String get_a_currency_symbol() {
 		return conv_val.get(active_currency_pos)[3];
 	}
 	
