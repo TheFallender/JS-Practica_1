@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import amazing.inside.Converter;
+import amazing.inside.Encrypter;
 import amazing.inside.Filter;
 import amazing.inside.IO;
 import amazing.inside.Localization;
@@ -64,6 +65,10 @@ public class Amazing {
 				Product[] comp_pr = new Product[]{null, null}; 	//Compare product array
 				String[] comp_data = new String[6];				//String with the data of the region
 				
+				//First user will be admin
+				boolean first_user = false;
+				if (c_user(true).isEmpty()) //No users on the database
+					first_user = true; //This is the first user
 				
 			//Menu
 			while(true) { //Loop of the menu
@@ -271,17 +276,18 @@ public class Amazing {
 									//Print menu
 									System.out.println(Localization.get("main", "main_menu_acc_mn"));				//Account Menu:
 									System.out.println("1. " + Localization.get("main", "main_menu_acc_inf"));				//1. Account Info.
-									System.out.println("2. " + Localization.get("main", "main_menu_acc_pru"));			//2. Ordered Products.
-									System.out.println("3. " + Localization.get("main", "main_menu_acc_lgo"));	//3. Log out.
-									System.out.println("4. " + Localization.get("main", "main_menu_acc_hm") );					//4. Homepage.
+									System.out.println("2. " + Localization.get("main", "main_menu_acc_cpw"));				//2. Change Password
+									System.out.println("3. " + Localization.get("main", "main_menu_acc_pru"));				//3. Ordered Products.
+									System.out.println("4. " + Localization.get("main", "main_menu_acc_lgo"));				//4. Log out.
+									System.out.println("5. " + Localization.get("main", "main_menu_acc_hm") );				//5. Homepage.
 									
 									//Menu selection
 									if (active_user.r_admin()) { //Checks if the user is admin
-										System.out.println("5. " + Localization.get("main", "main_menu_acc_adm"));		//5. Admin
-										menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 5); //Request menu selection
+										System.out.println("5. " + Localization.get("main", "main_menu_acc_adm"));		//6. Admin
+										menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 6); //Request menu selection
 									}
 									else
-										menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 4); //Request menu selection
+										menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 5); //Request menu selection
 									break;
 									
 									
@@ -294,7 +300,45 @@ public class Amazing {
 									break;
 									
 									
-								case 2: //Ordered products				
+								case 2: //Change password
+									String e_old_pw = ""; 				//Old password
+									String[] e_new_pw = new String[2];	//String for new password
+									boolean pass_changed = false;
+									try { //Try to change the password
+										while (true) { //Old password
+											e_old_pw = Encrypter.encrypt(Filter.filter_s(Localization.get("main", "main_menu_acc_cpw_old")));		//Request old password
+											if (e_old_pw.equals(active_user.r_pass())) { //Inserted password equals old password
+												while (true) { //New password match
+													e_new_pw[0] = Encrypter.encrypt(Filter.filter_s(Localization.get("main", "main_menu_acc_cpw_new")));		//Request new password
+													e_new_pw[1] = Encrypter.encrypt(Filter.filter_s(Localization.get("main", "main_menu_acc_cpw_new_r")));		//Request new password again
+													
+													//New passwords match
+													if (e_new_pw[0].equals(e_new_pw[1])) { //Update user
+														active_user.s_pass(e_new_pw[0]); 														//Update the old password
+														String[] data_mod = new String[] {active_user.r_email(), "u_password=" + e_new_pw[0]};	//Data for the modify
+														IO.modify("d_user", data_mod, 1);														//Modify user
+														System.out.println(Localization.get("main", "main_menu_acc_cpw_succ")); 				//Prints that the password was changed
+														break;
+													}
+													else //New passwords don't match
+														System.out.println(Localization.get("main", "main_menu_acc_cpw_new_err")); //Reports that the new passwords don't match
+												}
+												//Changed the pasword
+												break;
+											}
+											else //Actual password doesn't equal old password
+												System.out.println(Localization.get("main", "main_menu_acc_cpw_old_err"));
+										}
+									}
+									catch (Exception e) { //Illegal encryption
+										System.out.println(Localization.get("inside", "enc_err_illgl"));
+									}
+									
+									menu[1] = 0; //Back to basic account menu
+									break;
+									
+									
+								case 3: //Ordered products				
 									menu[1] = 0; //Back to Account basic menu
 									
 									if (create_success_pu) {//No error, proceed
@@ -310,7 +354,7 @@ public class Amazing {
 										}
 										else {
 											create_success_pu = c_product_user();	//Recreates the product user to check for new orders
-											changes_pu = false;
+											changes_pu = false; //Disable product user
 											menu[1] = 2; //Keep in this menu
 										}
 									}
@@ -319,33 +363,34 @@ public class Amazing {
 									break;
 									
 									
-								case 3: //Log out
-									Login_method.login_method_out(); 					//Log out method
+								case 4: //Log out
+									Login_method.login_method_out(); 											//Log out method
 									System.out.println(Localization.get("main", "main_menu_acc_lgo_succ")); 	//Prints that the user logged out
-									Filter.filter_s(Localization.get("main", "main_menu_wait")); 	//Waits for the user input
+									Filter.filter_s(Localization.get("main", "main_menu_wait")); 				//Waits for the user input
 									
 									menu[0] = 0; //Resets Main menu
 									menu[1] = 0; //Back to Account basic menu
 									break;
 									
 									
-								case 4: //Exit account menu
+								case 5: //Exit account menu
 									menu[0] = 0; //Resets Main menu
 									menu[1] = 0; //Back to Account basic menu
 									break;
 									
 									
-								case 5: //Admin
+								case 6: //Admin
 									switch (menu[2]) { //Checks selection within Admin menu
 										case 0: //Admin Menu
 											//Print menu
 											System.out.println(Localization.get("main", "main_menu_adm_mn")); 		//Admin menu:
 											System.out.println("1. " + Localization.get("main", "main_menu_adm_ncat")); //1. New Category.
 											System.out.println("2. " + Localization.get("main", "main_menu_adm_npr")); 	//2. New Product.
-											System.out.println("3. " + Localization.get("main", "main_menu_ex")); 		//3. Exit.
+											System.out.println("3. " + Localization.get("main", "main_menu_adm_uadm")); //3. Give admin access.
+											System.out.println("4. " + Localization.get("main", "main_menu_ex")); 		//4. Exit.
 											
 											//Menu selection
-											menu[2] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 3); //Request menu selection
+											menu[2] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 4); //Request menu selection
 											break;
 											
 											
@@ -367,7 +412,39 @@ public class Amazing {
 											break;
 											
 											
-										case 3: //Exit
+										case 3: //Give admin access to other users
+											List<String> temp_ul = c_user(false); //Temporary user list
+											
+											if (temp_ul.size() == 1) //The only user is the active user
+												System.out.println(Localization.get("main", "main_menu_adm_uadm_err_oys")); //Reports that there is only one user
+											else { //More than one user
+												//Print
+												//Menu
+												System.out.println(Localization.get("main", "main_menu_adm_uadm_ul")); //Prints that this is the user list
+												//Prints the user list
+												for (int i = 0; i < temp_ul.size(); i++) //Print list
+													System.out.println((i + 1) + ". " + temp_ul.get(i)); //Print user email with number
+												//Print the exit
+												System.out.println((temp_ul.size() + 1) + ". " + Localization.get("main", "main_menu_ex"));
+												
+												//Select
+												menu[3] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, (temp_ul.size() + 1)); //Request menu selection
+												
+												if (menu[3] != (temp_ul.size() + 1)) {//Give admin access
+													String[] modify_data = new String[] {"u_email=" + temp_ul.get(menu[3] - 1), "u_admin=1"}; 				//Set string to modify
+													IO.modify("d_user", modify_data, 4);																	//Modify the user
+													System.out.println(temp_ul.get(menu[3] - 1) + Localization.get("main", "main_menu_adm_uadm_succ") + "\n"); 	//Prints that the selected user now has admin access
+													Filter.filter_s(Localization.get("main", "main_menu_wait")); 											//Waits for the user input
+												}
+											}
+											
+											
+											
+											menu[2] = 0; 						//Back to Admin basic menu
+											break;
+											
+											
+										case 4: //Exit
 											menu[1] = 0; //Resets Account menu
 											menu[2] = 0; //Resets Admin menu
 											break;
@@ -399,15 +476,14 @@ public class Amazing {
 						if (active_user != null) { //Log out
 							Login_method.login_method_out(); 											//Logs out the user
 							System.out.println(Localization.get("main", "main_menu_acc_lgo_succ")); 	//Prints that the user logged out
-							Filter.filter_s(Localization.get("main", "main_menu_wait")); 				//Waits for the user input
 						}
 						else { //Log in
 							if (Login_method.login_method_in()) //Check if the method successfully creates the user
 								System.out.println(Localization.get("main", "main_menu_acc_lgi_succ")); 	//Prints that the user logged in
 							create_success_pu = c_product_user(); 
-							
-							Filter.filter_s(Localization.get("main", "main_menu_wait")); 	//Waits for the user input
 						}
+						
+						Filter.filter_s(Localization.get("main", "main_menu_wait")); 	//Waits for the user input
 						
 						menu[0] = 0; //Resets Main menu
 						break;
@@ -419,6 +495,10 @@ public class Amazing {
 							System.out.println(Localization.get("main", "main_menu_cracc_err")); //Report error as the user is logged in
 						else {
 							active_user = new User(); 												//Creates a new user
+							if (first_user) { 				//If this is the first user
+								active_user.s_admin("1"); 		//Set admin level to 1
+								first_user = false; 			//Disable first user
+							}
 							active_user.save();														//Save the data on the file
 							System.out.println(Localization.get("main", "main_menu_cracc_succ")); 	//Print that the user was created successfully
 						}
@@ -486,7 +566,7 @@ public class Amazing {
 		c = new ArrayList<>();
 		
 		//Get the data from the file
-		IO.read("d_category", "", 15, false); //Get data
+		IO.read("d_category", "", 0, false); //Get data
 		if (IO.data().isEmpty()) //If there is no data return
 			return false;												//Couldn't get the data		
 		
@@ -506,7 +586,7 @@ public class Amazing {
 		p = new ArrayList<>();
 		
 		//Get the data from the file
-		IO.read("d_product", "", 100, false); 	//Get data
+		IO.read("d_product", "", 0, false); 	//Get data
 		if (IO.data().isEmpty()) //If there is no data return
 			return false;												//Couldn't get the data
 		
@@ -573,7 +653,31 @@ public class Amazing {
 	}
 	
 	
-	
+	private static List<String> c_user(boolean complete) { //User list
+		//List to return
+		ArrayList<String> user_email = new ArrayList<>();
+		
+		//Get the data from the file
+		IO.read("d_user", "", 0, false); //Get data
+		
+		//Get User email list
+		for(int i = 1; i <= IO.data().size()/5; i++) { //Search between the created list
+			//Null prevent
+			if (IO.data().get((i * 5) - 5) == null)
+				break;
+			
+			//Add emails
+			user_email.add(IO.data().get((i * 5) - 5));	//Adds email of the user	
+		}
+		
+		//Not complete, remove active user
+		if (!complete)
+			for (int i = 0; i < user_email.size(); i++)
+				if (user_email.get(i).equals(active_user.r_email()))
+					user_email.remove(i);
+		//Return
+		return user_email;
+	}
 	
 	//Compare
 	private static void compare_pr (Product[] pr_data, String[] comp_currency) { //Compares two products

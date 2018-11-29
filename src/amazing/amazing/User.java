@@ -53,6 +53,10 @@ public class User { //User class
 		return this.email;
 	}
 	
+	public void s_pass (String new_pw) { //Set the Password (encrypted)
+		this.password = new_pw;
+	}
+	
 	public String r_pass () { //Returns the Password (encrypted)
 		return this.password;
 	}
@@ -86,5 +90,9 @@ public class User { //User class
 		
 		//Write data
 		IO.write("d_user", aux, true);
+	}
+
+	public void s_admin(String level) { //Sets the admin level
+		this.admin = "1";
 	}
 }
