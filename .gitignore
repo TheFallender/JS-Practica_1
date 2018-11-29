@@ -1,23 +1,25 @@
-# Compiled class file
+# /////////////////////////
+# /////////Exclude/////////
+# Data Folders
+/src/Data/
+/src/Test/
+data_path
+
+#Compiled folder
+/bin
+
+
+# Eclipse Files
+/.settings/
 *.class
 
-# Log file
+# Log Files
 *.log
 
-# BlueJ files
+# Extra Files
 *.ctxt
-
-# Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
-# ignore an entire directory
-# Data folders
-/src/Data/
-/bin/Data/
-/src/Test/
-/bin/Test/
-
-# Package Files #
+hs_err_pid*
 *.jar
 *.war
 *.nar
@@ -26,8 +28,7 @@
 *.tar.gz
 *.rar
 
-# you can skip this first one if it is not already excluded by prior patterns
+# /////////////////////////
+# /////////Include/////////
+# Libraries
 !libraries/bouncycastle.jar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
