@@ -3,7 +3,7 @@
 # Data Folders
 /src/Data/
 /src/Test/
-data_path
+/data_path
 
 #Compiled folder
 /bin
@@ -11,7 +11,10 @@ data_path
 
 # Eclipse Files
 /.settings/
+/.classpath
+/.project
 *.class
+*.project
 
 # Log Files
 *.log
@@ -20,15 +23,8 @@ data_path
 *.ctxt
 .mtj.tmp/
 hs_err_pid*
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
 
 # /////////////////////////
 # /////////Include/////////
 # Libraries
-!libraries/bouncycastle.jar
+!libraries/
