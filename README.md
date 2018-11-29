@@ -66,8 +66,7 @@ l_lang=(String)
 ```
 
 ## To do list:
-☒ Give admin to a user without the need to access the files (having a default admin).
 
-☒ Allow to change the password.
+☒ Delete categories and products.
 
-☒ Delete categories and products (will have to update the product user to retain data).
+☒ UI.
