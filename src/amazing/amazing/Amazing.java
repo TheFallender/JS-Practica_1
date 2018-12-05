@@ -2,7 +2,7 @@ package amazing.amazing;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import amazing.gui.FX_Menu;
 import amazing.inside.Converter;
 import amazing.inside.Encrypter;
 import amazing.inside.Filter;
@@ -28,6 +28,7 @@ public class Amazing {
 	
 	//Main
 	public static void main(String[] args){ //Main code
+		FX_Menu.launch(args);
 		if (!test) { //Default enviroment
 			//Starting functions
 				//Data
@@ -41,9 +42,9 @@ public class Amazing {
 				//Adds the default regions and locales
 				Localization.set_locale("en", "EN");
 				Region.region_add("Default", "eur/eur", "en", "€"); 	//Sets the new region
-				Region.region_add("ES", "eur/eur", "es", "€"); 	//Sets the new region
-				Region.region_add("US", "eur/usd", "en", "$"); 	//Sets the new region
-				Region.region_add("GB", "eur/gbp", "en", "£"); 	//Sets the new region
+				Region.region_add("ES", "eur/eur", "es", "€"); 			//Sets the new region
+				Region.region_add("US", "eur/usd", "en", "$"); 			//Sets the new region
+				Region.region_add("GB", "eur/gbp", "en", "£"); 			//Sets the new region
 				
 				//Sets the default region
 				Region.set_ar(0);						//Sets the active region			
