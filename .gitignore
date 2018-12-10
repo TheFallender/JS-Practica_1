@@ -11,10 +11,7 @@
 
 # Eclipse Files
 /.settings/
-/.classpath
-/.project
 *.class
-*.project
 
 # Log Files
 *.log
