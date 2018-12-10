@@ -1,7 +1,10 @@
 package amazing.amazing;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import amazing.gui.FX_Menu;
 import amazing.inside.Converter;
 import amazing.inside.Encrypter;
@@ -11,9 +14,18 @@ import amazing.inside.Localization;
 import amazing.inside.Login_method;
 import amazing.inside.Region;
 import amazing.test.Test;
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 //Menu, marketplace class
-public class Amazing {
+public class Amazing extends Application{
 	//Test variable
 	private static boolean test = false; 		//Change this to start the test system
 	
@@ -26,10 +38,14 @@ public class Amazing {
 	private static ArrayList<Product> pc = new ArrayList<>(); 		//Product category list array (list of the actual category)
 	private static ArrayList<Product_user> pu = new ArrayList<>();	//Product user list
 	
+	//Menu
+	private static int[] menu = new int[4]; //Menu int values
+	
 	//Main
 	public static void main(String[] args){ //Main code
-		FX_Menu.launch(args);
 		if (!test) { //Default enviroment
+			//Launch GUI
+			Amazing.launch(args);					//Launches the basic menu GUI
 			//Starting functions
 				//Data
 				IO.data_check(); //Checks the data files are there, if not, it create them 
@@ -49,11 +65,7 @@ public class Amazing {
 				//Sets the default region
 				Region.set_ar(0);						//Sets the active region			
 				
-				
-			//Variables definitions
-				//Menu
-				int[] menu = new int[4]; //Menu int values
-				
+			//Variables definitions			
 				//Boolean changes
 				boolean create_success_c = c_category();	//Detects error in the creation process of category
 				boolean changes_c = false;					//Detects changes in the category list
@@ -720,5 +732,27 @@ public class Amazing {
 	//Test
 	public static boolean get_test() {
 		return test;
+	}
+
+	//FX
+	@Override
+	public void start(Stage stage) throws Exception { //Method to start the menu
+		File location_fx = new File("src/amazing/gui/menu.fxml");
+		URL fx_file = (location_fx.toURI().toURL());
+		Parent root = FXMLLoader.load(fx_file);
+		Scene menu_s = new Scene(root);
+		
+		stage.initStyle(StageStyle.DECORATED);
+        stage.getIcons().add(new Image("file:src/amazing/gui/menu_items/logo_app.png"));
+        
+        stage.setTitle("Amazing");
+		stage.setScene(menu_s);
+		stage.show();
+		
+        FX_Menu.close_call(stage);
+	}
+	
+	public static void set_menu (int menu_a_pos, int val) {
+		menu[menu_a_pos] = val;
 	}
 }
