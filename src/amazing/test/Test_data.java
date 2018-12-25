@@ -37,15 +37,16 @@ public class Test_data extends Test { //Data Test class
 		
 		//Product User
 		System.out.println(Localization.get("test", "test_data_pu")); 	//Prints that the Product User is going to be tested
-		String[] aux = new String[5]; 															//Auxiliar string
+		String[] aux = new String[6]; 															//Auxiliar string
 		aux[0] = testUser.r_email(); 															//Set the Email
 		aux[1] = "" + testProduct.r_id(); 														//Set the ID
 		aux[2] = testProduct.r_name(); 															//Set the Name
 		aux[3] = "" + testProduct.r_price(); 													//Set the Price
 		aux[4] = "" + Filter.filter_i(Localization.get("main", "main_menu_pr_buy_amt"), 0, 0); 	//Set the number of items to order
+		aux[5] = "" + (testProduct.r_price() * Integer.parseInt(aux[4]));						//Set the total price of the order
 		Product_user testProduct_User = new Product_user(aux); 					//Test Product User
 		testProduct_User.save(); 												//Save the data on the file
-		IO.read("d_product_user", testUser.r_email(), 5, false); 				//Read Product User
+		IO.read("d_product_user", testUser.r_email(), 6, false); 				//Read Product User
 		super.print_data(); 													//Print the data from the data array
 		
 		

@@ -1,11 +1,7 @@
 package amazing.amazing;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import amazing.gui.FX_Menu;
 import amazing.inside.Converter;
 import amazing.inside.Encrypter;
 import amazing.inside.Filter;
@@ -14,20 +10,11 @@ import amazing.inside.Localization;
 import amazing.inside.Login_method;
 import amazing.inside.Region;
 import amazing.test.Test;
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
 //Menu, marketplace class
-public class Amazing extends Application{
+public class Amazing {
 	//Test variable
-	private static boolean test = false; 		//Change this to start the test system
+	private static boolean test = true; 		//Change this to start the test system
 	
 	//User data
 	private static User active_user = null; 	//The active user at the moment
@@ -43,28 +30,26 @@ public class Amazing extends Application{
 	
 	//Main
 	public static void main(String[] args){ //Main code
+		//Starting functions
+			//Data
+			IO.data_check(); //Checks the data files are there, if not, it create them 
+					
+			//Region and Converter
+			Region.region_list();					//Sets the Region list
+			Converter.set_conv_list();				//Sets the Converter list
+			Localization.set_locale_list();			//Sets the Locale list
+			
+			//Adds the default regions and locales
+			Localization.set_locale("en", "EN");
+			Region.region_add("Default", "eur/eur", "en", "€"); 	//Sets the new region
+			Region.region_add("ES", "eur/eur", "es", "€"); 			//Sets the new region
+			Region.region_add("US", "eur/usd", "en", "$"); 			//Sets the new region
+			Region.region_add("GB", "eur/gbp", "en", "£"); 			//Sets the new region
+			
+			//Sets the default region
+			Region.set_ar(0);						//Sets the active region			
+		
 		if (!test) { //Default enviroment
-			//Launch GUI
-			Amazing.launch(args);					//Launches the basic menu GUI
-			//Starting functions
-				//Data
-				IO.data_check(); //Checks the data files are there, if not, it create them 
-						
-				//Region and Converter
-				Region.region_list();					//Sets the Region list
-				Converter.set_conv_list();				//Sets the Converter list
-				Localization.set_locale_list();			//Sets the Locale list
-				
-				//Adds the default regions and locales
-				Localization.set_locale("en", "EN");
-				Region.region_add("Default", "eur/eur", "en", "€"); 	//Sets the new region
-				Region.region_add("ES", "eur/eur", "es", "€"); 			//Sets the new region
-				Region.region_add("US", "eur/usd", "en", "$"); 			//Sets the new region
-				Region.region_add("GB", "eur/gbp", "en", "£"); 			//Sets the new region
-				
-				//Sets the default region
-				Region.set_ar(0);						//Sets the active region			
-				
 			//Variables definitions			
 				//Boolean changes
 				boolean create_success_c = c_category();	//Detects error in the creation process of category
@@ -296,7 +281,7 @@ public class Amazing extends Application{
 									
 									//Menu selection
 									if (active_user.r_admin()) { //Checks if the user is admin
-										System.out.println("5. " + Localization.get("main", "main_menu_acc_adm"));		//6. Admin
+										System.out.println("6. " + Localization.get("main", "main_menu_acc_adm"));		//6. Admin
 										menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 6); //Request menu selection
 									}
 									else
@@ -354,23 +339,20 @@ public class Amazing extends Application{
 								case 3: //Ordered products				
 									menu[1] = 0; //Back to Account basic menu
 									
-									if (create_success_pu) {//No error, proceed
+									if (create_success_pu) //No error, proceed
 										if (!(pu.isEmpty())) //Check if it's empty
 											for (int i = 0; i < pu.size(); i++) //Print all the orders
 												pu.get(i).print(); 						//Prints the product user
 										else
 											System.out.println(Localization.get("main", "main_menu_acc_pru_err")); 	//Reports that the user hasn't made any orders
-									}
-									else {
-										if (!changes_pu) { //There were no changes
+									else
+										if (!changes_pu) //There were no changes
 											System.out.println(Localization.get("main", "main_menu_acc_pru_err")); 	//Reports that the user hasn't made any orders
-										}
 										else {
 											create_success_pu = c_product_user();	//Recreates the product user to check for new orders
 											changes_pu = false; //Disable product user
 											menu[1] = 2; //Keep in this menu
 										}
-									}
 
 									Filter.filter_s(Localization.get("main", "main_menu_wait")); //Waits for the user input
 									break;
@@ -732,27 +714,5 @@ public class Amazing extends Application{
 	//Test
 	public static boolean get_test() {
 		return test;
-	}
-
-	//FX
-	@Override
-	public void start(Stage stage) throws Exception { //Method to start the menu
-		File location_fx = new File("src/amazing/gui/menu.fxml");
-		URL fx_file = (location_fx.toURI().toURL());
-		Parent root = FXMLLoader.load(fx_file);
-		Scene menu_s = new Scene(root);
-		
-		stage.initStyle(StageStyle.DECORATED);
-        stage.getIcons().add(new Image("file:src/amazing/gui/menu_items/logo_app.png"));
-        
-        stage.setTitle("Amazing");
-		stage.setScene(menu_s);
-		stage.show();
-		
-        FX_Menu.close_call(stage);
-	}
-	
-	public static void set_menu (int menu_a_pos, int val) {
-		menu[menu_a_pos] = val;
 	}
 }

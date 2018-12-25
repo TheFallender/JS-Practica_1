@@ -12,7 +12,7 @@ public class Test_IO extends Test { //IO Test class
 		
 		
 		//Filter test
-		System.out.println(Localization.get("test", "test_io_fltr")); 								//Prints that the Filter is going to be tested
+		System.out.print(Localization.get("test", "test_io_fltr")); 								//Prints that the Filter is going to be tested
 		//Int
 		System.out.println(Localization.get("test", "test_io_fltr_int")); 							//Prints that this is the Filter of the int
 		int[] i_lh = new int[2]; 																	//Int low high values

@@ -62,14 +62,10 @@ public class Test_inside extends Test { //Inside Test class
 		System.out.println(Localization.get("test", "test_ins_conv_acu") + Converter.get_a_currency());							//Prints the current currency
 		System.out.println(Localization.get("test", "test_ins_conv_val") + Converter.get_factor()); 							//Prints the converter value of the active currency
 		System.out.println(Localization.get("test", "test_ins_conv_dt") + Converter.date()); 									//Prints the date
-		System.out.print(Localization.get("test", "test_ins_conv_dec"));														//Prints that is going to test the decimal method
-		System.out.println(Converter.decimal_conv(Filter.filter_f(Localization.get("test", "test_ins_conv_dec_nmb"), 0, 0, 0),
-				Filter.filter_i(Localization.get("test", "test_ins_conv_dec_dp"), 0, 0)));										//Prints the decimal out of the method
 		
-		//Region
-		Region.region_add(Filter.filter_s(Localization.get("test", "reg_n_nm")), Filter.filter_s(Localization.get("test", "reg_n_cu")),
-				Filter.filter_s(Localization.get("test", "reg_n_lng")), Filter.filter_s(Localization.get("test", "reg_n_sym")));			//Add region
-		System.out.println(Localization.get("test", "test_ins_reg_ar") + Region.get_region());												//Set region
+		System.out.println("\n" + Localization.get("test", "test_ins_conv_dec"));												//Prints that is going to test the decimal method
+		System.out.println(Converter.decimal_conv(Filter.filter_f(Localization.get("test", "test_ins_conv_dec_nmb"), 0, 0, 0),
+		Filter.filter_i(Localization.get("test", "test_ins_conv_dec_dp"), 0, 0)));										//Prints the decimal out of the method
 		
 		
 		//Phase completed, 

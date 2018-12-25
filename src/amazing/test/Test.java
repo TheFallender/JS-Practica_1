@@ -43,7 +43,7 @@ public class Test { //Test class
 		
 		
 		//Delete folder
-		File folder = new File ("src/Test/"); 			//Folder to delete
+		File folder = new File ("src/data/test/"); 	//Folder to delete
 		if (folder.exists()) { 							//Checks the folder exists, just for precaution
 	        File files[] = folder.listFiles(); 				//Makes a list of the files inside the folder
 	        for (int i = 0; i < files.length; i++) 			//For to delete the files
