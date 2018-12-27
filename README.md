@@ -9,6 +9,7 @@ This project tries to immitate how a marketstore like Amazon would work. You can
 -Create locales with a predefined template.
 -As an admin you can add products, categories and promote other users to admin.
 -All the values are saved inside files (passwords are encrypted).
+-It includes a thread that can perform any method in parallel by using reflection.
 
 The project is covered with EclEmma and optimized with SonarLint, if you find anything that could be optimized, please create a pull request and we'll merge it as soon as we verify it.
 
@@ -77,5 +78,3 @@ l_lang=(String)
 ```
 
 ## To do list:
-
-☒ Threads
