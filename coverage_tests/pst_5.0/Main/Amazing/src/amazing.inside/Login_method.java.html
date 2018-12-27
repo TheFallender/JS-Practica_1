@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Login_method.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Main (27-Dec-2018 19:20:05)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.inside</a> &gt; <span class="el_source">Login_method.java</span></div><h1>Login_method.java</h1><pre class="source lang-java linenums">package amazing.inside;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import amazing.amazing.Amazing;
+
+<span class="nc" id="L8">public class Login_method { //Login class</span>
+	public static boolean login_method_in() { //Log in method
+		//Variables
+		String email; //Email
+		String e_password; //Encrypted password
+		
+		//Loop for the login
+<span class="nc" id="L15">		while(true) { //User check</span>
+<span class="fc" id="L16">			email = Filter.filter_s(Localization.get(&quot;objects&quot;, &quot;user_crt_em&quot;)); //Filters the email</span>
+			
+			//Exit check
+<span class="fc bfc" id="L19" title="All 2 branches covered.">			if (email.equals(&quot;exit&quot;)) 	//Email is exit</span>
+<span class="fc" id="L20">				return false; 				//Get out of the log in</span>
+			
+			//Password encryption
+			try {
+<span class="fc" id="L24">				e_password = Encrypter.encrypt(Filter.filter_s(Localization.get(&quot;objects&quot;, &quot;user_crt_pw&quot;))); //Get the encrypted password</span>
+<span class="fc" id="L25">			}</span>
+<span class="nc" id="L26">			catch (Exception e) { //Illegal operation</span>
+<span class="nc" id="L27">				throw new IllegalArgumentException(Localization.get(&quot;inside&quot;, &quot;enc_err_illgl&quot;)); //Report that there was an illegal operation</span>
+			}
+			
+			//Read the data from the User file
+<span class="fc" id="L31">			IO.read(&quot;d_user&quot;, &quot;u_email=&quot; + email, 5, false);</span>
+			
+			//Check if User exists
+<span class="fc bfc" id="L34" title="All 2 branches covered.">			if (IO.data().isEmpty()) 													//User not found</span>
+<span class="fc" id="L35">				System.out.println(Localization.get(&quot;objects&quot;, &quot;user_crt_err_match&quot;)); 		//For security reasons, it doesn't report that there isn't a user with that email</span>
+			else { //User exists
+				//Checks if password matches
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">				if (e_password.equals(IO.data().get(1))) { //Password match login in</span>
+					//User create
+<span class="fc" id="L40">					Amazing.set_a_user(true); //Set the new user based on the array</span>
+					
+					//Data array
+<span class="fc" id="L43">					String[] data = new String[2]; //String to pass through modify</span>
+<span class="fc" id="L44">					data[0] = email; //Set Email</span>
+<span class="fc" id="L45">					data[1] = &quot;u_login=&quot; + date(); //Login to modify</span>
+					
+					//Modify
+<span class="fc" id="L48">					IO.modify(&quot;d_user&quot;, data, 2); //Modify the login info</span>
+					
+					//Return value
+<span class="fc" id="L51">					return true;</span>
+				}
+				else //Password doesn't match
+<span class="nc" id="L54">					System.out.println(Localization.get(&quot;objects&quot;, &quot;user_crt_err_match&quot;)); //Report that the passwords don't match</span>
+			}
+		}
+	}
+	
+	public static void login_method_out() { //Log out method
+		//Data array
+<span class="fc" id="L61">		String[] data = new String[3]; 							//String to pass through modify</span>
+<span class="fc" id="L62">		data[0] = &quot;u_email=&quot; + Amazing.get_a_user().r_email(); 	//Set the email</span>
+<span class="fc" id="L63">		data[1] = &quot;u_login=0&quot;; 								//Set the login</span>
+<span class="fc" id="L64">		data[2] = &quot;u_last_login=&quot; + date(); 			//Set the last login</span>
+		
+		//Modify
+<span class="fc" id="L67">		IO.modify(&quot;d_user&quot;, data, 2); //Modify the login info</span>
+		
+		//Reset the user
+<span class="fc" id="L70">		Amazing.set_a_user(false);</span>
+<span class="fc" id="L71">	}</span>
+	
+	public static String date() { //Get the actual date
+<span class="fc" id="L74">    	DateTimeFormatter date_format = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy - HH:mm&quot;); 	//Date format of the Date</span>
+<span class="fc" id="L75">    	LocalDateTime date = LocalDateTime.now(); 											//Set the Date now</span>
+    	
+    	//Return value
+<span class="fc" id="L78">    	return date_format.format(date); //Date with the defined format</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Main (27-Dec-2018 19:20:05)</div></body></html>

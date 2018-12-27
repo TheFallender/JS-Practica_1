@@ -2,8 +2,8 @@ package amazing.amazing;
 
 import amazing.inside.Converter;
 import amazing.inside.Filter;
-import amazing.inside.IO;
 import amazing.inside.Localization;
+import amazing.inside.Task_ex;
 
 public class Product { //Product class
 	
@@ -79,6 +79,6 @@ public class Product { //Product class
 		aux[4] = "p_stock=" + this.stock; 					//Set Stock
 		
 		//Write data
-		IO.write("d_product", aux, true); //Writes the data on the file
+		Task_ex.task_add("amazing.inside.IO", "write", new Object[]{"d_product", aux, true}); //Write request
 	}
 }

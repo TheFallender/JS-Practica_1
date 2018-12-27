@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Product.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Main (27-Dec-2018 19:20:05)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.amazing</a> &gt; <span class="el_source">Product.java</span></div><h1>Product.java</h1><pre class="source lang-java linenums">package amazing.amazing;
+
+import amazing.inside.Converter;
+import amazing.inside.Filter;
+import amazing.inside.Localization;
+import amazing.inside.Task_ex;
+
+public class Product { //Product class
+	
+	private int id; 				//ID of the Product
+	private String name; 			//Name of the Product
+	private String category_id; 	//Category ID of the Product
+	private float price; 			//Price of the Product
+	private int stock; 				//Stock of the Product
+	
+<span class="fc" id="L16">	public Product() { //Product basic Constructor </span>
+		//Request data
+<span class="fc" id="L18">		this.id = Filter.filter_i(Localization.get(&quot;objects&quot;, &quot;pr_crt_id&quot;), 0, 0); 			//Request Product ID</span>
+<span class="fc" id="L19">		this.name = Filter.filter_s(Localization.get(&quot;objects&quot;, &quot;pr_crt_nm&quot;)); 				//Request Product Name</span>
+<span class="fc" id="L20">		this.category_id = Filter.filter_s(Localization.get(&quot;objects&quot;, &quot;pr_crt_cat&quot;)); 		//Request Product Category</span>
+<span class="fc" id="L21">		this.price = Filter.filter_f(Localization.get(&quot;objects&quot;, &quot;pr_crt_val&quot;), 0 , 0, 2); 	//Request Product Price</span>
+<span class="fc" id="L22">		this.stock = Filter.filter_i(Localization.get(&quot;objects&quot;, &quot;pr_crt_stk&quot;), 0 , 0); 	//Request Product Stock</span>
+<span class="fc" id="L23">	}</span>
+	
+<span class="fc" id="L25">	public Product(String[] data) { //Product data Consturctor</span>
+		//Set the data
+<span class="fc" id="L27">		this.id = Integer.parseInt(data[0]); 		//Set Product ID</span>
+<span class="fc" id="L28">		this.name = data[1]; 						//Set Name Id</span>
+<span class="fc" id="L29">		this.category_id = data[2]; 				//Set Product Category</span>
+<span class="fc" id="L30">		this.price = Float.parseFloat(data[3]); 	//Set Product Price</span>
+<span class="fc" id="L31">		this.stock = Integer.parseInt(data[4]); 	//Set Product Stock</span>
+<span class="fc" id="L32">	}</span>
+
+	public int r_id () { //Return Product ID
+<span class="fc" id="L35">		return this.id;</span>
+	}
+	
+	public String r_name () { //Return Product Name
+<span class="fc" id="L39">		return this.name;</span>
+	}
+	
+	public String r_category () { //Return Product Category
+<span class="fc" id="L43">		return this.category_id;</span>
+	}
+	
+	public Float r_price () { //Return Product Price
+<span class="fc" id="L47">		return Converter.decimal_conv(this.price * Converter.get_factor(), 2);</span>
+	}
+	
+	public Float r_raw_price () { //Return Product Price
+<span class="fc" id="L51">		return this.price;</span>
+	}
+	
+	public int r_stock () { //Return Product Stock
+<span class="fc" id="L55">		return this.stock;</span>
+	}
+	
+	public void print () { //Print Product
+		//Print
+<span class="fc" id="L60">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pr_print_bs&quot;)); 																									//Product</span>
+<span class="fc" id="L61">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pr_print_n&quot;) + this.name); 																								//Print Product name</span>
+<span class="fc" id="L62">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pr_print_id&quot;) + this.id); 																								//Print Product name</span>
+<span class="fc" id="L63">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pr_print_cat&quot;) + this.category_id); 																					//Print Product name</span>
+<span class="fc" id="L64">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pr_print_val&quot;) + Converter.decimal_conv(this.price * Converter.get_factor(), 2) + Converter.get_a_currency_symbol()); 	//Print the Product Price</span>
+<span class="fc" id="L65">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pr_print_stk&quot;) + this.stock); 																							//Print the number of items available</span>
+<span class="fc" id="L66">	}</span>
+
+	public void buy(int n_ordered) { //This method decreases the product stock by the amount entered
+<span class="fc" id="L69">		this.stock -= n_ordered;</span>
+<span class="fc" id="L70">	}</span>
+	
+	public void save() { //Saves the data on the file
+		//String
+<span class="fc" id="L74">		String[] aux = new String[5]; 					//Auxiliar string to save</span>
+<span class="fc" id="L75">		aux[0] = &quot;p_id=&quot; + this.id; 						//Set ID</span>
+<span class="fc" id="L76">		aux[1] = &quot;p_name=&quot; + this.name; 					//Set Name</span>
+<span class="fc" id="L77">		aux[2] = &quot;p_category=&quot; + this.category_id; 			//Set Category</span>
+<span class="fc" id="L78">		aux[3] = &quot;p_price=&quot; + this.price; 					//Set Price</span>
+<span class="fc" id="L79">		aux[4] = &quot;p_stock=&quot; + this.stock; 					//Set Stock</span>
+		
+		//Write data
+<span class="fc" id="L82">		Task_ex.task_add(&quot;amazing.inside.IO&quot;, &quot;write&quot;, new Object[]{&quot;d_product&quot;, aux, true}); //Write request</span>
+<span class="fc" id="L83">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Main (27-Dec-2018 19:20:05)</div></body></html>

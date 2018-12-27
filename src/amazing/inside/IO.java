@@ -89,8 +89,10 @@ public class IO { //Input Output class
 		files_check(data_path + "d_converter_rate", false); 	//Check Converter Rate
 		files_check(data_path + "d_region", false); 			//Check Region
 		files_check(data_path + "d_locale", false); 			//Check Locale
-		if (Amazing.get_test()) //Test is active
+		if (Amazing.get_test()) { //Test is active
 			files_check(data_path + "d_test", false); 			//Check Test
+			files_check(data_path + "d_thread_works", false); 	//Check Thread file
+		}
 	}
 	
 	

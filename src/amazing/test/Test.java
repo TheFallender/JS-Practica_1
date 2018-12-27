@@ -14,12 +14,10 @@ public class Test { //Test class
 		System.out.println(Localization.get("test", "test_main_str")); //Prints that the Test system has started
 		
 		//Test calls
-		/*
 		Test_IO t1 = new Test_IO(); 		//Creates the IO Test
 		t1.test(); 								//Tests IO
 		Test_inside t2 = new Test_inside(); //Creates the Inside Test
 		t2.test();								//Tests Inside
-		*/
 		Test_data t3 = new Test_data(); 	//Creates the Data Test
 		t3.test(); 								//Tests Data
 		

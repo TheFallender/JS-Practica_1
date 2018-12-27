@@ -3,6 +3,7 @@ package amazing.amazing;
 import amazing.inside.Filter;
 import amazing.inside.IO;
 import amazing.inside.Localization;
+import amazing.inside.Task_ex;
 
 public class Category { //Category class
 	
@@ -25,6 +26,6 @@ public class Category { //Category class
 		String[] aux = new String[] {"category=" + this.name}; //Auxiliar string to save
 		
 		//Write data
-		IO.write("d_category", aux, true); //Writes the data on the file
+		Task_ex.task_add("amazing.inside.IO", "write", new Object[]{"d_category", aux, true}); //Write request
 	}
 }

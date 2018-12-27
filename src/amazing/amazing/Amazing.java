@@ -12,9 +12,9 @@ import amazing.inside.Region;
 import amazing.test.Test;
 
 //Menu, marketplace class
-public class Amazing {
+public class Amazing implements Runnable {
 	//Test variable
-	private static boolean test = true; 		//Change this to start the test system
+	private static boolean test = false; 		//Change this to start the test system
 	
 	//User data
 	private static User active_user = null; 	//The active user at the moment
@@ -28,8 +28,9 @@ public class Amazing {
 	//Menu
 	private static int[] menu = new int[4]; //Menu int values
 	
-	//Main
-	public static void main(String[] args){ //Main code
+	//Menu
+	@Override
+	public synchronized void run (){ //Main code
 		//Starting functions
 			//Data
 			IO.data_check(); //Checks the data files are there, if not, it create them 

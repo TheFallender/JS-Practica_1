@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Main (27-Dec-2018 19:20:05)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.amazing</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">package amazing.amazing;
+
+import java.util.ArrayList;
+
+import amazing.inside.Custom_Exception;
+import amazing.inside.Localization;
+import amazing.inside.Task_ex;
+
+<span class="nc" id="L9">public class Main {</span>
+<span class="fc" id="L10">	private static ArrayList&lt;Thread&gt; thread_l = new ArrayList&lt;&gt;();</span>
+	
+	public static void main (String[] args) {
+		//Define the runnable tasks
+<span class="fc" id="L14">		Runnable main_run = new Amazing();</span>
+<span class="fc" id="L15">		Runnable task_run = new Task_ex();</span>
+		
+		//Add the threads into the arraylist
+<span class="fc" id="L18">		thread_l.add(new Thread(main_run));</span>
+<span class="fc" id="L19">		thread_l.add(new Thread(task_run));</span>
+		
+		//Starts the threads
+<span class="fc" id="L22">		thread_l.get(0).start();</span>
+<span class="fc" id="L23">		thread_l.get(1).start();</span>
+
+		//Checks until the main thread dies and then closes the application
+<span class="fc bfc" id="L26" title="All 2 branches covered.">		while (thread_l.get(0).isAlive()) { //Main thread alive</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">			while (!Task_ex.task_l_empty()) {	//Task thread is NOT empty</span>
+<span class="fc" id="L28">				notify_thread(1);					//Wakes up the Task thread</span>
+<span class="fc" id="L29">				thread_wait(0, 0);					//Makes the Main thread wait</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">				if (Task_ex.get_completed())		//If the task is completed</span>
+<span class="fc" id="L31">					Task_ex.ack_cmplt();				//Acknowledges the action</span>
+			}
+		}
+		
+<span class="fc bfc" id="L35" title="All 2 branches covered.">		while (thread_l.get(1).isAlive()) { //Wait for Task thread to die</span>
+<span class="fc" id="L36">			notify_thread(1);					//Wakes up the Task thread</span>
+		}
+<span class="fc" id="L38">	}</span>
+	
+	public static boolean thread_alive (int thread_num) { //Thread alive return
+<span class="fc" id="L41">		return thread_l.get(thread_num).isAlive();			//Returns boolean</span>
+	}
+	
+	public static void thread_wait (int thread_num, int time) { //Makes the selected thread wait
+<span class="fc" id="L45">		synchronized (thread_l.get(thread_num)) {					//Synchronizes with the selected thread</span>
+			try {
+<span class="fc" id="L47">				thread_l.get(thread_num).wait(time);					//Waits selected amount of time</span>
+<span class="pc" id="L48">			} catch (InterruptedException e) {</span>
+<span class="nc" id="L49">				Thread.currentThread().interrupt();												//Catches interruption</span>
+<span class="nc" id="L50">				throw new Custom_Exception(Localization.get(&quot;inside&quot;, &quot;thread_interrupt&quot;), e); 	//Throw exception</span>
+			}
+		}
+<span class="fc" id="L53">	}</span>
+	
+	public static void notify_thread (int thread_num) {	//Notifies the selected thread
+<span class="fc" id="L56">		synchronized (thread_l.get(thread_num)) {			//Synchronizes with the selected thread</span>
+<span class="fc" id="L57">			thread_l.get(thread_num).notify();					//Notifies the thread</span>
+		}
+<span class="fc" id="L59">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Main (27-Dec-2018 19:20:05)</div></body></html>

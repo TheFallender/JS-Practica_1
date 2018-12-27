@@ -35,7 +35,6 @@ public class Test_IO extends Test { //IO Test class
 		
 		//IO Class test
 		System.out.println(Localization.get("test", "test_io_fltr_wr")); 												//Prints that the files are going to be written and read
-		IO.data_check(); 																								//Checks and creates the files
 		System.out.println(Localization.get("test", "test_io_fltr_wr_w")); 												//Prints that data is going to be written
 		String[] d = new String[] {"test_info=" + Filter.filter_s(Localization.get("test", "test_io_fltr_wr_w_str"))}; 		//String to pass as Data
 		IO.write("d_test", d, false); 																					//Creates a test file

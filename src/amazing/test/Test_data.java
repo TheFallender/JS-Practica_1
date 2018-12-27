@@ -7,7 +7,6 @@ import amazing.amazing.User;
 import amazing.inside.Filter;
 import amazing.inside.IO;
 import amazing.inside.Localization;
-import amazing.inside.Thread_ins;
 
 public class Test_data extends Test { //Data Test class
 	@Override
@@ -18,15 +17,8 @@ public class Test_data extends Test { //Data Test class
 		//Category
 		System.out.println(Localization.get("test", "test_data_cat")); 	//Prints that the Category is going to be tested
 		Category testCategory = new Category(); 						//Check constructor of Category
-		
 		testCategory.save(); 											//Save the data on the file
-		Thread_ins.task_add("IO", "read", new Object[]{"d_category", testCategory.r_name(), 1, false});
-		Thread_ins t1 = new Thread_ins();
-		t1.start();
-		
-		while (Thread_ins.get_completed()) {
-			Thread_ins.ack_cmplt();
-		}
+		IO.read("d_category", testCategory.r_name(), 1, false); 		//Read Product
 		super.print_data(); 											//Print the data from the data array
 		
 		//Product
@@ -35,7 +27,6 @@ public class Test_data extends Test { //Data Test class
 		testProduct.save(); 											//Save the data on the file
 		IO.read("d_product", "p_id=" + testProduct.r_id(), 5, false); 	//Read Product
 		super.print_data(); 											//Print the data from the data array
-		
 		//User
 		System.out.println(Localization.get("test", "test_data_usr")); 	//Prints that the User is going to be tested
 		User testUser = new User(); 									//Check constructor of User
