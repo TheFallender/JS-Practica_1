@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Main (27-Dec-2018 19:14:54)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.amazing</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package amazing.amazing;
+
+import amazing.inside.Encrypter;
+import amazing.inside.Filter;
+import amazing.inside.IO;
+import amazing.inside.Localization;
+import amazing.inside.Login_method;
+
+public class User { //User class
+	
+	private String email; 			//Email of the user
+	private String password; 		//Password of the user
+<span class="pc" id="L13">	private String login = &quot;0&quot;; 		//Login date</span>
+<span class="pc" id="L14">	private String last_login = &quot;0&quot;; 	//Last login date</span>
+<span class="pc" id="L15">	private String admin = &quot;0&quot;; 	//Admin</span>
+	
+<span class="fc" id="L17">	public User() { //User basic Constructor</span>
+		//Email
+<span class="nc" id="L19">		while(true) { 																				//Loop to get the email</span>
+<span class="fc" id="L20">			String email_data = Filter.filter_s(Localization.get(&quot;objects&quot;, &quot;user_crt_em&quot;)); 							//Email Data </span>
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">			if (email_data.equals(&quot;exit&quot;)) 																//Prevent exit as email</span>
+<span class="nc" id="L22">				System.out.println(Localization.get(&quot;objects&quot;, &quot;user_crt_err_exit&quot;)); 							//Reports that you can't put 'exit' as an email</span>
+			else {
+<span class="fc" id="L24">				IO.read(&quot;d_user&quot;, &quot;u_email=&quot; + email_data, 1, false);										//Read User</span>
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">				if (IO.data().isEmpty()) { 																	//User doesn't exist, proceed</span>
+<span class="fc" id="L26">					this.email = email_data;																	//Set email</span>
+<span class="fc" id="L27">					break;																						//Break the loop</span>
+				}
+				else 																						//User already exists
+<span class="nc" id="L30">					System.out.println(Localization.get(&quot;objects&quot;, &quot;user_crt_err_exist&quot;));						//Report that the user already exists</span>
+			}
+		}
+		//Password
+		try { 																							//Try to encrypt password
+<span class="fc" id="L35">			this.password = Encrypter.encrypt(Filter.filter_s(Localization.get(&quot;objects&quot;, &quot;user_crt_pw&quot;))); 	//Encrypt password and set it</span>
+<span class="pc" id="L36">		} catch (Exception e) {																			//Illegal Exception</span>
+<span class="nc" id="L37">			throw new IllegalArgumentException(Localization.get(&quot;inside&quot;, &quot;enc_err_illgl&quot;));		//Report that there was an illegal operation</span>
+		}
+		
+		//Date
+<span class="fc" id="L41">		this.login = Login_method.date(); //Set the login date to the moment of the creation</span>
+<span class="fc" id="L42">	}</span>
+	
+<span class="nc" id="L44">	public User(String[] data) { //User data Constructor</span>
+<span class="nc" id="L45">		this.email = data[0];								//Set Email</span>
+<span class="nc" id="L46">		this.password = data[1];							//Set Password</span>
+<span class="nc" id="L47">		this.login = Login_method.date();	//Set Login</span>
+<span class="nc" id="L48">		this.last_login = data[3];			//Set Last Login</span>
+<span class="nc" id="L49">		this.admin = data[4];								//Set Admin</span>
+<span class="nc" id="L50">	}</span>
+	
+	public String r_email () { //Returns the Email
+<span class="fc" id="L53">		return this.email;</span>
+	}
+	
+	public void s_pass (String new_pw) { //Set the Password (encrypted)
+<span class="nc" id="L57">		this.password = new_pw;</span>
+<span class="nc" id="L58">	}</span>
+	
+	public String r_pass () { //Returns the Password (encrypted)
+<span class="nc" id="L61">		return this.password;</span>
+	}
+	
+	public String r_date(boolean login) { //Returns the Date
+<span class="nc bnc" id="L65" title="All 2 branches missed.">		return (login) ? this.login : this.last_login;</span>
+	}
+
+	public boolean r_admin() { //Returns the Admin value
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		return (Integer.parseInt(admin) &gt; 0);</span>
+	}
+	
+	public void print() { //Prints User
+<span class="nc" id="L73">		System.out.println(Localization.get(&quot;objects&quot;, &quot;user_print_em&quot;) + (this.email));			//Print Email</span>
+<span class="nc" id="L74">		System.out.println(Localization.get(&quot;objects&quot;, &quot;user_print_pw&quot;) + &quot;********&quot;);				//Print Password (nothing)</span>
+<span class="nc" id="L75">		System.out.println(Localization.get(&quot;objects&quot;, &quot;user_print_lg&quot;) + this.login);				//Print Login</span>
+<span class="nc" id="L76">		System.out.println(Localization.get(&quot;objects&quot;, &quot;user_print_llg&quot;) + this.last_login);	//Print Last Login</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">		if(r_admin()) {	//Checks if its admin</span>
+<span class="nc" id="L78">			System.out.println(Localization.get(&quot;objects&quot;, &quot;user_print_adm&quot;));	//Print Admin</span>
+		}
+<span class="nc" id="L80">	}</span>
+	
+	public void save() {	//Saves the data on the file
+		//String
+<span class="fc" id="L84">		String[] aux = new String[5];					//Auxiliar string to save</span>
+<span class="fc" id="L85">		aux[0] = &quot;u_email=&quot; + this.email;					//Set Email</span>
+<span class="fc" id="L86">		aux[1] = &quot;u_password=&quot; + this.password;				//Set Password</span>
+<span class="fc" id="L87">		aux[2] = &quot;u_login=&quot; + this.login;					//Set Login</span>
+<span class="fc" id="L88">		aux[3] = &quot;u_last_login=&quot; + this.last_login;			//Set Last Login</span>
+<span class="fc" id="L89">		aux[4] = &quot;u_admin=&quot; + this.admin;					//Set Admin</span>
+		
+		//Write data
+<span class="fc" id="L92">		IO.write(&quot;d_user&quot;, aux, true);</span>
+<span class="fc" id="L93">	}</span>
+
+	public void s_admin(String level) { //Sets the admin level
+<span class="nc" id="L96">		this.admin = level;</span>
+<span class="nc" id="L97">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Main (27-Dec-2018 19:14:54)</div></body></html>

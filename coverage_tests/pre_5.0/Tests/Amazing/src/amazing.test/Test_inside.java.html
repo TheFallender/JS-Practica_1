@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Test_inside.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Amazing (26-Dec-2018 21:47:04)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.test</a> &gt; <span class="el_source">Test_inside.java</span></div><h1>Test_inside.java</h1><pre class="source lang-java linenums">package amazing.test;
+
+import amazing.inside.Converter;
+import amazing.inside.Encrypter;
+import amazing.inside.Filter;
+import amazing.inside.Localization;
+
+<span class="fc" id="L8">public class Test_inside extends Test { //Inside Test class</span>
+	@Override
+	public void test() { //Test of this class
+		//Inside test
+<span class="fc" id="L12">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_main&quot;)); //Prints that this is the Inside test</span>
+		
+		
+		//Encrypter and decryption test
+<span class="fc" id="L16">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc&quot;)); 			//Prints that the Encrypter is going to be tested</span>
+<span class="fc" id="L17">		String text = Filter.filter_s(Localization.get(&quot;test&quot;, &quot;test_ins_enc_txt&quot;)); 	//Base text</span>
+<span class="fc" id="L18">		String[] e_text = new String[2]; 												//Encrypted text</span>
+<span class="fc" id="L19">		String[] d_text = new String [2]; 												//Base text</span>
+		
+		//Encryption and decryption process
+		try {
+			//Encrypt the base text
+<span class="fc" id="L24">			e_text[0] = Encrypter.encrypt(text); //Encrypts the first text</span>
+<span class="fc" id="L25">			e_text[1] = Encrypter.encrypt(text); //Encrypts the second text</span>
+			
+			//Test the encryption
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">			if((e_text[0].equals(e_text[1]))) { //Source and destination are the same</span>
+<span class="fc" id="L29">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_succ&quot;)); //Prints that the encryption process works</span>
+<span class="fc" id="L30">			}</span>
+			else { //Unknown error, check, source and destination are not the same
+<span class="nc" id="L32">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_err&quot;)); 											//Prints that the encryption doesn't work</span>
+<span class="nc" id="L33">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_bt&quot;) + text); 									//Prints the base encryption</span>
+<span class="nc" id="L34">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_et1&quot;) + e_text[0]); 								//Prints the first encrypted text</span>
+<span class="nc" id="L35">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_et2&quot;) + e_text[1]); 								//Prints the second encrypted text</span>
+			}
+			
+			//Decrypt the encrypted text
+<span class="fc" id="L39">			d_text[0] = Encrypter.decrypt(e_text[0]); //Decrypts the first text</span>
+<span class="fc" id="L40">			d_text[1] = Encrypter.decrypt(e_text[1]); //Decrypts the second text</span>
+			
+			//Test the decryption
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">			if((d_text[0].equals(d_text[1]))) {  //Source and destination are the same</span>
+<span class="fc" id="L44">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_dec_err&quot;)); //Prints that the decryption process works</span>
+<span class="fc" id="L45">			}</span>
+			else { //Unknown error, check, source and destination are not the same
+<span class="nc" id="L47">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_err&quot;)); 											//Prints that the encryption doesn't work</span>
+<span class="nc" id="L48">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_bt&quot;) + text); 									//Prints the base encryption</span>
+<span class="nc" id="L49">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_et1&quot;) + e_text[0]); 								//Prints the first encrypted text</span>
+<span class="nc" id="L50">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_et2&quot;) + e_text[1]); 								//Prints the second encrypted text</span>
+<span class="nc" id="L51">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_dt1&quot;) + d_text[0]); 								//Prints the first decrypted text</span>
+<span class="nc" id="L52">				System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_enc_dt2&quot;) + d_text[1]); 								//Prints the second decrypted text</span>
+			}
+<span class="nc" id="L54">		} catch (Exception e) { //Illegal exception</span>
+<span class="nc" id="L55">			super.throw_exc(Localization.get(&quot;inside&quot;, &quot;enc_err_illgl&quot;), e); //Reports that there was an error in the process</span>
+		}
+		
+		
+		//Converter test
+<span class="fc" id="L60">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_conv&quot;)); 															//Prints that the converter is going to be tested</span>
+<span class="fc" id="L61">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_conv_acu&quot;) + Converter.get_a_currency());							//Prints the current currency</span>
+<span class="fc" id="L62">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_conv_val&quot;) + Converter.get_factor()); 							//Prints the converter value of the active currency</span>
+<span class="fc" id="L63">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_ins_conv_dt&quot;) + Converter.date()); 									//Prints the date</span>
+		
+<span class="fc" id="L65">		System.out.println(&quot;\n&quot; + Localization.get(&quot;test&quot;, &quot;test_ins_conv_dec&quot;));												//Prints that is going to test the decimal method</span>
+<span class="fc" id="L66">		System.out.println(Converter.decimal_conv(Filter.filter_f(Localization.get(&quot;test&quot;, &quot;test_ins_conv_dec_nmb&quot;), 0, 0, 0),</span>
+<span class="fc" id="L67">		Filter.filter_i(Localization.get(&quot;test&quot;, &quot;test_ins_conv_dec_dp&quot;), 0, 0)));										//Prints the decimal out of the method</span>
+		
+		
+		//Phase completed, 
+<span class="fc" id="L71">		super.incPhase(); //Increase the phase</span>
+<span class="fc" id="L72">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Amazing (26-Dec-2018 21:47:04)</div></body></html>

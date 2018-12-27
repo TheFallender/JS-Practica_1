@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Amazing.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Main (27-Dec-2018 19:20:05)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.amazing</a> &gt; <span class="el_source">Amazing.java</span></div><h1>Amazing.java</h1><pre class="source lang-java linenums">package amazing.amazing;
+
+import java.util.ArrayList;
+import java.util.List;
+import amazing.inside.Converter;
+import amazing.inside.Encrypter;
+import amazing.inside.Filter;
+import amazing.inside.IO;
+import amazing.inside.Localization;
+import amazing.inside.Login_method;
+import amazing.inside.Region;
+import amazing.test.Test;
+
+//Menu, marketplace class
+<span class="fc" id="L15">public class Amazing implements Runnable {</span>
+	//Test variable
+<span class="fc" id="L17">	private static boolean test = false; 		//Change this to start the test system</span>
+	
+	//User data
+<span class="fc" id="L20">	private static User active_user = null; 	//The active user at the moment</span>
+	
+	//Data array
+<span class="fc" id="L23">	private static ArrayList&lt;Category&gt; c = new ArrayList&lt;&gt;();		//Category list</span>
+<span class="fc" id="L24">	private static ArrayList&lt;Product&gt; p = new ArrayList&lt;&gt;();		//Product list</span>
+<span class="fc" id="L25">	private static ArrayList&lt;Product&gt; pc = new ArrayList&lt;&gt;(); 		//Product category list array (list of the actual category)</span>
+<span class="fc" id="L26">	private static ArrayList&lt;Product_user&gt; pu = new ArrayList&lt;&gt;();	//Product user list</span>
+	
+	//Menu
+<span class="fc" id="L29">	private static int[] menu = new int[4]; //Menu int values</span>
+	
+	//Menu
+	@Override
+	public synchronized void run (){ //Main code
+		//Starting functions
+			//Data
+<span class="fc" id="L36">			IO.data_check(); //Checks the data files are there, if not, it create them </span>
+					
+			//Region and Converter
+<span class="fc" id="L39">			Region.region_list();					//Sets the Region list</span>
+<span class="fc" id="L40">			Converter.set_conv_list();				//Sets the Converter list</span>
+<span class="fc" id="L41">			Localization.set_locale_list();			//Sets the Locale list</span>
+			
+			//Adds the default regions and locales
+<span class="fc" id="L44">			Localization.set_locale(&quot;en&quot;, &quot;EN&quot;);</span>
+<span class="fc" id="L45">			Region.region_add(&quot;Default&quot;, &quot;eur/eur&quot;, &quot;en&quot;, &quot;€&quot;); 	//Sets the new region</span>
+<span class="fc" id="L46">			Region.region_add(&quot;ES&quot;, &quot;eur/eur&quot;, &quot;es&quot;, &quot;€&quot;); 			//Sets the new region</span>
+<span class="fc" id="L47">			Region.region_add(&quot;US&quot;, &quot;eur/usd&quot;, &quot;en&quot;, &quot;$&quot;); 			//Sets the new region</span>
+<span class="fc" id="L48">			Region.region_add(&quot;GB&quot;, &quot;eur/gbp&quot;, &quot;en&quot;, &quot;£&quot;); 			//Sets the new region</span>
+			
+			//Sets the default region
+<span class="fc" id="L51">			Region.set_ar(0);						//Sets the active region			</span>
+		
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">		if (!test) { //Default enviroment</span>
+			//Variables definitions			
+				//Boolean changes
+<span class="fc" id="L56">				boolean create_success_c = c_category();	//Detects error in the creation process of category</span>
+<span class="fc" id="L57">				boolean changes_c = false;					//Detects changes in the category list</span>
+<span class="fc" id="L58">				boolean create_success_p = c_product(); 	//Detects error in the creation process of product</span>
+<span class="fc" id="L59">				boolean changes_p = false;					//Detects changes in the product list</span>
+<span class="fc" id="L60">				boolean create_success_pu = false; 			//Detects error in the creation process of product user</span>
+<span class="fc" id="L61">				boolean changes_pu = false;					//Detects changes in the product user</span>
+				
+				//Product
+<span class="fc" id="L64">				Product[] comp_pr = new Product[]{null, null}; 	//Compare product array</span>
+<span class="fc" id="L65">				String[] comp_data = new String[6];				//String with the data of the region</span>
+				
+				//First user will be admin
+<span class="fc" id="L68">				boolean first_user = false;</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">				if (c_user(true).isEmpty()) //No users on the database</span>
+<span class="fc" id="L70">					first_user = true; //This is the first user</span>
+				
+			//Menu
+<span class="nc" id="L73">			while(true) { //Loop of the menu</span>
+<span class="pc bpc" id="L74" title="1 of 8 branches missed.">				switch (menu[0]) { //Checks selection within Main menu</span>
+					case 0: //Main menu
+						//Menu
+<span class="fc" id="L77">						System.out.println(Localization.get(&quot;main&quot;, &quot;main_site&quot;) + Region.get_region() + &quot;:&quot;); 	//Amazing (Region):</span>
+<span class="fc" id="L78">						System.out.println(&quot;1. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_basic_cat&quot;));				//1. Search by Category</span>
+<span class="fc" id="L79">						System.out.println(&quot;2. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_basic_acc&quot;));				//2. Account</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">						if (active_user != null) //User logged in</span>
+<span class="fc" id="L81">							System.out.println(&quot;3. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_basic_lg_i&quot;));			//3. Sing out.</span>
+						else //User not logged
+<span class="fc" id="L83">							System.out.println(&quot;3. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_basic_lg_o&quot;));			//3. Sing in.</span>
+<span class="fc" id="L84">						System.out.println(&quot;4. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_basic_cracc&quot;));				//4. Create account.</span>
+<span class="fc" id="L85">						System.out.println(&quot;5. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_basic_reg&quot;));				//5. Select other region.</span>
+<span class="fc" id="L86">						System.out.println(&quot;6. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_ex&quot;));						//6. Exit.</span>
+						
+						//Menu selection
+<span class="fc" id="L89">						menu[0] = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_sel&quot;), 1, 6); //Request selection</span>
+<span class="fc" id="L90">						break;</span>
+						
+						
+					case 1: //Search by category
+<span class="fc bfc" id="L94" title="All 2 branches covered.">						if (menu[1] == 0) { 		//Category list</span>
+							//Detect error creating
+<span class="fc bfc" id="L96" title="All 2 branches covered.">							if(create_success_c) {</span>
+								//Menu
+<span class="fc" id="L98">								System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_cat_mn&quot;));								//Prints the Category</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">								for (int i = 0; i &lt; c.size(); i++) 																	//Print categories</span>
+<span class="fc" id="L100">									System.out.println(i+1 + &quot;. &quot; + c.get(i).r_name()); 												//Print the name of the Category with a dot in front of it </span>
+<span class="fc" id="L101">								System.out.println((c.size() + 1) + &quot;. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_ex&quot;)); 			//Print exit</span>
+								
+								//Menu selection
+<span class="fc" id="L104">								menu[1] = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_sel&quot;), 1, c.size() + 1); //Request selection</span>
+<span class="fc" id="L105">							}</span>
+							else {
+<span class="fc bfc" id="L107" title="All 2 branches covered.">								if (!changes_c) { //There were no changes</span>
+<span class="fc" id="L108">									System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_cat_err&quot;)); 	//Reports that there are no categories registered</span>
+<span class="fc" id="L109">									menu[0] = 0; //Reset to base menu</span>
+<span class="fc" id="L110">								}</span>
+								else {
+<span class="fc" id="L112">									create_success_c = c_category(); //Reset the error</span>
+<span class="fc" id="L113">									changes_c = false;</span>
+								}
+							}
+<span class="fc" id="L116">						}</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">						else if(menu[1] == c.size() + 1) { 	//Exit</span>
+<span class="fc" id="L118">							menu[0] = 0; 						//Resets Main menu</span>
+<span class="fc" id="L119">							menu[1] = 0; 						//Reset Category menu</span>
+<span class="fc" id="L120">						}</span>
+						else { //Category selected
+<span class="fc bfc" id="L122" title="All 2 branches covered.">							if (menu[2] == 0) { 		//Product Menu</span>
+								//Product list
+<span class="fc" id="L124">								pc = new ArrayList&lt;&gt;(); 		//Resets the product list</span>
+								
+<span class="fc bfc" id="L126" title="All 2 branches covered.">								if (create_success_p) { //No error, there is data</span>
+									//Menu print
+<span class="fc" id="L128">									System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_pr_mn&quot;) + c.get(menu[1] - 1).r_name() + &quot;:&quot;); 	//Print the info of the Category as a product list</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">									for (int i = 0; i &lt; p.size(); i++) 												//Prints products</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">										if (p.get(i).r_category().equals(c.get(menu[1] - 1).r_name())) { 					//The product category name is equal to the category name</span>
+											//Print
+<span class="fc" id="L132">											System.out.println((pc.size() + 1) + &quot;. &quot; + p.get(i).r_name());					//Print product name</span>
+											
+											//Add the product to the list
+<span class="fc" id="L135">											pc.add(p.get(i));						//Add the p_aux to the list</span>
+										}
+<span class="fc" id="L137">									System.out.println((pc.size() + 1) + &quot;. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_ex&quot;)); //Print exit</span>
+									
+									//Menu selection
+<span class="fc" id="L140">									menu[2] = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_sel&quot;), 1, pc.size() + 1); //Request selection</span>
+<span class="fc" id="L141">								}</span>
+								else { //There is no data
+<span class="fc bfc" id="L143" title="All 2 branches covered.">									if (!changes_p) { //There were no changes</span>
+<span class="fc" id="L144">										System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_pr_err&quot;)); //Reports that there are no products registered</span>
+<span class="fc" id="L145">										menu[1] = 0; //Reset to category menu</span>
+<span class="fc" id="L146">									}</span>
+									else {
+<span class="fc" id="L148">										create_success_p = c_product(); //Reset the error</span>
+<span class="fc" id="L149">										changes_p = false;</span>
+									}
+								}
+<span class="fc" id="L152">							}</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">							else if(menu[2] == pc.size() + 1) { //Exit</span>
+<span class="fc" id="L154">								menu[1] = 0; 						//Reset Category menu</span>
+<span class="fc" id="L155">								menu[2] = 0; 						//Reset Product list menu</span>
+<span class="fc" id="L156">							}</span>
+							else { //Show product
+<span class="pc bpc" id="L158" title="1 of 5 branches missed.">								switch (menu[3]) { //Checks selection within Product menu</span>
+									case 0: //Product Menu
+										//Print
+<span class="fc" id="L161">										System.out.println(&quot;\n&quot; + c.get(menu[1] - 1).r_name() + &quot;:&quot;); 	//Print newline for print of the product and the actual category</span>
+<span class="fc" id="L162">										pc.get(menu[2] - 1).print(); 								//Print the selected product</span>
+										
+										//Menu print
+<span class="fc" id="L165">										System.out.println(&quot;1. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_pr_buy&quot;));			//1. Buy.</span>
+<span class="fc" id="L166">										System.out.println(&quot;2. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_pr_comp&quot;));		//2. Compare.</span>
+<span class="fc" id="L167">										System.out.println(&quot;3. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_ex&quot;));			//3. Exit.</span>
+										
+										//Menu selection
+<span class="fc" id="L170">										menu[3] = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_sel&quot;), 1, 3); //Request menu selection</span>
+<span class="fc" id="L171">										break;</span>
+										
+										
+									case 1: //Buy
+										//Check if the user is logged in
+<span class="fc bfc" id="L176" title="All 2 branches covered.">										if (active_user != null) { //The user is logged in</span>
+																		//Check if there is stock
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">											if (pc.get(menu[2] - 1).r_stock() &gt; 0) { //There is some stock</span>
+<span class="fc" id="L179">												int amount = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_pr_buy_amt&quot;), 1, 10); //Request the number of items to order</span>
+												
+												//Check if the stock is enough
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">												if (pc.get(menu[2] - 1).r_stock() - amount &gt;= 0) { //There is enough stock for the order</span>
+													//Product user array
+<span class="fc" id="L184">													String[] pu_a = new String [6]; 	//Product user from this order</span>
+<span class="fc" id="L185">													pu_a[0] = 		active_user.r_email(); 															//User that is going to buy the order</span>
+<span class="fc" id="L186">													pu_a[1] = &quot;&quot; + 	pc.get(menu[2] - 1).r_id(); 													//Product ID of the ordered item</span>
+<span class="fc" id="L187">													pu_a[2] = 		pc.get(menu[2] - 1).r_name();													//Product Name of the ordered item</span>
+<span class="fc" id="L188">													pu_a[3] = &quot;&quot; + 	pc.get(menu[2] - 1).r_price() + Converter.get_a_currency_symbol(); 				//Price at the moment of the order</span>
+<span class="fc" id="L189">													pu_a[4] = &quot;&quot; + 	amount; 																		//Amount on the order</span>
+<span class="fc" id="L190">													pu_a[5] = &quot;&quot; + 	(pc.get(menu[2] - 1).r_price() * amount) + Converter.get_a_currency_symbol();	//Total price of the order</span>
+													
+													//Product User
+<span class="fc" id="L193">													Product_user bought_product = new Product_user(pu_a); 	//New product user</span>
+<span class="fc" id="L194">													bought_product.save(); 									//Saves the data to the file</span>
+													
+													
+													//Product Update
+<span class="fc" id="L198">													pc.get(menu[2] - 1).buy(amount); 		//Decrease the value by the amount selected</span>
+													
+													//Update Product User list
+<span class="fc" id="L201">													pu.add(bought_product);		//Adds the latest order</span>
+													
+													//Changes in product user
+<span class="fc" id="L204">													changes_pu = true;</span>
+													
+													//Product Update File
+<span class="fc" id="L207">													String[] data = new String[] {&quot;p_id=&quot; + pc.get(menu[2] - 1).r_id(), &quot;p_stock=&quot; + pc.get(menu[2] - 1).r_stock()}; 	//Data array, first the ID to search, then the stock.</span>
+<span class="fc" id="L208">													IO.modify(&quot;d_product&quot;, data, 4); 														//Modify Product with the new data</span>
+													
+													//Print info
+<span class="fc" id="L211">													System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_pr_buy_succ&quot;)); //Print that the product was bought</span>
+<span class="fc" id="L212">												}</span>
+												else //There is not enough stock
+<span class="nc" id="L214">													System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_pr_buy_err_nestk&quot;)); //Report that the product doesn't have enough stock</span>
+<span class="nc" id="L215">											}</span>
+											else //There is no stock
+<span class="nc" id="L217">												System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_pr_buy_err_nstk&quot;)); //Report that the product is out of stock</span>
+<span class="nc" id="L218">										}</span>
+										else //User must be logged in to buy the product
+<span class="fc" id="L220">											System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_pr_buy_err_nlg&quot;)); //Report that the user must be logged in to buy</span>
+										
+										
+<span class="fc" id="L223">										Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_wait&quot;)); //Waits for the user input</span>
+										
+<span class="fc" id="L225">										menu[3] = 0; //Back to Product basic menu</span>
+<span class="fc" id="L226">										break;</span>
+										
+										
+									case 2: //Compare
+										//Check if there is a product selected
+<span class="fc bfc" id="L231" title="All 2 branches covered.">										if (comp_pr[0] == null) { //No product selected</span>
+<span class="fc" id="L232">											comp_pr[0] = pc.get(menu[2] - 1); //First product to compare</span>
+<span class="fc" id="L233">											comp_data[0] = Region.get_region();</span>
+<span class="fc" id="L234">											comp_data[1] = &quot;&quot; + Converter.get_factor();</span>
+<span class="fc" id="L235">											comp_data[2] = Converter.get_a_currency_symbol(); </span>
+<span class="fc" id="L236">										}</span>
+										else { //One product selected, check the other one
+											//Set product
+<span class="fc" id="L239">											comp_pr[1] = pc.get(menu[2] - 1); //Second product to compare</span>
+<span class="fc" id="L240">											comp_data[3] = Region.get_region();</span>
+<span class="fc" id="L241">											comp_data[4] = &quot;&quot; + Converter.get_factor();</span>
+<span class="fc" id="L242">											comp_data[5] = Converter.get_a_currency_symbol(); </span>
+											
+											//Compare function
+<span class="fc" id="L245">											compare_pr(comp_pr, comp_data); //Compare both products</span>
+											
+											//Reset product
+<span class="fc" id="L248">											comp_pr[0] = null; //Reset to null the first product (second one won't matter)</span>
+										}
+										
+<span class="fc" id="L251">										menu[2] = 0; //Reset Product list menu</span>
+<span class="fc" id="L252">										menu[3] = 0; //Reset Product menu</span>
+<span class="fc" id="L253">										break;</span>
+										
+										
+									case 3: //Exit
+<span class="fc" id="L257">										menu[2] = 0; //Reset Product list menu</span>
+<span class="fc" id="L258">										menu[3] = 0; //Reset Product menu</span>
+<span class="fc" id="L259">										break;</span>
+										
+										
+									default: //Default case
+<span class="nc" id="L263">										menu[0] = -1; //Sends menu to an invalid state to reset it</span>
+										break;
+								}
+							}
+						}
+<span class="nc" id="L268">						break;</span>
+						
+						
+					case 2:	//Account
+<span class="fc bfc" id="L272" title="All 2 branches covered.">						if (active_user != null) { //User is logged in</span>
+<span class="pc bpc" id="L273" title="1 of 8 branches missed.">							switch(menu[1]) { //Checks selection within Account menu</span>
+								case 0: //Account Menu
+									//Print menu
+<span class="fc" id="L276">									System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_mn&quot;));				//Account Menu:</span>
+<span class="fc" id="L277">									System.out.println(&quot;1. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_acc_inf&quot;));				//1. Account Info.</span>
+<span class="fc" id="L278">									System.out.println(&quot;2. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_acc_cpw&quot;));				//2. Change Password</span>
+<span class="fc" id="L279">									System.out.println(&quot;3. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_acc_pru&quot;));				//3. Ordered Products.</span>
+<span class="fc" id="L280">									System.out.println(&quot;4. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_acc_lgo&quot;));				//4. Log out.</span>
+<span class="fc" id="L281">									System.out.println(&quot;5. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_acc_hm&quot;) );				//5. Homepage.</span>
+									
+									//Menu selection
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">									if (active_user.r_admin()) { //Checks if the user is admin</span>
+<span class="fc" id="L285">										System.out.println(&quot;6. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_acc_adm&quot;));		//6. Admin</span>
+<span class="fc" id="L286">										menu[1] = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_sel&quot;), 1, 6); //Request menu selection</span>
+<span class="fc" id="L287">									}</span>
+									else
+<span class="nc" id="L289">										menu[1] = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_sel&quot;), 1, 5); //Request menu selection</span>
+<span class="nc" id="L290">									break;</span>
+									
+									
+								case 1: //See User Info
+<span class="fc" id="L294">									active_user.print(); //Print info of the user</span>
+									
+<span class="fc" id="L296">									Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_wait&quot;)); //Waits for the user input</span>
+									
+<span class="fc" id="L298">									menu[1] = 0; //Back to Account basic menu</span>
+<span class="fc" id="L299">									break;</span>
+									
+									
+								case 2: //Change password
+<span class="fc" id="L303">									String e_old_pw = &quot;&quot;; 				//Old password</span>
+<span class="fc" id="L304">									String[] e_new_pw = new String[2];	//String for new password</span>
+<span class="fc" id="L305">									boolean pass_changed = false;</span>
+									try { //Try to change the password
+<span class="fc" id="L307">										while (true) { //Old password</span>
+<span class="fc" id="L308">											e_old_pw = Encrypter.encrypt(Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_acc_cpw_old&quot;)));		//Request old password</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">											if (e_old_pw.equals(active_user.r_pass())) { //Inserted password equals old password</span>
+<span class="nc" id="L310">												while (true) { //New password match</span>
+<span class="fc" id="L311">													e_new_pw[0] = Encrypter.encrypt(Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_acc_cpw_new&quot;)));		//Request new password</span>
+<span class="fc" id="L312">													e_new_pw[1] = Encrypter.encrypt(Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_acc_cpw_new_r&quot;)));		//Request new password again</span>
+													
+													//New passwords match
+<span class="pc bpc" id="L315" title="1 of 2 branches missed.">													if (e_new_pw[0].equals(e_new_pw[1])) { //Update user</span>
+<span class="fc" id="L316">														active_user.s_pass(e_new_pw[0]); 														//Update the old password</span>
+<span class="fc" id="L317">														String[] data_mod = new String[] {active_user.r_email(), &quot;u_password=&quot; + e_new_pw[0]};	//Data for the modify</span>
+<span class="fc" id="L318">														IO.modify(&quot;d_user&quot;, data_mod, 1);														//Modify user</span>
+<span class="fc" id="L319">														System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_cpw_succ&quot;)); 				//Prints that the password was changed</span>
+<span class="fc" id="L320">														break;</span>
+													}
+													else //New passwords don't match
+<span class="nc" id="L323">														System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_cpw_new_err&quot;)); //Reports that the new passwords don't match</span>
+												}
+												//Changed the pasword
+												break;
+											}
+											else //Actual password doesn't equal old password
+<span class="fc" id="L329">												System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_cpw_old_err&quot;));</span>
+										}
+									}
+<span class="nc" id="L332">									catch (Exception e) { //Illegal encryption</span>
+<span class="nc" id="L333">										System.out.println(Localization.get(&quot;inside&quot;, &quot;enc_err_illgl&quot;));</span>
+									}
+									
+<span class="fc" id="L336">									menu[1] = 0; //Back to basic account menu</span>
+<span class="fc" id="L337">									break;</span>
+									
+									
+								case 3: //Ordered products				
+<span class="fc" id="L341">									menu[1] = 0; //Back to Account basic menu</span>
+									
+<span class="fc bfc" id="L343" title="All 2 branches covered.">									if (create_success_pu) //No error, proceed</span>
+<span class="pc bpc" id="L344" title="1 of 2 branches missed.">										if (!(pu.isEmpty())) //Check if it's empty</span>
+<span class="fc bfc" id="L345" title="All 2 branches covered.">											for (int i = 0; i &lt; pu.size(); i++) //Print all the orders</span>
+<span class="fc" id="L346">												pu.get(i).print(); 						//Prints the product user</span>
+										else
+<span class="nc" id="L348">											System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_pru_err&quot;)); 	//Reports that the user hasn't made any orders</span>
+									else
+<span class="fc bfc" id="L350" title="All 2 branches covered.">										if (!changes_pu) //There were no changes</span>
+<span class="fc" id="L351">											System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_pru_err&quot;)); 	//Reports that the user hasn't made any orders</span>
+										else {
+<span class="fc" id="L353">											create_success_pu = c_product_user();	//Recreates the product user to check for new orders</span>
+<span class="fc" id="L354">											changes_pu = false; //Disable product user</span>
+<span class="fc" id="L355">											menu[1] = 2; //Keep in this menu</span>
+										}
+
+<span class="fc" id="L358">									Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_wait&quot;)); //Waits for the user input</span>
+<span class="fc" id="L359">									break;</span>
+									
+									
+								case 4: //Log out
+<span class="fc" id="L363">									Login_method.login_method_out(); 											//Log out method</span>
+<span class="fc" id="L364">									System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_lgo_succ&quot;)); 	//Prints that the user logged out</span>
+<span class="fc" id="L365">									Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_wait&quot;)); 				//Waits for the user input</span>
+									
+<span class="fc" id="L367">									menu[0] = 0; //Resets Main menu</span>
+<span class="fc" id="L368">									menu[1] = 0; //Back to Account basic menu</span>
+<span class="fc" id="L369">									break;</span>
+									
+									
+								case 5: //Exit account menu
+<span class="fc" id="L373">									menu[0] = 0; //Resets Main menu</span>
+<span class="fc" id="L374">									menu[1] = 0; //Back to Account basic menu</span>
+<span class="fc" id="L375">									break;</span>
+									
+									
+								case 6: //Admin
+<span class="pc bpc" id="L379" title="1 of 6 branches missed.">									switch (menu[2]) { //Checks selection within Admin menu</span>
+										case 0: //Admin Menu
+											//Print menu
+<span class="fc" id="L382">											System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_adm_mn&quot;)); 		//Admin menu:</span>
+<span class="fc" id="L383">											System.out.println(&quot;1. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_adm_ncat&quot;)); //1. New Category.</span>
+<span class="fc" id="L384">											System.out.println(&quot;2. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_adm_npr&quot;)); 	//2. New Product.</span>
+<span class="fc" id="L385">											System.out.println(&quot;3. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_adm_uadm&quot;)); //3. Give admin access.</span>
+<span class="fc" id="L386">											System.out.println(&quot;4. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_ex&quot;)); 		//4. Exit.</span>
+											
+											//Menu selection
+<span class="fc" id="L389">											menu[2] = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_sel&quot;), 1, 4); //Request menu selection</span>
+<span class="fc" id="L390">											break;</span>
+											
+											
+										case 1: //Create category
+<span class="fc" id="L394">											Category new_c = new Category(); 	//Create category</span>
+<span class="fc" id="L395">											new_c.save(); 						//Saves the data on the file</span>
+<span class="fc" id="L396">											c.add(new_c);						//Add the new category</span>
+<span class="fc" id="L397">											changes_c = true;					//Changes in the Category</span>
+<span class="fc" id="L398">											menu[2] = 0; 						//Back to Admin basic menu</span>
+<span class="fc" id="L399">											break;</span>
+											
+											
+										case 2: //Create Product
+<span class="fc" id="L403">											Product new_p = new Product(); 		//Create new product</span>
+<span class="fc" id="L404">											new_p.save();						//Saves the data on the file</span>
+<span class="fc" id="L405">											p.add(new_p);						//Add the new product</span>
+<span class="fc" id="L406">											changes_p = true;					//Changes in the Product</span>
+<span class="fc" id="L407">											menu[2] = 0; 						//Back to Admin basic menu</span>
+<span class="fc" id="L408">											break;</span>
+											
+											
+										case 3: //Give admin access to other users
+<span class="fc" id="L412">											List&lt;String&gt; temp_ul = c_user(false); //Temporary user list</span>
+											
+<span class="fc bfc" id="L414" title="All 2 branches covered.">											if (temp_ul.size() == 1) //The only user is the active user</span>
+<span class="fc" id="L415">												System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_adm_uadm_err_oys&quot;)); //Reports that there is only one user</span>
+											else { //More than one user
+												//Print
+												//Menu
+<span class="fc" id="L419">												System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_adm_uadm_ul&quot;)); //Prints that this is the user list</span>
+												//Prints the user list
+<span class="fc bfc" id="L421" title="All 2 branches covered.">												for (int i = 0; i &lt; temp_ul.size(); i++) //Print list</span>
+<span class="fc" id="L422">													System.out.println((i + 1) + &quot;. &quot; + temp_ul.get(i)); //Print user email with number</span>
+												//Print the exit
+<span class="fc" id="L424">												System.out.println((temp_ul.size() + 1) + &quot;. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_ex&quot;));</span>
+												
+												//Select
+<span class="fc" id="L427">												menu[3] = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_sel&quot;), 1, (temp_ul.size() + 1)); //Request menu selection</span>
+												
+<span class="pc bpc" id="L429" title="1 of 2 branches missed.">												if (menu[3] != (temp_ul.size() + 1)) {//Give admin access</span>
+<span class="fc" id="L430">													String[] modify_data = new String[] {&quot;u_email=&quot; + temp_ul.get(menu[3] - 1), &quot;u_admin=1&quot;}; 				//Set string to modify</span>
+<span class="fc" id="L431">													IO.modify(&quot;d_user&quot;, modify_data, 4);																	//Modify the user</span>
+<span class="fc" id="L432">													System.out.println(temp_ul.get(menu[3] - 1) + &quot; &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_adm_uadm_succ&quot;) + &quot;\n&quot;); 	//Prints that the selected user now has admin access</span>
+<span class="fc" id="L433">													Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_wait&quot;)); 											//Waits for the user input</span>
+												}
+											}
+											
+											
+											
+<span class="fc" id="L439">											menu[2] = 0; 						//Back to Admin basic menu</span>
+<span class="fc" id="L440">											break;</span>
+											
+											
+										case 4: //Exit
+<span class="fc" id="L444">											menu[1] = 0; //Resets Account menu</span>
+<span class="fc" id="L445">											menu[2] = 0; //Resets Admin menu</span>
+<span class="fc" id="L446">											break;</span>
+											
+											
+										default: //Default case
+<span class="nc" id="L450">											menu[0] = -1; //Sends menu to an invalid state to reset it</span>
+											break;
+									}
+<span class="nc" id="L453">									break;</span>
+									
+									
+								default: //Default case
+<span class="nc" id="L457">									menu[0] = -1; //Sends menu to an invalid state to reset it</span>
+									break;
+							}
+<span class="nc" id="L460">						}</span>
+						else { //User not logged in
+<span class="fc" id="L462">							System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_err&quot;)); //Report error, user should be logged in to see this.</span>
+<span class="fc" id="L463">							Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_wait&quot;)); //Waits for the user input</span>
+							
+<span class="fc" id="L465">							menu[0] = 0; //Resets Main menu</span>
+						}
+<span class="fc" id="L467">						break;</span>
+						
+						
+					case 3: //Log in/out
+						//Checks if it should log in or out
+<span class="fc bfc" id="L472" title="All 2 branches covered.">						if (active_user != null) { //Log out</span>
+<span class="fc" id="L473">							Login_method.login_method_out(); 											//Logs out the user</span>
+<span class="fc" id="L474">							System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_lgo_succ&quot;)); 	//Prints that the user logged out</span>
+<span class="fc" id="L475">						}</span>
+						else { //Log in
+<span class="fc bfc" id="L477" title="All 2 branches covered.">							if (Login_method.login_method_in()) //Check if the method successfully creates the user</span>
+<span class="fc" id="L478">								System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_acc_lgi_succ&quot;)); 	//Prints that the user logged in</span>
+<span class="fc" id="L479">							create_success_pu = c_product_user(); </span>
+						}
+						
+<span class="fc" id="L482">						Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_wait&quot;)); 	//Waits for the user input</span>
+						
+<span class="fc" id="L484">						menu[0] = 0; //Resets Main menu</span>
+<span class="fc" id="L485">						break;</span>
+						
+						
+					case 4: //Create account
+						//Check if the user is logged in
+<span class="fc bfc" id="L490" title="All 2 branches covered.">						if (active_user != null)</span>
+<span class="fc" id="L491">							System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_cracc_err&quot;)); //Report error as the user is logged in</span>
+						else {
+<span class="fc" id="L493">							active_user = new User(); 												//Creates a new user</span>
+<span class="fc bfc" id="L494" title="All 2 branches covered.">							if (first_user) { 				//If this is the first user</span>
+<span class="fc" id="L495">								active_user.s_admin(&quot;1&quot;); 		//Set admin level to 1</span>
+<span class="fc" id="L496">								first_user = false; 			//Disable first user</span>
+							}
+<span class="fc" id="L498">							active_user.save();														//Save the data on the file</span>
+<span class="fc" id="L499">							System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_cracc_succ&quot;)); 	//Print that the user was created successfully</span>
+						}
+						
+<span class="fc" id="L502">						Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_wait&quot;)); //Waits for the user input</span>
+						
+<span class="fc" id="L504">						menu[0] = 0; //Resets Main menu</span>
+<span class="fc" id="L505">						break;</span>
+						
+						
+					case 5: //Change region
+						//Auxiliary list
+<span class="fc" id="L510">						List&lt;String[]&gt; aux_l = Region.get_list();	//Set the list</span>
+						
+						//Print
+<span class="fc bfc" id="L513" title="All 2 branches covered.">						for (int i = 1; i &lt;= aux_l.size(); i++) { //Print the list</span>
+<span class="fc" id="L514">							System.out.println(i + &quot;. &quot; + aux_l.get(i - 1)[0] + &quot;.&quot;); //Prints the numbered list item</span>
+						}
+<span class="fc" id="L516">						System.out.println((aux_l.size() + 1) + &quot;. &quot; + Localization.get(&quot;main&quot;, &quot;main_menu_ex&quot;));</span>
+						
+						//Menu selection
+<span class="fc" id="L519">						menu[1] = Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_sel&quot;), 1, (aux_l.size() + 1)); //Request selection</span>
+						
+						//Selection
+<span class="fc bfc" id="L522" title="All 2 branches covered.">						if (menu[1] != (aux_l.size() + 1)) { //Select the region</span>
+<span class="fc" id="L523">							Region.set_ar(menu[1] - 1);										//Sets the new active region</span>
+<span class="fc" id="L524">							System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_reg_wcm&quot;) + Region.get_region() + &quot;.&quot;); 	//Welcomes the user to the new region</span>
+						}
+<span class="fc" id="L526">						Filter.filter_s(Localization.get(&quot;main&quot;, &quot;main_menu_wait&quot;)); 	//Waits for the user input</span>
+						
+						//Menu resets
+<span class="fc" id="L529">						menu[0] = 0; //Resets Main menu</span>
+<span class="fc" id="L530">						menu[1] = 0; //Resets Region menu</span>
+<span class="fc" id="L531">						break;</span>
+						
+						
+					case 6: //Close program
+<span class="fc" id="L535">						Filter.scan.close(); //Closes the scan</span>
+						
+<span class="pc bpc" id="L537" title="1 of 2 branches missed.">						if (active_user != null) //In case that the user is logged in, it logs him out</span>
+<span class="fc" id="L538">							Login_method.login_method_out();</span>
+<span class="fc" id="L539">						return; //Closes the program by getting out of the main function</span>
+						
+						
+					default: //Default case
+<span class="nc bnc" id="L543" title="All 2 branches missed.">						for (int i = 0; i &lt; menu.length; i++) //Resets every menu value to 0</span>
+<span class="nc" id="L544">							menu[i] = 0; //Reset menu on the i array</span>
+<span class="nc" id="L545">						System.out.println(Localization.get(&quot;main&quot;, &quot;main_menu_err&quot;)); //Report outside of menu selection</span>
+						break;
+				}
+			}
+		}
+		else { //Test enviroment
+<span class="nc" id="L551">			Test t = new Test(); //Creates a new test object</span>
+<span class="nc" id="L552">			t.test(); //Tests the object</span>
+		}
+<span class="nc" id="L554">	}</span>
+	
+	
+	
+	
+	//Create
+	private static boolean c_category() { //Category create
+		//Reset list
+<span class="fc" id="L562">		c = new ArrayList&lt;&gt;();</span>
+		
+		//Get the data from the file
+<span class="fc" id="L565">		IO.read(&quot;d_category&quot;, &quot;&quot;, 0, false); //Get data</span>
+<span class="fc bfc" id="L566" title="All 2 branches covered.">		if (IO.data().isEmpty()) //If there is no data return</span>
+<span class="fc" id="L567">			return false;												//Couldn't get the data		</span>
+		
+		//Get Category list
+<span class="fc bfc" id="L570" title="All 2 branches covered.">		for (int i = 0; i &lt; IO.data().size(); i++) 			//Create categories</span>
+<span class="pc bpc" id="L571" title="1 of 2 branches missed.">			if (IO.data().get(i) != null) {							//Prevents creating null objects</span>
+<span class="fc" id="L572">				Category c_aux = new Category (IO.data().get(i));		//Creates an auxiliary category</span>
+<span class="fc" id="L573">				c.add(c_aux);										//Adds the category</span>
+			}
+		
+<span class="fc" id="L576">		return true;</span>
+	}
+	
+	
+	private static boolean c_product () { //Product list
+		//Reset list
+<span class="fc" id="L582">		p = new ArrayList&lt;&gt;();</span>
+		
+		//Get the data from the file
+<span class="fc" id="L585">		IO.read(&quot;d_product&quot;, &quot;&quot;, 0, false); 	//Get data</span>
+<span class="fc bfc" id="L586" title="All 2 branches covered.">		if (IO.data().isEmpty()) //If there is no data return</span>
+<span class="fc" id="L587">			return false;												//Couldn't get the data</span>
+		
+		//Variables to use
+<span class="fc" id="L590">		String[] aux_i = new String[5]; //Auxiliar string to use</span>
+		
+		//Get Product list
+<span class="fc bfc" id="L593" title="All 2 branches covered.">		for(int i = 1; i &lt;= IO.data().size()/5; i++) {	//Write every product in the list		</span>
+			//Null prevent
+<span class="pc bpc" id="L595" title="1 of 2 branches missed.">			if (IO.data().get((i*5) - 5) == null) //Prevents creating null objects</span>
+<span class="nc" id="L596">				break;</span>
+
+			//Auxiliary array
+<span class="fc" id="L599">			aux_i[0] = IO.data().get((i*5) - 5); 				//Id</span>
+<span class="fc" id="L600">			aux_i[1] = IO.data().get((i*5) - 4); 				//Name</span>
+<span class="fc" id="L601">			aux_i[2] = IO.data().get((i*5) - 3); 				//Category</span>
+<span class="fc" id="L602">			aux_i[3] = IO.data().get((i*5) - 2); 				//Price</span>
+<span class="fc" id="L603">			aux_i[4] = IO.data().get((i*5) - 1); 				//Stock</span>
+			
+			//Create a product
+<span class="fc" id="L606">			Product p_aux = new Product (aux_i);		//Creates an auxiliary product</span>
+<span class="fc" id="L607">			p.add(p_aux);								//Adds the product</span>
+		}
+			
+		
+<span class="fc" id="L611">		return true;</span>
+	}
+	
+	
+	private static boolean c_product_user() { //Product User list
+		//Reset list
+<span class="fc" id="L617">		pu = new ArrayList&lt;&gt;();</span>
+		
+		//Get the data from the file
+<span class="fc" id="L620">		IO.read(&quot;d_product_user&quot;, &quot;&quot;, 0, false); //Get data</span>
+<span class="fc bfc" id="L621" title="All 2 branches covered.">		if (IO.data().isEmpty()) //If there is no data return</span>
+<span class="fc" id="L622">			return false;												//Couldn't get the data</span>
+		
+		//Variables to use
+<span class="fc" id="L625">		String[] aux_i = new String[6]; //Auxiliar string to check</span>
+		
+		//Get Product User list
+<span class="fc bfc" id="L628" title="All 2 branches covered.">		for(int i = 1; i &lt;= IO.data().size()/6; i++) { //Search between the created list</span>
+			//Null prevent
+<span class="pc bpc" id="L630" title="1 of 2 branches missed.">			if (IO.data().get((i * 6) - 6) == null)</span>
+<span class="nc" id="L631">				break;</span>
+			
+<span class="fc" id="L633">			aux_i[0] = IO.data().get((i*6) - 6); 						//User Email</span>
+<span class="pc bpc" id="L634" title="1 of 2 branches missed.">			if(aux_i[0].equals(Amazing.active_user.r_email())) { //Checks if the product user equals the active user email</span>
+				//Now checks for the rest of the data
+<span class="fc" id="L636">				aux_i[1] = IO.data().get((i * 6) - 5); 					//Product ID</span>
+<span class="fc" id="L637">				aux_i[2] = IO.data().get((i * 6) - 4); 					//Product Name</span>
+<span class="fc" id="L638">				aux_i[3] = IO.data().get((i * 6) - 3); 					//Product Price</span>
+<span class="fc" id="L639">				aux_i[4] = IO.data().get((i * 6) - 2); 					//Number of items Ordered</span>
+<span class="fc" id="L640">				aux_i[5] = IO.data().get((i * 6) - 1); 					//Price of the total order</span>
+				
+				//Create a product user
+<span class="fc" id="L643">				Product_user pu_aux = new Product_user(aux_i); 	//Sets the new product user</span>
+<span class="fc" id="L644">				pu.add(pu_aux);									//Adds the auxiliary product user</span>
+			}
+		}
+		
+<span class="fc" id="L648">		return true;</span>
+	}
+	
+	
+	private static List&lt;String&gt; c_user(boolean complete) { //User list
+		//List to return
+<span class="fc" id="L654">		ArrayList&lt;String&gt; user_email = new ArrayList&lt;&gt;();</span>
+		
+		//Get the data from the file
+<span class="fc" id="L657">		IO.read(&quot;d_user&quot;, &quot;&quot;, 0, false); //Get data</span>
+		
+		//Get User email list
+<span class="fc bfc" id="L660" title="All 2 branches covered.">		for(int i = 1; i &lt;= IO.data().size()/5; i++) { //Search between the created list</span>
+			//Null prevent
+<span class="pc bpc" id="L662" title="1 of 2 branches missed.">			if (IO.data().get((i * 5) - 5) == null)</span>
+<span class="nc" id="L663">				break;</span>
+			
+			//Add emails
+<span class="fc" id="L666">			user_email.add(IO.data().get((i * 5) - 5));	//Adds email of the user	</span>
+		}
+		
+		//Not complete, remove active user
+<span class="fc bfc" id="L670" title="All 2 branches covered.">		if (!complete)</span>
+<span class="fc bfc" id="L671" title="All 2 branches covered.">			for (int i = 0; i &lt; user_email.size(); i++)</span>
+<span class="fc bfc" id="L672" title="All 2 branches covered.">				if (user_email.get(i).equals(active_user.r_email()))</span>
+<span class="fc" id="L673">					user_email.remove(i);</span>
+		//Return
+<span class="fc" id="L675">		return user_email;</span>
+	}
+	
+	//Compare
+	private static void compare_pr (Product[] pr_data, String[] comp_currency) { //Compares two products
+		//Formatting
+<span class="fc" id="L681">		String spacing = &quot;			|		&quot;; 	//Spacing</span>
+		//Prices
+<span class="fc" id="L683">		Float[] prices = new Float[2];			//Float with the prices converted</span>
+<span class="fc" id="L684">		prices[0] = Converter.decimal_conv((pr_data[0].r_raw_price() * Float.parseFloat(comp_currency[1])), 2); 	//Gets the price with the decimal places</span>
+<span class="fc" id="L685">		prices[1] = Converter.decimal_conv((pr_data[1].r_raw_price() * Float.parseFloat(comp_currency[4])), 2); 	//Gets the price with the decimal places</span>
+<span class="fc" id="L686">		String[] prices_s = new String[] {prices[0] + comp_currency[2], prices[1] + comp_currency[5]};		//String with the prices and the symbol</span>
+		
+		//Print comparison
+<span class="fc" id="L689">		System.out.println(Localization.get(&quot;main&quot;, &quot;main_comp_pr_n&quot;)			+ pr_data[0].r_name()		+ spacing + 	pr_data[1].r_name()); 		//Product Name 		(Pr1 name)		(Pr2 name)</span>
+<span class="fc" id="L690">		System.out.println(Localization.get(&quot;main&quot;, &quot;main_comp_pr_id&quot;) 			+ pr_data[0].r_id()			+ spacing + 	pr_data[1].r_id());			//Product Id 		(Pr1 id)		(Pr2 id)</span>
+<span class="fc" id="L691">		System.out.println(Localization.get(&quot;main&quot;, &quot;main_comp_pr_cat&quot;) 		+ pr_data[0].r_category()	+ spacing + 	pr_data[1].r_category());	//Product Category 	(Pr1 category)	(Pr2 category)</span>
+<span class="fc" id="L692">		System.out.println(Localization.get(&quot;main&quot;, &quot;main_comp_pr_val&quot;) 		+ prices_s[0]				+ spacing + 	prices_s[1]);				//Product Price 	(Pr1 price)		(Pr2 price)</span>
+<span class="fc" id="L693">		System.out.println(Localization.get(&quot;main&quot;, &quot;main_comp_pr_stk&quot;) 		+ pr_data[0].r_stock() 		+ spacing + 	pr_data[1].r_stock());		//Product Stock 	(Pr1 stock)		(Pr2 stock)</span>
+<span class="fc" id="L694">		System.out.println(Localization.get(&quot;main&quot;, &quot;main_comp_pr_reg&quot;)			+ comp_currency[0] 			+ spacing +		comp_currency[3]);			//Product Region	(Region of Pr1)	(Region of Pr2)</span>
+<span class="fc" id="L695">	}</span>
+	
+	
+	
+	
+	//Active User
+	public static User get_a_user() {
+<span class="fc" id="L702">		return active_user;</span>
+	}
+	
+	public static void set_a_user(boolean set) {
+<span class="fc bfc" id="L706" title="All 2 branches covered.">		if (set)</span>
+<span class="fc" id="L707">			active_user = new User (IO.data().toArray(new String[IO.data().size()])); //Set the new user based on the array</span>
+		else
+<span class="fc" id="L709">			active_user = null;</span>
+<span class="fc" id="L710">	}</span>
+	
+	
+	
+	
+	//Test
+	public static boolean get_test() {
+<span class="fc" id="L717">		return test;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Main (27-Dec-2018 19:20:05)</div></body></html>

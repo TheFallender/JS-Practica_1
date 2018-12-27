@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Filter.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Amazing (26-Dec-2018 21:47:04)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.inside</a> &gt; <span class="el_source">Filter.java</span></div><h1>Filter.java</h1><pre class="source lang-java linenums">package amazing.inside;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Scanner;
+
+<span class="nc" id="L7">public class Filter { //Filter class</span>
+<span class="fc" id="L8">	public static final Scanner scan = new Scanner(System.in); //Scanner definition</span>
+<span class="fc" id="L9">	private static InputStream skipper = new ByteArrayInputStream(&quot;&quot;.getBytes()); //Skip the next input</span>
+	
+	
+	public static int filter_i(String ask, int low, int high) { //Filters Int
+<span class="nc" id="L13">		while (true) { //Keeps in the loop until it gets out with the return</span>
+			//Ask
+<span class="fc" id="L15">			System.out.print(ask); //Ask string</span>
+			
+			//Scan
+<span class="fc" id="L18">			String input = scan.nextLine(); //Scan the next line</span>
+			
+			//Filter
+			try {  
+				//Parse
+<span class="fc" id="L23">				int val = Integer.parseInt(input); //Value to return</span>
+				
+				//Limiters check
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">				if (low == high) { 			//No limit</span>
+<span class="fc" id="L27">					System.setIn(skipper); 		//Skip input</span>
+<span class="fc" id="L28">					return val;					//Return value</span>
+				}
+				else { //There is a limit
+<span class="nc bnc" id="L31" title="All 4 branches missed.">					if (val &gt;= low &amp;&amp; val &lt;= high) { //Check if the integer is valid</span>
+<span class="nc" id="L32">						System.setIn(skipper); 			//Skip input</span>
+<span class="nc" id="L33">						return val;						//Return value</span>
+					}
+					else //Error, out of limit
+<span class="nc" id="L36">						System.out.println(Localization.get(&quot;inside&quot;, &quot;fltr_err_btw&quot;) + low + &quot;-&quot; + high + &quot;.&quot;); //Reports that the integer isn't between the values</span>
+				}
+<span class="nc" id="L38">			}  </span>
+<span class="nc" id="L39">			catch(NumberFormatException e) { //Not a valid number</span>
+<span class="nc" id="L40">				System.out.println(Localization.get(&quot;inside&quot;, &quot;fltr_err_inv&quot;)); //Reports that the input is not a valid value</span>
+			}
+		}
+	}
+	
+	public static float filter_f(String ask, float low, float high, int decimal_slots) { //Filters Float
+<span class="nc" id="L46">		while (true) { //Keeps in the loop until it gets out with the return</span>
+			//Ask
+<span class="fc" id="L48">			System.out.print(ask); //Ask string</span>
+			
+			//Scan
+<span class="fc" id="L51">			String input = scan.nextLine(); //Scan the next line</span>
+<span class="fc" id="L52">			String format = &quot;%.&quot; + decimal_slots + &quot;f&quot;;</span>
+			
+			//Filter
+			try {  
+				//Parse
+<span class="fc" id="L57">				Float val = Float.parseFloat(input); //Value to return</span>
+				
+				//Decimal format
+<span class="fc bfc" id="L60" title="All 2 branches covered.">				if (decimal_slots != 0) { //There is a decimal slot defined</span>
+<span class="fc" id="L61">					input = String.format (format, val); //Format the string</span>
+<span class="fc" id="L62">					val = Float.parseFloat(input); //Parse again to obtain the reduced value</span>
+				}
+				
+				//Limiters check
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">				if (low == high) { 			//No limit</span>
+<span class="fc" id="L67">					System.setIn(skipper); 		//Skip input</span>
+<span class="fc" id="L68">					return val;					//Return value</span>
+				}
+				else { //There is a limit
+<span class="nc bnc" id="L71" title="All 4 branches missed.">					if (val &gt;= low &amp;&amp; val &lt;= high) { 	//Check if the float is valid</span>
+<span class="nc" id="L72">						System.setIn(skipper); 				//Skip input</span>
+<span class="nc" id="L73">						return val;							//Return value</span>
+					}
+					else //Error, out of limit
+<span class="nc" id="L76">						System.out.println(Localization.get(&quot;inside&quot;, &quot;fltr_err_btw&quot;) + low + &quot;-&quot; + high + &quot;.&quot;); //Reports that the float isn't between the values</span>
+				}
+<span class="nc" id="L78">			}  </span>
+<span class="nc" id="L79">			catch(NumberFormatException e)  { //Not a valid number</span>
+<span class="nc" id="L80">				System.out.println(Localization.get(&quot;inside&quot;, &quot;fltr_err_inv&quot;)); //Reports that the input is not a valid value</span>
+			}
+		}
+	}
+	
+	public static String filter_s(String ask) { //Filters Strings
+<span class="fc" id="L86">		System.out.print(ask); 		//Ask string</span>
+<span class="fc" id="L87">		return scan.nextLine(); 	//Return the next line</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Amazing (26-Dec-2018 21:47:04)</div></body></html>

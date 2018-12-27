@@ -53,35 +53,35 @@ public class IO { //Input Output class
 	public static void data_check () { //Sets data path and checks files
 		//Try to set the default path
 		if (Amazing.get_test()) 																	//Test is active, set the path for test
-			data_path = "src/Test/";															//Data path set
+			data_path = "src/data/test/";															//Data path set
 		else																				//Test is disabled, proceed
 			try(BufferedReader reader = new BufferedReader(new FileReader("data_path"))) { 		//Tries to open the file
 				String line = reader.readLine(); 													//Line data
-				if (line == "") { 																	//If there is no content on the file, add default path
+				if (line == "")																		//If there is no content on the file, add default path
 					try(FileWriter writer =  new FileWriter("data_path", true)) { 						//Tries to open/create the file
-						writer.write("DATA_PATH=src/Data/");												//Writes the default path
-						data_path = "src/Data/"; 															//Sets default path
+						writer.write("DATA_PATH=src/data/main/");											//Writes the default path
+						data_path = "src/data/main/"; 														//Sets default path
 					}
 					catch (Exception IOException) { 													//Couldn't read the file (file not found)
 						System.out.println(Localization.get("inside", "io_err_fnf")); 						//Reports that there was no file found
 					}
-				}
 				else 																				//If there is content on the file, read it and set it
 					data_path = line.replaceFirst(".*=", ""); 										//Sets the defined path
 	
 			}
 			catch (IOException e_1) { 															//There is no file, create a new one and set the default path
 				try (FileWriter writer =  new FileWriter("data_path", true)){						//Tryes to open the new file
-					writer.write("DATA_PATH=src/Data/");												//Writes the default path
+					writer.write("DATA_PATH=src/data/main/");											//Writes the default path
 				} 
 				catch (IOException e_2) { 															//Couldn't read the file (file not found)
 					System.out.println(Localization.get("inside", "io_err_fnf")); 						//Reports that there was no file found
 				}
-				data_path = "src/Data/";															//In any case it sets the default path
+				data_path = "src/data/main/";															//In any case it sets the default path
 			}
 
 		//Files check
-		files_check(data_path, true); 							//Check folder
+		files_check("src/data/", true); 						//Check Data Folder
+		files_check(data_path, true); 							//Check Data path
 		files_check(data_path + "d_category", false); 			//Check Category
 		files_check(data_path + "d_product", false); 			//Check Product
 		files_check(data_path + "d_user", false); 				//Check User
@@ -89,8 +89,10 @@ public class IO { //Input Output class
 		files_check(data_path + "d_converter_rate", false); 	//Check Converter Rate
 		files_check(data_path + "d_region", false); 			//Check Region
 		files_check(data_path + "d_locale", false); 			//Check Locale
-		if (Amazing.get_test()) //Test is active
+		if (Amazing.get_test()) { //Test is active
 			files_check(data_path + "d_test", false); 			//Check Test
+			files_check(data_path + "d_thread_works", false); 	//Check Thread file
+		}
 	}
 	
 	
@@ -98,17 +100,21 @@ public class IO { //Input Output class
 	public static void files_check(String path, boolean folder) { //Checks if a file exists, if not, it creates one
 		try {																	//Tries to create the file/folder
 			File file = new File(path);												//New file with the path
-			if (!file.exists())	{													//No file exists with the same name
+			if (!file.exists())														//No file exists with the same name
 				if (folder)																//It's a folder
 					file.mkdir();															//Creates the folder
 				else																	//It's a file
 					if (!file.createNewFile())												//Checks if the file couldn't be created
 						System.out.println(Localization.get("inside", "io_err_crf")); 					//Reports that it couldn't create the file
-			}
 		} 
 		catch (IOException e) { 												//Invalid path selected (admin access, other drive...)
 			System.out.println(Localization.get("inside", "io_err_path")); 							//Reports that the selected path is invalid
 		}
+	}
+	
+	public static boolean files_exist(String path) { //Checks if the file/folder exists
+		File file = new File(path);												//New file with the path
+		return (file.exists());													//Returns the value
 	}
 	
 	public static void modify (String file_type, String[] input, int skip) { //Writes the date of the login on the user

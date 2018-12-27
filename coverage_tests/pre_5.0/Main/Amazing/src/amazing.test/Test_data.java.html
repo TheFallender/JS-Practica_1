@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Test_data.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Amazing (26-Dec-2018 21:59:45)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.test</a> &gt; <span class="el_source">Test_data.java</span></div><h1>Test_data.java</h1><pre class="source lang-java linenums">package amazing.test;
+
+import amazing.amazing.Category;
+import amazing.amazing.Product;
+import amazing.amazing.Product_user;
+import amazing.amazing.User;
+import amazing.inside.Filter;
+import amazing.inside.IO;
+import amazing.inside.Localization;
+
+<span class="nc" id="L11">public class Test_data extends Test { //Data Test class</span>
+	@Override
+	public void test() { //Test of this class
+		//Data test
+<span class="nc" id="L15">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_data_main&quot;)); //Prints that this is the Data test</span>
+		
+		//Category
+<span class="nc" id="L18">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_data_cat&quot;)); 	//Prints that the Category is going to be tested</span>
+<span class="nc" id="L19">		Category testCategory = new Category(); 						//Check constructor of Category</span>
+<span class="nc" id="L20">		testCategory.save(); 											//Save the data on the file</span>
+<span class="nc" id="L21">		IO.read(&quot;d_category&quot;, testCategory.r_name(), 1, false); 		//Read Category</span>
+<span class="nc" id="L22">		super.print_data(); 											//Print the data from the data array</span>
+		
+		//Product
+<span class="nc" id="L25">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_data_pr&quot;)); 	//Prints that the Product is going to be tested</span>
+<span class="nc" id="L26">		Product testProduct = new Product(); 							//Check constructor of Product</span>
+<span class="nc" id="L27">		testProduct.save(); 											//Save the data on the file</span>
+<span class="nc" id="L28">		IO.read(&quot;d_product&quot;, &quot;p_id=&quot; + testProduct.r_id(), 5, false); 	//Read Product</span>
+<span class="nc" id="L29">		super.print_data(); 											//Print the data from the data array</span>
+		
+		//User
+<span class="nc" id="L32">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_data_usr&quot;)); 	//Prints that the User is going to be tested</span>
+<span class="nc" id="L33">		User testUser = new User(); 									//Check constructor of User</span>
+<span class="nc" id="L34">		testUser.save();												//Save the data on the file</span>
+<span class="nc" id="L35">		IO.read(&quot;d_user&quot;, testUser.r_email(), 5, false); 				//Read User</span>
+<span class="nc" id="L36">		super.print_data(); 											//Print the data from the data array</span>
+		
+		//Product User
+<span class="nc" id="L39">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_data_pu&quot;)); 	//Prints that the Product User is going to be tested</span>
+<span class="nc" id="L40">		String[] aux = new String[6]; 															//Auxiliar string</span>
+<span class="nc" id="L41">		aux[0] = testUser.r_email(); 															//Set the Email</span>
+<span class="nc" id="L42">		aux[1] = &quot;&quot; + testProduct.r_id(); 														//Set the ID</span>
+<span class="nc" id="L43">		aux[2] = testProduct.r_name(); 															//Set the Name</span>
+<span class="nc" id="L44">		aux[3] = &quot;&quot; + testProduct.r_price(); 													//Set the Price</span>
+<span class="nc" id="L45">		aux[4] = &quot;&quot; + Filter.filter_i(Localization.get(&quot;main&quot;, &quot;main_menu_pr_buy_amt&quot;), 0, 0); 	//Set the number of items to order</span>
+<span class="nc" id="L46">		aux[5] = &quot;&quot; + (testProduct.r_price() * Integer.parseInt(aux[4]));						//Set the total price of the order</span>
+<span class="nc" id="L47">		Product_user testProduct_User = new Product_user(aux); 					//Test Product User</span>
+<span class="nc" id="L48">		testProduct_User.save(); 												//Save the data on the file</span>
+<span class="nc" id="L49">		IO.read(&quot;d_product_user&quot;, testUser.r_email(), 6, false); 				//Read Product User</span>
+<span class="nc" id="L50">		super.print_data(); 													//Print the data from the data array</span>
+		
+		
+		//Phase completed, 
+<span class="nc" id="L54">		super.incPhase(); //Increase the phase</span>
+<span class="nc" id="L55">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Amazing (26-Dec-2018 21:59:45)</div></body></html>

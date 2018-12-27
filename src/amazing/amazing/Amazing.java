@@ -2,7 +2,6 @@ package amazing.amazing;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import amazing.inside.Converter;
 import amazing.inside.Encrypter;
 import amazing.inside.Filter;
@@ -13,7 +12,7 @@ import amazing.inside.Region;
 import amazing.test.Test;
 
 //Menu, marketplace class
-public class Amazing {
+public class Amazing implements Runnable {
 	//Test variable
 	private static boolean test = false; 		//Change this to start the test system
 	
@@ -26,33 +25,33 @@ public class Amazing {
 	private static ArrayList<Product> pc = new ArrayList<>(); 		//Product category list array (list of the actual category)
 	private static ArrayList<Product_user> pu = new ArrayList<>();	//Product user list
 	
-	//Main
-	public static void main(String[] args){ //Main code
+	//Menu
+	private static int[] menu = new int[4]; //Menu int values
+	
+	//Menu
+	@Override
+	public synchronized void run (){ //Main code
+		//Starting functions
+			//Data
+			IO.data_check(); //Checks the data files are there, if not, it create them 
+					
+			//Region and Converter
+			Region.region_list();					//Sets the Region list
+			Converter.set_conv_list();				//Sets the Converter list
+			Localization.set_locale_list();			//Sets the Locale list
+			
+			//Adds the default regions and locales
+			Localization.set_locale("en", "EN");
+			Region.region_add("Default", "eur/eur", "en", "€"); 	//Sets the new region
+			Region.region_add("ES", "eur/eur", "es", "€"); 			//Sets the new region
+			Region.region_add("US", "eur/usd", "en", "$"); 			//Sets the new region
+			Region.region_add("GB", "eur/gbp", "en", "£"); 			//Sets the new region
+			
+			//Sets the default region
+			Region.set_ar(0);						//Sets the active region			
+		
 		if (!test) { //Default enviroment
-			//Starting functions
-				//Data
-				IO.data_check(); //Checks the data files are there, if not, it create them 
-						
-				//Region and Converter
-				Region.region_list();					//Sets the Region list
-				Converter.set_conv_list();				//Sets the Converter list
-				Localization.set_locale_list();			//Sets the Locale list
-				
-				//Adds the default regions and locales
-				Localization.set_locale("en", "EN");
-				Region.region_add("Default", "eur/eur", "en", "€"); 	//Sets the new region
-				Region.region_add("ES", "eur/eur", "es", "€"); 	//Sets the new region
-				Region.region_add("US", "eur/usd", "en", "$"); 	//Sets the new region
-				Region.region_add("GB", "eur/gbp", "en", "£"); 	//Sets the new region
-				
-				//Sets the default region
-				Region.set_ar(0);						//Sets the active region			
-				
-				
-			//Variables definitions
-				//Menu
-				int[] menu = new int[4]; //Menu int values
-				
+			//Variables definitions			
 				//Boolean changes
 				boolean create_success_c = c_category();	//Detects error in the creation process of category
 				boolean changes_c = false;					//Detects changes in the category list
@@ -283,7 +282,7 @@ public class Amazing {
 									
 									//Menu selection
 									if (active_user.r_admin()) { //Checks if the user is admin
-										System.out.println("5. " + Localization.get("main", "main_menu_acc_adm"));		//6. Admin
+										System.out.println("6. " + Localization.get("main", "main_menu_acc_adm"));		//6. Admin
 										menu[1] = Filter.filter_i(Localization.get("main", "main_menu_sel"), 1, 6); //Request menu selection
 									}
 									else
@@ -341,23 +340,20 @@ public class Amazing {
 								case 3: //Ordered products				
 									menu[1] = 0; //Back to Account basic menu
 									
-									if (create_success_pu) {//No error, proceed
+									if (create_success_pu) //No error, proceed
 										if (!(pu.isEmpty())) //Check if it's empty
 											for (int i = 0; i < pu.size(); i++) //Print all the orders
 												pu.get(i).print(); 						//Prints the product user
 										else
 											System.out.println(Localization.get("main", "main_menu_acc_pru_err")); 	//Reports that the user hasn't made any orders
-									}
-									else {
-										if (!changes_pu) { //There were no changes
+									else
+										if (!changes_pu) //There were no changes
 											System.out.println(Localization.get("main", "main_menu_acc_pru_err")); 	//Reports that the user hasn't made any orders
-										}
 										else {
 											create_success_pu = c_product_user();	//Recreates the product user to check for new orders
 											changes_pu = false; //Disable product user
 											menu[1] = 2; //Keep in this menu
 										}
-									}
 
 									Filter.filter_s(Localization.get("main", "main_menu_wait")); //Waits for the user input
 									break;
@@ -433,7 +429,7 @@ public class Amazing {
 												if (menu[3] != (temp_ul.size() + 1)) {//Give admin access
 													String[] modify_data = new String[] {"u_email=" + temp_ul.get(menu[3] - 1), "u_admin=1"}; 				//Set string to modify
 													IO.modify("d_user", modify_data, 4);																	//Modify the user
-													System.out.println(temp_ul.get(menu[3] - 1) + Localization.get("main", "main_menu_adm_uadm_succ") + "\n"); 	//Prints that the selected user now has admin access
+													System.out.println(temp_ul.get(menu[3] - 1) + " " + Localization.get("main", "main_menu_adm_uadm_succ") + "\n"); 	//Prints that the selected user now has admin access
 													Filter.filter_s(Localization.get("main", "main_menu_wait")); 											//Waits for the user input
 												}
 											}

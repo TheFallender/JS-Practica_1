@@ -1,7 +1,19 @@
 # Amazing
-This project tries to immitate how a marketstore like Amazon would work. It gives you the option to create products, category (only if you are an admin) and buy the products.
+This project tries to immitate how a marketstore like Amazon would work. You can:
+-Buy products distributed inside categories.
+-Compare products.
+-Create an account that holds all your orders.
+-Change the password of the account.
+-Change the regions.
+-Get currencies conversion rate from the net.
+-Create locales with a predefined template.
+-As an admin you can add products, categories and promote other users to admin.
+-All the values are saved inside files (passwords are encrypted).
+-It includes a thread that can perform any method in parallel by using reflection.
 
-This project uses a [website](http://currencies.apps.grandtrunk.net/) made by Wim Heirman, thanks to him the converter rate gets the latest value from the net.
+The project is covered with EclEmma and optimized with SonarLint, if you find anything that could be optimized, please create a pull request and we'll merge it as soon as we verify it.
+
+The converter uses a [website](http://currencies.apps.grandtrunk.net/) made by Wim Heirman, thanks to him the converter rate gets the latest value from the net.
 
 ## How to manually modify settings
 In case you want to manually create things outside of the app, here is the template for the files.
@@ -45,7 +57,7 @@ pu_p_price=(Float)
 pu_number=(Int)
 ```
 
-d_conversor_rate //Conversor rate - Currency rate from and to
+d_converter_rate //Converter rate - Currency rate from and to
 ```
 (From currency)/(To currency)
 conv_date=(Long)
@@ -66,7 +78,3 @@ l_lang=(String)
 ```
 
 ## To do list:
-
-☒ Delete categories and products.
-
-☒ UI.

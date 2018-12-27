@@ -1,8 +1,8 @@
 # /////////////////////////
 # /////////Exclude/////////
 # Data Folders
-/src/Data/
-/src/Test/
+/src/data/
+/src/test/
 /data_path
 
 #Compiled folder
@@ -11,10 +11,7 @@
 
 # Eclipse Files
 /.settings/
-/.classpath
-/.project
 *.class
-*.project
 
 # Log Files
 *.log

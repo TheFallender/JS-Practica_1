@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Test.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Main (27-Dec-2018 19:14:54)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.test</a> &gt; <span class="el_source">Test.java</span></div><h1>Test.java</h1><pre class="source lang-java linenums">package amazing.test;
+
+import java.io.File;
+
+import amazing.inside.Custom_Exception;
+import amazing.inside.Filter;
+import amazing.inside.IO;
+import amazing.inside.Localization;
+
+<span class="fc" id="L10">public class Test { //Test class</span>
+<span class="fc" id="L11">	private static int phase = 1; //Which phase is the test located in</span>
+	
+	public void test() { //Method to override that, by default, calls all the childs
+<span class="fc" id="L14">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_main_str&quot;)); //Prints that the Test system has started</span>
+		
+		//Test calls
+<span class="fc" id="L17">		Test_IO t1 = new Test_IO(); 		//Creates the IO Test</span>
+<span class="fc" id="L18">		t1.test(); 								//Tests IO</span>
+<span class="fc" id="L19">		Test_inside t2 = new Test_inside(); //Creates the Inside Test</span>
+<span class="fc" id="L20">		t2.test();								//Tests Inside</span>
+<span class="fc" id="L21">		Test_data t3 = new Test_data(); 	//Creates the Data Test</span>
+<span class="fc" id="L22">		t3.test(); 								//Tests Data</span>
+		
+		//Closes the scan
+<span class="fc" id="L25">		Filter.scan.close();</span>
+		
+		//Finished test
+<span class="fc" id="L28">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_main_fin&quot;)); //Prints that the test is finished</span>
+<span class="fc" id="L29">		System.out.println( &quot;	  ||\r\n&quot; + </span>
+							&quot;	  ||\r\n&quot; + 
+							&quot;	  ||\r\n&quot; + 
+							&quot;	  ||\r\n&quot; + 
+							&quot;	  ||\r\n&quot; + 
+							&quot;	  ||\r\n&quot; + 
+							&quot;	  ||\r\n&quot; + 
+							&quot;	  ||\r\n&quot; + 
+							&quot;	 /||\\\r\n&quot; + 
+							&quot;	/||||\\\r\n&quot; + 
+							&quot;	======         __|__\r\n&quot; + 
+							&quot;	||||||        / ~@~ \\\r\n&quot; + 
+							&quot;	||||||       |-------|\r\n&quot; + 
+							&quot;	||||||       |_______|\r\n&quot;); //Clean code is the base of programming.
+		
+		
+		//Delete folder
+<span class="fc" id="L46">		File folder = new File (&quot;src/data/test/&quot;); 	//Folder to delete</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">		if (folder.exists()) { 							//Checks the folder exists, just for precaution</span>
+<span class="fc" id="L48">	        File files[] = folder.listFiles(); 				//Makes a list of the files inside the folder</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">	        for (int i = 0; i &lt; files.length; i++) 			//For to delete the files</span>
+<span class="fc" id="L50">	        	files[i].delete(); 								//Delete the file</span>
+<span class="fc" id="L51">	        folder.delete(); 								//Delete the folder</span>
+		}
+<span class="fc" id="L53">	}</span>
+
+	protected void incPhase() { //Increases the phase
+<span class="fc" id="L56">		Test.phase++;</span>
+<span class="fc" id="L57">	}</span>
+	
+	protected int getPhase() { //Get's the actual phase
+<span class="nc" id="L60">		return Test.phase;</span>
+	}
+	
+	protected void print_data() { //Prints the data array from IO class
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		for(int i = 0; i &lt; IO.data().size(); i++) //For to print data</span>
+<span class="fc" id="L65">			System.out.println(Localization.get(&quot;test&quot;, &quot;test_main_prt&quot;) + i + &quot;: &quot; + IO.data().get(i)); //Prints the data number and it's value</span>
+<span class="fc" id="L66">	}</span>
+	
+	protected void throw_exc(String msg, Throwable cause) { //Method to create and throw a new exception based on the error
+<span class="nc" id="L69">		System.out.println(Localization.get(&quot;test&quot;, &quot;test_main_phs&quot;) + phase + Localization.get(&quot;test&quot;, &quot;test_main_err&quot;)); //Phase error location</span>
+<span class="nc" id="L70">		throw new Custom_Exception(msg, cause); //Throw exception</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Main (27-Dec-2018 19:14:54)</div></body></html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Product_user.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Amazing (26-Dec-2018 21:47:04)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.amazing</a> &gt; <span class="el_source">Product_user.java</span></div><h1>Product_user.java</h1><pre class="source lang-java linenums">package amazing.amazing;
+
+import amazing.inside.IO;
+import amazing.inside.Localization;
+
+public class Product_user { //Product User class
+	
+	private String user_id;			//User ID
+	private int product_id; 		//Product ID
+	private String product_name; 	//Product Name
+	private String product_price; 	//Product price
+	private String product_t_price; //Product total price
+	private int number_items; 		//Number of ordered items
+	
+<span class="fc" id="L15">	public Product_user(String[] data) { //Product User constructor</span>
+		//Set the data
+<span class="fc" id="L17">		this.user_id = data[0]; 						//Set User ID</span>
+<span class="fc" id="L18">		this.product_id = Integer.parseInt(data[1]); 	//Set Product ordered ID</span>
+<span class="fc" id="L19">		this.product_name = data[2]; 					//Set Product ordered Name</span>
+<span class="fc" id="L20">		this.product_price = data[3]; 					//Set Product Price at the moment of the order</span>
+<span class="fc" id="L21">		this.number_items = Integer.parseInt(data[4]); 	//Set Number of ordered items</span>
+<span class="fc" id="L22">		this.product_t_price = data[5];					//Set the total price value</span>
+<span class="fc" id="L23">	}</span>
+
+	public void print() { //Print the Product User
+		//Print
+<span class="nc" id="L27">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pu_print_bs&quot;)); 									//Order</span>
+<span class="nc" id="L28">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pu_print_n&quot;) + this.product_name); 			//Print Product name</span>
+<span class="nc" id="L29">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pu_print_val&quot;) + this.product_price); 				//Print the Product Price</span>
+<span class="nc" id="L30">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pu_print_amt&quot;) + this.number_items); 		//Print the number of items ordered of this Product</span>
+<span class="nc" id="L31">		System.out.println(Localization.get(&quot;objects&quot;, &quot;pu_print_tval&quot;) + this.product_t_price + &quot;\n\n&quot;); 		//Print the number of items ordered of this Product</span>
+<span class="nc" id="L32">	}</span>
+	
+	public void save() { //Save the data on the file
+		//String
+<span class="fc" id="L36">		String[] aux = new String[6]; 				//Auxiliar string to save</span>
+<span class="fc" id="L37">		aux[0] = &quot;pu_u_id=&quot; + this.user_id; 			//Set User ID</span>
+<span class="fc" id="L38">		aux[1] = &quot;pu_p_id=&quot; + this.product_id; 			//Set Product ordered ID</span>
+<span class="fc" id="L39">		aux[2] = &quot;pu_p_name=&quot; + this.product_name; 		//Set Product ordered Name</span>
+<span class="fc" id="L40">		aux[3] = &quot;pu_p_price=&quot; + this.product_price; 	//Set Product Price at the moment of the order</span>
+<span class="fc" id="L41">		aux[4] = &quot;pu_number=&quot; + this.number_items; 		//Set Number of ordered items</span>
+<span class="fc" id="L42">		aux[5] = &quot;pu_p_tprice=&quot; + this.product_t_price; 		//Set Number of ordered items</span>
+		
+		//Write data
+<span class="fc" id="L45">		IO.write(&quot;d_product_user&quot;, aux, true); //Writes the data on the file</span>
+<span class="fc" id="L46">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Amazing (26-Dec-2018 21:47:04)</div></body></html>

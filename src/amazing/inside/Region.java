@@ -12,6 +12,10 @@ public class Region {
 		return region_list.get(active_region)[0];
 	}
 	
+	public static int get_region_pos() {		//Gets region pos
+		return active_region;
+	}
+	
 	public static String get_currency() { 		//Gets the currency of the region
 		return region_list.get(active_region)[1];
 	}

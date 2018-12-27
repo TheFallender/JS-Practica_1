@@ -4,7 +4,7 @@ import amazing.inside.Converter;
 import amazing.inside.Encrypter;
 import amazing.inside.Filter;
 import amazing.inside.Localization;
-import amazing.inside.Region;
+import amazing.inside.Task_ex;
 
 public class Test_inside extends Test { //Inside Test class
 	@Override
@@ -12,13 +12,20 @@ public class Test_inside extends Test { //Inside Test class
 		//Inside test
 		System.out.println(Localization.get("test", "test_ins_main")); //Prints that this is the Inside test
 		
+		//Thread test
+		System.out.println(Localization.get("test", "test_ins_thr_test")); 																						//Prints that the thread is going to be tested
+		Task_ex.task_add("amazing.inside.IO", "write", new Object[]{"d_thread_works", new String[] {Filter.filter_s(Localization.get("test", "test_ins_thr_wrt"))}, false}); //Write request
+		Task_ex.task_add("amazing.inside.IO", "read", new Object[]{"d_thread_works", "", 1, false});																		//Read task
+		Filter.filter_s(Localization.get("main", "main_menu_wait")); 																										//Waits for the user to accept
+		System.out.println(Localization.get("test", "test_ins_thr_info")); 																									//Info about the thread
+		super.print_data(); //Print data from the thread
+		
 		
 		//Encrypter and decryption test
 		System.out.println(Localization.get("test", "test_ins_enc")); 			//Prints that the Encrypter is going to be tested
 		String text = Filter.filter_s(Localization.get("test", "test_ins_enc_txt")); 	//Base text
 		String[] e_text = new String[2]; 												//Encrypted text
 		String[] d_text = new String [2]; 												//Base text
-		
 		//Encryption and decryption process
 		try {
 			//Encrypt the base text
@@ -62,15 +69,10 @@ public class Test_inside extends Test { //Inside Test class
 		System.out.println(Localization.get("test", "test_ins_conv_acu") + Converter.get_a_currency());							//Prints the current currency
 		System.out.println(Localization.get("test", "test_ins_conv_val") + Converter.get_factor()); 							//Prints the converter value of the active currency
 		System.out.println(Localization.get("test", "test_ins_conv_dt") + Converter.date()); 									//Prints the date
-		System.out.print(Localization.get("test", "test_ins_conv_dec"));														//Prints that is going to test the decimal method
+		
+		System.out.println("\n" + Localization.get("test", "test_ins_conv_dec"));												//Prints that is going to test the decimal method
 		System.out.println(Converter.decimal_conv(Filter.filter_f(Localization.get("test", "test_ins_conv_dec_nmb"), 0, 0, 0),
-				Filter.filter_i(Localization.get("test", "test_ins_conv_dec_dp"), 0, 0)));										//Prints the decimal out of the method
-		
-		//Region
-		Region.region_add(Filter.filter_s(Localization.get("test", "reg_n_nm")), Filter.filter_s(Localization.get("test", "reg_n_cu")),
-				Filter.filter_s(Localization.get("test", "reg_n_lng")), Filter.filter_s(Localization.get("test", "reg_n_sym")));			//Add region
-		System.out.println(Localization.get("test", "test_ins_reg_ar") + Region.get_region());												//Set region
-		
+		Filter.filter_i(Localization.get("test", "test_ins_conv_dec_dp"), 0, 0)));										//Prints the decimal out of the method
 		
 		//Phase completed, 
 		super.incPhase(); //Increase the phase
