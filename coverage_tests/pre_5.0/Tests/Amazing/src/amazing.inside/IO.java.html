@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>IO.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Amazing (26-Dec-2018 21:47:04)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.inside</a> &gt; <span class="el_source">IO.java</span></div><h1>IO.java</h1><pre class="source lang-java linenums">package amazing.inside;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import amazing.amazing.Amazing;
+
+<span class="nc" id="L13">public class IO { //Input Output class</span>
+<span class="fc" id="L14">	private static String data_path = &quot;&quot;; 	//Path to the Data Folder</span>
+<span class="fc" id="L15">	private static ArrayList&lt;String&gt; data_a = new ArrayList&lt;&gt;(); 			//Data array</span>
+	
+	public static final List&lt;String&gt; data(){ //Returns the Data List
+<span class="fc" id="L18">		return data_a;</span>
+	}
+	
+	public static void read (String file_type, String search_for, int array_size, boolean repeat) {	//Reads all the filtered data from file
+<span class="fc" id="L22">		String file_path = data_path + file_type;											//Path to the file</span>
+<span class="fc" id="L23">		try(BufferedReader reader = new BufferedReader(new FileReader(file_path))) { 		//Tries to open the file</span>
+<span class="fc" id="L24">			data_a = new ArrayList&lt;&gt;(); 	 													//Data array with the size of the parameter</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">			for (String line = reader.readLine(); line != null; line = reader.readLine())				//Search in the file</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">				if (line.contains(search_for)) { 													//Check if this is the requested line</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">					if (!repeat) 																		//Remove code if it is not going to search for the same term</span>
+<span class="fc" id="L28">						search_for = &quot;&quot;;																	//Now it accepts anything as the &quot;&quot; contains nothing</span>
+<span class="pc bpc" id="L29" title="2 of 4 branches missed.">					if ((array_size != 0) &amp;&amp; (data_a.size() &gt;= array_size)) 							//Break if the array size is reached</span>
+<span class="nc" id="L30">						break;																				//Break the loop</span>
+					else																				//There is space for the data
+<span class="fc" id="L32">						data_a.add(line.replaceFirst(&quot;^\\w+=&quot;, &quot;&quot;)); 										//Cleans the line data</span>
+				}
+		}
+<span class="nc" id="L35">		catch (Exception FileNotFoundException) { //Exception Catch</span>
+<span class="nc" id="L36">			System.out.println(Localization.get(&quot;inside&quot;, &quot;io_err_fnf&quot;)); //Reports that there was no file found</span>
+		}
+<span class="fc" id="L38">	}</span>
+	
+	public static void write (String file_type, String[] input, boolean append) { //Writes the array inside the selected file
+<span class="fc" id="L41">		String file_path = data_path + file_type; 						//Path to the file</span>
+<span class="fc" id="L42">		try(FileWriter writer =  new FileWriter(file_path, append)) {	//Tries to open the file</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">			for (int i = 0; i &lt; input.length; i++)							//For to write the array &quot;input&quot;</span>
+<span class="fc" id="L44">				writer.write(input[i] + &quot;\r\n&quot;);								//Writes the selected data from the array</span>
+		}
+<span class="nc" id="L46">		catch (IOException e) { //Exception Catch</span>
+<span class="nc" id="L47">			System.out.println(Localization.get(&quot;inside&quot;, &quot;io_err_fnf&quot;)); //Reports that there was no file found</span>
+		}
+<span class="fc" id="L49">	}</span>
+
+	
+	//Starting function
+	public static void data_check () { //Sets data path and checks files
+		//Try to set the default path
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">		if (Amazing.get_test()) 																	//Test is active, set the path for test</span>
+<span class="fc" id="L56">			data_path = &quot;src/data/test/&quot;;															//Data path set</span>
+		else																				//Test is disabled, proceed
+<span class="nc" id="L58">			try(BufferedReader reader = new BufferedReader(new FileReader(&quot;data_path&quot;))) { 		//Tries to open the file</span>
+<span class="nc" id="L59">				String line = reader.readLine(); 													//Line data</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">				if (line == &quot;&quot;)																		//If there is no content on the file, add default path</span>
+<span class="nc" id="L61">					try(FileWriter writer =  new FileWriter(&quot;data_path&quot;, true)) { 						//Tries to open/create the file</span>
+<span class="nc" id="L62">						writer.write(&quot;DATA_PATH=src/data/main/&quot;);											//Writes the default path</span>
+<span class="nc" id="L63">						data_path = &quot;src/data/main/&quot;; 														//Sets default path</span>
+					}
+<span class="nc" id="L65">					catch (Exception IOException) { 													//Couldn't read the file (file not found)</span>
+<span class="nc" id="L66">						System.out.println(Localization.get(&quot;inside&quot;, &quot;io_err_fnf&quot;)); 						//Reports that there was no file found</span>
+<span class="nc" id="L67">					}</span>
+				else 																				//If there is content on the file, read it and set it
+<span class="nc" id="L69">					data_path = line.replaceFirst(&quot;.*=&quot;, &quot;&quot;); 										//Sets the defined path</span>
+	
+			}
+<span class="nc" id="L72">			catch (IOException e_1) { 															//There is no file, create a new one and set the default path</span>
+<span class="nc" id="L73">				try (FileWriter writer =  new FileWriter(&quot;data_path&quot;, true)){						//Tryes to open the new file</span>
+<span class="nc" id="L74">					writer.write(&quot;DATA_PATH=src/data/main/&quot;);											//Writes the default path</span>
+				} 
+<span class="nc" id="L76">				catch (IOException e_2) { 															//Couldn't read the file (file not found)</span>
+<span class="nc" id="L77">					System.out.println(Localization.get(&quot;inside&quot;, &quot;io_err_fnf&quot;)); 						//Reports that there was no file found</span>
+				}
+<span class="nc" id="L79">				data_path = &quot;src/data/main/&quot;;															//In any case it sets the default path</span>
+			}
+
+		//Files check
+<span class="fc" id="L83">		files_check(&quot;src/data/&quot;, true); 						//Check Data Folder</span>
+<span class="fc" id="L84">		files_check(data_path, true); 							//Check Data path</span>
+<span class="fc" id="L85">		files_check(data_path + &quot;d_category&quot;, false); 			//Check Category</span>
+<span class="fc" id="L86">		files_check(data_path + &quot;d_product&quot;, false); 			//Check Product</span>
+<span class="fc" id="L87">		files_check(data_path + &quot;d_user&quot;, false); 				//Check User</span>
+<span class="fc" id="L88">		files_check(data_path + &quot;d_product_user&quot;, false); 		//Check Product User</span>
+<span class="fc" id="L89">		files_check(data_path + &quot;d_converter_rate&quot;, false); 	//Check Converter Rate</span>
+<span class="fc" id="L90">		files_check(data_path + &quot;d_region&quot;, false); 			//Check Region</span>
+<span class="fc" id="L91">		files_check(data_path + &quot;d_locale&quot;, false); 			//Check Locale</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">		if (Amazing.get_test()) //Test is active</span>
+<span class="fc" id="L93">			files_check(data_path + &quot;d_test&quot;, false); 			//Check Test</span>
+<span class="fc" id="L94">	}</span>
+	
+	
+	//Auxiliary functions
+	public static void files_check(String path, boolean folder) { //Checks if a file exists, if not, it creates one
+		try {																	//Tries to create the file/folder
+<span class="fc" id="L100">			File file = new File(path);												//New file with the path</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">			if (!file.exists())														//No file exists with the same name</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">				if (folder)																//It's a folder</span>
+<span class="fc" id="L103">					file.mkdir();															//Creates the folder</span>
+				else																	//It's a file
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">					if (!file.createNewFile())												//Checks if the file couldn't be created</span>
+<span class="nc" id="L106">						System.out.println(Localization.get(&quot;inside&quot;, &quot;io_err_crf&quot;)); 					//Reports that it couldn't create the file</span>
+<span class="nc" id="L107">		} </span>
+<span class="nc" id="L108">		catch (IOException e) { 												//Invalid path selected (admin access, other drive...)</span>
+<span class="nc" id="L109">			System.out.println(Localization.get(&quot;inside&quot;, &quot;io_err_path&quot;)); 							//Reports that the selected path is invalid</span>
+		}
+<span class="fc" id="L111">	}</span>
+	
+	public static boolean files_exist(String path) { //Checks if the file/folder exists
+<span class="nc" id="L114">		File file = new File(path);												//New file with the path</span>
+<span class="nc" id="L115">		return (file.exists());													//Returns the value</span>
+	}
+	
+	public static void modify (String file_type, String[] input, int skip) { //Writes the date of the login on the user
+<span class="nc" id="L119">		String file_path = data_path + file_type; 										//Defines the path of the file with data path and the file name</span>
+<span class="nc" id="L120">		try (BufferedReader reader = new BufferedReader(new FileReader(file_path))) { 	//Tries to open the file</span>
+<span class="nc" id="L121">			String line = &quot;&quot;; 																//Line of data</span>
+<span class="nc" id="L122">			StringBuilder text = new StringBuilder(); 										//Text from the file</span>
+<span class="nc" id="L123">			boolean applied = false;														//Boolean to check if the changes were made</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">			while((line = reader.readLine()) != null){ 										//Buffered Reader searches for the user</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">				if (!applied) {																	//If changes not applied</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">					if (line.contains(input[0])) { 													//Check if this is the searched line</span>
+						//Skip
+<span class="nc bnc" id="L128" title="All 2 branches missed.">						for (int j = 0; j &lt; skip; j++) { 												//Once it's found, skips the number of lines selected</span>
+<span class="nc" id="L129">							text.append(line + &quot;\r\n&quot;);														//Adds the line to the buffered reader</span>
+<span class="nc" id="L130">							line = reader.readLine();														//Reads the next line</span>
+						}
+						
+						//Write modified data
+<span class="nc bnc" id="L134" title="All 2 branches missed.">						for (int i = 1; i &lt; input.length; i++) {										//Writes the lines from the array</span>
+<span class="nc" id="L135">							text.append(input[i] + &quot;\r\n&quot;);															//Adds the lines to the text</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">							if(i &lt; input.length - 1)														//If it isn't last line</span>
+<span class="nc" id="L137">								line = reader.readLine();														//Reads the next line</span>
+						}
+						
+						//Applied changes
+<span class="nc" id="L141">						applied = true;																	//Changes applied, block access to optimize performance</span>
+<span class="nc" id="L142">					}</span>
+					else 																			//Does not contain the data
+<span class="nc" id="L144">						text.append(line + &quot;\r\n&quot;);														//Add lines to the text</span>
+<span class="nc" id="L145">				}</span>
+				else 																			//Changes applied
+<span class="nc" id="L147">					text.append(line + &quot;\r\n&quot;);														//Add lines to the text</span>
+			}
+			//Writer
+<span class="nc" id="L150">			try(FileWriter writer = new FileWriter(file_path, false)){ 						//Try to open the file to write</span>
+<span class="nc" id="L151">	            writer.write(text.toString()); 													//Write the text on the file</span>
+			}
+<span class="nc" id="L153">			catch (IOException e) { 														//Couldn't create the writer</span>
+<span class="nc" id="L154">				System.out.println(Localization.get(&quot;inside&quot;, &quot;io_err_fnf&quot;)); 					//Reports that there was no file found</span>
+			}
+		}
+<span class="nc" id="L157">		catch (IOException e) { 														//Couldn't create the reader</span>
+<span class="nc" id="L158">			System.out.println(Localization.get(&quot;inside&quot;, &quot;io_err_fnf&quot;)); 					//Reports that there was no file found</span>
+		}
+<span class="nc" id="L160">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Amazing (26-Dec-2018 21:47:04)</div></body></html>

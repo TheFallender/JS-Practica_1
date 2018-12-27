@@ -66,7 +66,7 @@ public class User { //User class
 	}
 
 	public boolean r_admin() { //Returns the Admin value
-		return (admin.equals("1"));
+		return (Integer.parseInt(admin) > 0);
 	}
 	
 	public void print() { //Prints User
@@ -93,6 +93,6 @@ public class User { //User class
 	}
 
 	public void s_admin(String level) { //Sets the admin level
-		this.admin = "1";
+		this.admin = level;
 	}
 }

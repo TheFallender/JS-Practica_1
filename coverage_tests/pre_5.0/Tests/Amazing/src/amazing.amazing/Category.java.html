@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Category.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Amazing (26-Dec-2018 21:47:04)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.amazing</a> &gt; <span class="el_source">Category.java</span></div><h1>Category.java</h1><pre class="source lang-java linenums">package amazing.amazing;
+
+import amazing.inside.Filter;
+import amazing.inside.IO;
+import amazing.inside.Localization;
+
+public class Category { //Category class
+	
+	private String name; //Name of the Category
+
+<span class="fc" id="L11">	public Category() { //Category basic Constructor</span>
+<span class="fc" id="L12">		this.name = Filter.filter_s(Localization.get(&quot;objects&quot;, &quot;cat_crt_name&quot;)); //Gets the desired name</span>
+<span class="fc" id="L13">	}</span>
+	
+<span class="nc" id="L15">	public Category(String input) { 	//Category data Consturctor</span>
+<span class="nc" id="L16">		this.name = input; 					//Set name to the input</span>
+<span class="nc" id="L17">	}</span>
+	
+	public String r_name() { //Return the Category name
+<span class="fc" id="L20">		return this.name;</span>
+	}
+	
+	public void save() { //Saves the data on the file
+		//String
+<span class="fc" id="L25">		String[] aux = new String[] {&quot;category=&quot; + this.name}; //Auxiliar string to save</span>
+		
+		//Write data
+<span class="fc" id="L28">		IO.write(&quot;d_category&quot;, aux, true); //Writes the data on the file</span>
+<span class="fc" id="L29">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Amazing (26-Dec-2018 21:47:04)</div></body></html>

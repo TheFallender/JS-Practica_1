@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Region.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Amazing (26-Dec-2018 21:59:45)</a> &gt; <a href="../../index.html" class="el_group">Amazing</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">amazing.inside</a> &gt; <span class="el_source">Region.java</span></div><h1>Region.java</h1><pre class="source lang-java linenums">package amazing.inside;
+
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L6">public class Region {</span>
+	//Region
+<span class="fc" id="L8">	private static ArrayList&lt;String[]&gt; region_list = new ArrayList&lt;&gt;();	//List of the regions</span>
+<span class="fc" id="L9">	private static int active_region = 0;							//Active region on the list</span>
+	
+	public static String get_region() { 		//Gets the actual region
+<span class="fc" id="L12">		return region_list.get(active_region)[0];</span>
+	}
+	
+	public static int get_region_pos() {		//Gets region pos
+<span class="nc" id="L16">		return active_region;</span>
+	}
+	
+	public static String get_currency() { 		//Gets the currency of the region
+<span class="fc" id="L20">		return region_list.get(active_region)[1];</span>
+	}
+	
+	public static String get_lang() { 		//Gets the currency of the region
+<span class="fc" id="L24">		return region_list.get(active_region)[2];</span>
+	}
+	
+	public static void set_ar(int new_pos) { 	//Sets the new actual region
+<span class="fc" id="L28">		active_region = new_pos;</span>
+<span class="fc" id="L29">		Converter.set_factor(get_currency(), &quot;&quot;);				//Sets the new factor</span>
+<span class="fc" id="L30">		Localization.set_locale(get_lang(), get_region());		//Sets the new locale</span>
+<span class="fc" id="L31">	}</span>
+	
+	
+	public static void region_list() {			//Sets the region list based on the file
+<span class="fc" id="L35">		IO.read(&quot;d_region&quot;, &quot;&quot;, 0, false);</span>
+		
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">		for (int i = 1; i &lt;= IO.data().size()/3; i++) {	//Add region for each data</span>
+<span class="nc" id="L38">			String[] aux_s = new String[3];					//Temp data</span>
+<span class="nc" id="L39">			aux_s[0] = IO.data().get((i * 3) - 3);			//Sets the Region</span>
+<span class="nc" id="L40">			aux_s[1] = IO.data().get((i * 3) - 2);			//Sets it's currency</span>
+<span class="nc" id="L41">			aux_s[2] = IO.data().get((i * 3) - 1);			//Sets it's currency</span>
+<span class="nc" id="L42">			region_list.add(aux_s);							//Add region with the data</span>
+		}
+<span class="fc" id="L44">	}</span>
+	
+	public static void region_add(String new_region, String currency, String lang, String symb) { //Add region based on the string
+		//Check if it exists
+<span class="fc bfc" id="L48" title="All 2 branches covered.">		for (int i = 0; i &lt; region_list.size(); i++)	//Search that there isn't any region already</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">			if(region_list.get(i)[0].equals(new_region))	//If the preset equals the currency selected</span>
+<span class="nc" id="L50">				return;</span>
+		
+		//Update Region list
+<span class="fc" id="L53">		String[] aux_s = new String[]{new_region, currency, lang};</span>
+<span class="fc" id="L54">		region_list.add(aux_s);</span>
+		
+		//Set the factor and locale in case it doesn't exist
+<span class="fc" id="L57">		Converter.set_factor(currency, symb);</span>
+<span class="fc" id="L58">		Localization.set_locale(lang, new_region);</span>
+		
+		//Data array
+<span class="fc" id="L61">		String[] string_data = new String[]{new_region, &quot;r_currency=&quot; + currency, &quot;r_lang=&quot; + lang};</span>
+		
+		//Write on file
+<span class="fc" id="L64">		IO.write(&quot;d_region&quot;, string_data, true);</span>
+<span class="fc" id="L65">	}</span>
+	
+	public static List&lt;String[]&gt; get_list() { //Returns the region list
+<span class="fc" id="L68">		return region_list;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span>Amazing (26-Dec-2018 21:59:45)</div></body></html>

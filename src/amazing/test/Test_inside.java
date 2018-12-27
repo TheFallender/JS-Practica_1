@@ -4,7 +4,6 @@ import amazing.inside.Converter;
 import amazing.inside.Encrypter;
 import amazing.inside.Filter;
 import amazing.inside.Localization;
-import amazing.inside.Region;
 
 public class Test_inside extends Test { //Inside Test class
 	@Override

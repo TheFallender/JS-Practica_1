@@ -428,7 +428,7 @@ public class Amazing {
 												if (menu[3] != (temp_ul.size() + 1)) {//Give admin access
 													String[] modify_data = new String[] {"u_email=" + temp_ul.get(menu[3] - 1), "u_admin=1"}; 				//Set string to modify
 													IO.modify("d_user", modify_data, 4);																	//Modify the user
-													System.out.println(temp_ul.get(menu[3] - 1) + Localization.get("main", "main_menu_adm_uadm_succ") + "\n"); 	//Prints that the selected user now has admin access
+													System.out.println(temp_ul.get(menu[3] - 1) + " " + Localization.get("main", "main_menu_adm_uadm_succ") + "\n"); 	//Prints that the selected user now has admin access
 													Filter.filter_s(Localization.get("main", "main_menu_wait")); 											//Waits for the user input
 												}
 											}
