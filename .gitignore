@@ -8,6 +8,8 @@
 #Compiled folder
 /bin
 
+#Extra folder
+/extras
 
 # Eclipse Files
 /.settings/
